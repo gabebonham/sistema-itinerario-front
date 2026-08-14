@@ -1,0 +1,298 @@
+import { Injectable, signal } from '@angular/core';
+import { Attempt } from '../../../models/attempt';
+const ATTEMPT_MOCKS = [
+  // 1-6
+  {
+    clientName: 'Ana Oliveira',
+    status: 'Em Andamento',
+    window: 'Sábado',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-03'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 5,
+    contractId: 'CT-003'
+  },
+  {
+    clientName: 'Carlos Souza',
+    status: 'Concluído',
+    window: 'Tarde',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-04'),
+    visitNumber: 3,
+    attempt: '3ª Tentativa',
+    installmentsNumber: 1,
+    contractId: 'CT-004'
+  },
+  {
+    clientName: 'Mariana Costa',
+    status: 'Cancelada',
+    window: 'Manhã',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-05'),
+    visitNumber: 2,
+    attempt: '2ª Tentativa',
+    installmentsNumber: 4,
+    contractId: 'CT-005'
+  },
+  {
+    clientName: 'Ricardo Santos',
+    status: 'Pendente',
+    window: 'Sábado',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-06'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 3,
+    contractId: 'CT-006'
+  },
+  {
+    clientName: 'Fernanda Lima',
+    status: 'Concluído',
+    window: 'Manhã',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-07'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 2,
+    contractId: 'CT-007'
+  },
+  {
+    clientName: 'Bruno Alencar',
+    status: 'Em Andamento',
+    window: 'Tarde',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-08'),
+    visitNumber: 2,
+    attempt: '2ª Tentativa',
+    installmentsNumber: 6,
+    contractId: 'CT-008'
+  },
+
+  // 7-12
+  {
+    clientName: 'Juliana Vieira',
+    status: 'Pendente',
+    window: 'Manhã',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-09'),
+    visitNumber: 3,
+    attempt: '3ª Tentativa',
+    installmentsNumber: 1,
+    contractId: 'CT-009'
+  },
+  {
+    clientName: 'Lucas Ferreira',
+    status: 'Cancelada',
+    window: 'Sábado',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-10'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 4,
+    contractId: 'CT-010'
+  },
+  {
+    clientName: 'Beatriz Rocha',
+    status: 'Concluído',
+    window: 'Tarde',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-11'),
+    visitNumber: 2,
+    attempt: '2ª Tentativa',
+    installmentsNumber: 3,
+    contractId: 'CT-011'
+  },
+  {
+    clientName: 'Rodrigo Melo',
+    status: 'Em Andamento',
+    window: 'Manhã',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-12'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 2,
+    contractId: 'CT-012'
+  },
+  {
+    clientName: 'Camila Pires',
+    status: 'Pendente',
+    window: 'Tarde',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-13'),
+    visitNumber: 2,
+    attempt: '2ª Tentativa',
+    installmentsNumber: 5,
+    contractId: 'CT-013'
+  },
+  {
+    clientName: 'Thiago Ribeiro',
+    status: 'Concluído',
+    window: 'Sábado',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-14'),
+    visitNumber: 3,
+    attempt: '3ª Tentativa',
+    installmentsNumber: 1,
+    contractId: 'CT-014'
+  },
+
+  // 13-18
+  {
+    clientName: 'Amanda Martins',
+    status: 'Cancelada',
+    window: 'Manhã',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-15'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 3,
+    contractId: 'CT-015'
+  },
+  {
+    clientName: 'Felipe Cardoso',
+    status: 'Em Andamento',
+    window: 'Sábado',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-16'),
+    visitNumber: 2,
+    attempt: '2ª Tentativa',
+    installmentsNumber: 4,
+    contractId: 'CT-016'
+  },
+  {
+    clientName: 'Larissa Nunes',
+    status: 'Concluído',
+    window: 'Tarde',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-17'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 2,
+    contractId: 'CT-017'
+  },
+  {
+    clientName: 'Gustavo Lima',
+    status: 'Pendente',
+    window: 'Manhã',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-18'),
+    visitNumber: 3,
+    attempt: '3ª Tentativa',
+    installmentsNumber: 6,
+    contractId: 'CT-018'
+  },
+  {
+    clientName: 'Patricia Mendes',
+    status: 'Cancelada',
+    window: 'Tarde',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-19'),
+    visitNumber: 2,
+    attempt: '2ª Tentativa',
+    installmentsNumber: 1,
+    contractId: 'CT-019'
+  },
+  {
+    clientName: 'Leonardo Cruz',
+    status: 'Em Andamento',
+    window: 'Sábado',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-20'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 5,
+    contractId: 'CT-020'
+  },
+
+  // 19-24
+  {
+    clientName: 'Isabela Fontes',
+    status: 'Concluído',
+    window: 'Manhã',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-21'),
+    visitNumber: 2,
+    attempt: '2ª Tentativa',
+    installmentsNumber: 3,
+    contractId: 'CT-021'
+  },
+  {
+    clientName: 'Daniel Barbosa',
+    status: 'Pendente',
+    window: 'Tarde',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-22'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 2,
+    contractId: 'CT-022'
+  },
+  {
+    clientName: 'Vanessa Dias',
+    status: 'Concluído',
+    window: 'Sábado',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-23'),
+    visitNumber: 3,
+    attempt: '3ª Tentativa',
+    installmentsNumber: 4,
+    contractId: 'CT-023'
+  },
+  {
+    clientName: 'Renan Moreira',
+    status: 'Cancelada',
+    window: 'Manhã',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-24'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 1,
+    contractId: 'CT-024'
+  },
+  {
+    clientName: 'Gabriela Ramos',
+    status: 'Em Andamento',
+    window: 'Tarde',
+    agent: 'Marcelão Big Boy',
+    date: new Date('2023-01-25'),
+    visitNumber: 2,
+    attempt: '2ª Tentativa',
+    installmentsNumber: 3,
+    contractId: 'CT-025'
+  },
+  {
+    clientName: 'Eduardo Antunes',
+    status: 'Pendente',
+    window: 'Sábado',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-26'),
+    visitNumber: 3,
+    attempt: '3ª Tentativa',
+    installmentsNumber: 2,
+    contractId: 'CT-026'
+  }
+];
+
+
+@Injectable({ providedIn: 'root' })
+export class AttemptsService {
+
+  async getAttempts(page: number, pageSize: number): Promise<{ data: Attempt[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
+    const total = 24;
+
+    // fatia o mock pra simular paginação de verdade
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const data = ATTEMPT_MOCKS.slice(start, end);
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+      hasNext: page * pageSize < total,
+      hasPrevious: page > 1
+    };
+  }
+}

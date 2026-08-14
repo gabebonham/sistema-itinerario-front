@@ -1,0 +1,19 @@
+<div class="bg-white rounded-xl border-1 border-text-muted p-5 shadow-md">
+  <div class="flex flex-col gap-3">
+    @for (item of filteredAttempts(); track item.contractId) {
+    <app-attempt-entry [name]="item.clientName" [status]="item.status" [window]="item.window" [agent]="item.agent"
+      [date]="item.date" [visitNumber]="item.visitNumber" [attempt]="item.attempt"
+      [installmentsNumber]="item.installmentsNumber" [contractId]="item.contractId" [id]="'2'"></app-attempt-entry>
+    }
+  </div>
+  <div class="flex justify-center items-center pt-4">
+    <div class="flex items-center gap-8">
+      <mat-icon
+        class="{{ hasPreviousPages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
+        (click)="onPreviousPage()">arrow_back</mat-icon>
+      {{ currentPage }}
+      <mat-icon class="{{ hasMorePages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
+        (click)="onNextPage()">arrow_forward</mat-icon>
+    </div>
+  </div>
+</div>

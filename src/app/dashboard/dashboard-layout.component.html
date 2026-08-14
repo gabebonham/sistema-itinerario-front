@@ -1,0 +1,26 @@
+<div>
+    <mat-sidenav-container class="h-screen">
+        <mat-sidenav mode="side" opened [style.width]="'256px !important'" [style.border]="'0px'" [style.border-radius]="'0px !important'">
+            <div class="bg-text-black h-full rounded-none">
+                <div class="p-4 border-b-1 border-text-muted">
+                    <h1 class="text-xl text-text-muted">{{ appName }}</h1>
+                </div>
+                <nav class="flex flex-col gap-1 p-4">
+                    @for (section of sections; track section) {
+                    @if (section === activeSection) {
+                    <span class="flex items-center gap-2 bg-primary p-2 rounded-md text-on-surface">
+                       <mat-icon class="!text-base !w-4 !h-4 !leading-4 flex items-center justify-center">{{ section.icon }}</mat-icon>{{ section.name }}
+                    </span>
+                    } @else {
+                        
+                        <a class="flex items-center gap-2 cursor-pointer text-secondary p-2 rounded-md" (click)="changeSection(section)"><mat-icon class="!text-base !w-4 !h-4 !leading-4 flex items-center justify-center">{{ section.icon }}</mat-icon>{{ section.name }}</a>
+                    }
+                    } </nav>
+            </div>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <router-outlet />
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

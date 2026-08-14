@@ -1,0 +1,62 @@
+<div class="cursor-pointer w-full border-1 border-text-muted rounded-lg p-4 flex flex-col gap-4" (click)="goToAttempt(id)">
+    <div class="flex items-center gap-6 w-full">
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-2">
+                <div>
+                    <div class="rounded-full bg-background p-2 flex items-center justify-center">
+                        <mat-icon>person</mat-icon>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="font-semibold">{{ name }}</h1>
+                    <p class="!text-text-muted">Contrato {{ contractId }} · {{ installmentsNumber }} faturas pendentes
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{ attempt }}</span>
+                <div class="flex items-center gap-2">
+                    <mat-icon class="!text-text-muted"
+                        [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{ getWindowIcon(window)
+                        }}</mat-icon>
+                    <p>{{ window }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="h-8 w-px bg-text-muted"></div>
+        <div class="flex items-center justify-between w-5/6">
+            <div class="flex items-center gap-2">
+                <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">calendar_today
+                </mat-icon>
+                <p class="!text-text-muted">{{ getDateFormatted(date) }}</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <mat-icon class="!text-text-muted"
+                    style="font-size: 16px; width: 16px; height: 16px;">location_on</mat-icon>
+                <p class="!text-text-muted">{{ visitNumber }}</p>
+                <p class="!text-text-muted">Visitas</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <p class="!text-text-muted">Agente:</p>
+                <p>{{ agent }}</p>
+            </div>
+            <div class="flex items-center gap-2">
+                @if (status == "Concluído") {
+                <span class="text-xs px-2 rounded-2xl border-1 border-success bg-success/10 !text-success">{{ status
+                    }}</span>
+                } @else if (status == "Pendente") {
+                <span class="text-xs px-2 rounded-2xl border-1 border-warning bg-warning/10 !text-warning">{{ status
+                    }}</span>
+                } @else if (status == "Em Andamento") {
+                <span class="text-xs px-2 rounded-2xl border-1 border-text-muted bg-text-muted/10 !text-text-muted">{{
+                    status }}</span>
+                } @else if (status == "Cancelada") {
+                <span class="text-xs px-2 rounded-2xl border-1 border-error bg-error/10 !text-error">{{ status }}</span>
+                } @else {
+                <span class="text-xs px-2 rounded-2xl border-1 border-text-muted bg-text-muted/10 !text-text-muted">{{
+                    status }}</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>

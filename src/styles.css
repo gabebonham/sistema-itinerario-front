@@ -1,3 +1,76 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+@theme {
+  /* Brand */
+  --color-primary: #2196F3;
+  --color-secondary: #BBDEFB;
+  --color-tertiary: #9E9E9E;
+
+  /* UI */
+  --color-background: #f4f6f9;
+  --color-surface: #FFFFFF;
+  --color-border: #DDDDDD;
+
+  /* Text */
+  --color-text-black: #2C2F33;
+  --color-text-white: #FFFFFF;
+  --color-text-muted: #9E9E9E;
+
+  /* Content on colors */
+  --color-on-primary: #FFFFFF;
+  --color-on-secondary: #2196F3;
+  --color-on-tertiary: #FFFFFF;
+  --color-on-background: #333333;
+  --color-on-surface: #333333;
+
+  /* Semantic */
+  --color-success: #4CAF50;
+  --color-warning: #FFEB3B;
+  --color-error: #F44336;
+  --color-info: #2196F3;
+}
+
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+h1 {
+  font-family: "Sora", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+* {
+  font-family: "Manrope", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+
+.loading-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--color-background);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

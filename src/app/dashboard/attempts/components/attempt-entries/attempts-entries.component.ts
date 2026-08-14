@@ -1,7 +1,7 @@
 import { Component, computed, EventEmitter, inject, Input, input, Output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AttemptEntryComponent } from './attempt-entry/attempt-entry.component';
-import { AttemptsFilterService } from '../../services/attempts-filter.service';
+import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
 import { Attempt } from '../../../../models/attempt';
 
 @Component({

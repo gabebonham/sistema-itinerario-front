@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { debounceTime, Subject } from 'rxjs';
 
 import { ATTEMPTS_STATUS, ATTEMPTS, ATTEMPTS_WINDOW } from '../../constants/constants';
-import { AttemptsFilterService } from '../../services/attempts-filter.service';
+import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
 
 @Component({
     selector: 'app-attempts-filtered-search',

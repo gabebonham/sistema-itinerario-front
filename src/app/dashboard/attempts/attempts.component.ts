@@ -3,7 +3,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { DashboardHeaderComponent } from '../components/header.component';
 import { AttemptsFilteredSearchComponent } from "./components/filtered-search/attempts-filtered-search.component";
 import { AttemptsEntriesComponent } from "./components/attempt-entries/attempts-entries.component";
-import { AttemptsService } from './services/attempts.service';
+import { AttemptsService } from '../../services/attempts.service';
 import { Attempt } from '../../models/attempt';
 
 interface DashboardSection {

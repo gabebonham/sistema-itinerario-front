@@ -1,0 +1,19 @@
+<section class="w-full flex flex-col items-start gap-4 border-1 border-text-muted rounded-xl px-6 pt-4 pb-6">
+    <div class="flex items-center justify-between w-full">
+        <div class="flex flex-col items-start gap-2 pb-2">
+            <h1 class="text-xl">Endereços do Itinerário</h1>
+            <p class="text-xs text-text-muted">{{addresses.length}} paradas · ordem como prevista na lista</p>
+        </div>
+        <div>
+            <button class="cursor-pointer bg-primary text-text-white rounded-xl w-24 h-10">Adicionar</button>
+        </div>
+    </div>
+    @for (address of addresses; track address) {
+    <app-addresses-entry class="w-full" [order]="address.order" [country]="address.country" [state]="address.state"
+        [zipCode]="address.zipCode" [complement]="address.complement" [number]="address.number"
+        [street]="address.street" [neighborhood]="address.neighborhood" [city]="address.city"
+        [id]="address.id"></app-addresses-entry>
+    } @empty {
+    <p>SEM ADDRESSES ({{ addresses.length }})</p>
+    }
+</section>

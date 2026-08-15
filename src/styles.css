@@ -5,12 +5,12 @@
   --color-primary: #2196F3;
   --color-secondary: #BBDEFB;
   --color-tertiary: #9E9E9E;
-
+  --color-quarternary: oklch(31.8% .078 259);
   /* UI */
   --color-background: #f4f6f9;
   --color-surface: #FFFFFF;
   --color-border: #DDDDDD;
-
+  --color-card-background: oklch(0.92 0.02 251.98);
   /* Text */
   --color-text-black: #2C2F33;
   --color-text-white: #FFFFFF;

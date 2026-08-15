@@ -3,7 +3,7 @@
     @for (item of filteredAttempts(); track item.contractId) {
     <app-attempt-entry [name]="item.clientName" [status]="item.status" [window]="item.window" [agent]="item.agent"
       [date]="item.date" [visitNumber]="item.visitNumber" [attempt]="item.attempt"
-      [installmentsNumber]="item.installmentsNumber" [contractId]="item.contractId" [id]="'2'"></app-attempt-entry>
+      [installmentsNumber]="item.installmentsNumber" [contractId]="item.contractId" [id]="item.id"></app-attempt-entry>
     }
   </div>
   <div class="flex justify-center items-center pt-4">

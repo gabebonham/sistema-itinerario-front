@@ -1,7 +1,35 @@
 import { Injectable, signal } from '@angular/core';
 import { Attempt } from '../models/attempt';
 const ATTEMPT_MOCKS = [
-  // 1-6
+  // 1-67
+  {
+    id: 'f47ac10b-58cc-4372-a567-0e02b2c3d004',
+    clientName: 'Ricardo Santos',
+    status: 'Pendente',
+    window: 'Sábado',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-06'),
+    visitNumber: 1,
+    attempt: '1ª Tentativa',
+    installmentsNumber: 3,
+    contractId: 'CT-006',
+    createdAt: new Date('2023-01-04T13:10:00'),
+    updatedAt: new Date('2023-01-06T09:30:00')
+  },
+  {
+    id: 'f47ac10b-58cc-4372-a567-0e02b2c3d016',
+    clientName: 'Gustavo Lima',
+    status: 'Pendente',
+    window: 'Manhã',
+    agent: 'Gabriel Grote',
+    date: new Date('2023-01-18'),
+    visitNumber: 3,
+    attempt: '3ª Tentativa',
+    installmentsNumber: 6,
+    contractId: 'CT-018',
+    createdAt: new Date('2023-01-16T11:00:00'),
+    updatedAt: new Date('2023-01-18T08:50:00')
+  },
   {
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001',
     clientName: 'Ana Oliveira',
@@ -44,20 +72,7 @@ const ATTEMPT_MOCKS = [
     createdAt: new Date('2023-01-03T08:20:00'),
     updatedAt: new Date('2023-01-05T11:00:00')
   },
-  {
-    id: 'f47ac10b-58cc-4372-a567-0e02b2c3d004',
-    clientName: 'Ricardo Santos',
-    status: 'Pendente',
-    window: 'Sábado',
-    agent: 'Gabriel Grote',
-    date: new Date('2023-01-06'),
-    visitNumber: 1,
-    attempt: '1ª Tentativa',
-    installmentsNumber: 3,
-    contractId: 'CT-006',
-    createdAt: new Date('2023-01-04T13:10:00'),
-    updatedAt: new Date('2023-01-06T09:30:00')
-  },
+
   {
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3d005',
     clientName: 'Fernanda Lima',
@@ -216,20 +231,7 @@ const ATTEMPT_MOCKS = [
     createdAt: new Date('2023-01-15T09:10:00'),
     updatedAt: new Date('2023-01-17T17:00:00')
   },
-  {
-    id: 'f47ac10b-58cc-4372-a567-0e02b2c3d016',
-    clientName: 'Gustavo Lima',
-    status: 'Pendente',
-    window: 'Manhã',
-    agent: 'Gabriel Grote',
-    date: new Date('2023-01-18'),
-    visitNumber: 3,
-    attempt: '3ª Tentativa',
-    installmentsNumber: 6,
-    contractId: 'CT-018',
-    createdAt: new Date('2023-01-16T11:00:00'),
-    updatedAt: new Date('2023-01-18T08:50:00')
-  },
+
   {
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3d017',
     clientName: 'Patricia Mendes',

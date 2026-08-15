@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
     selector: 'app-addresses-entry',
-    imports: [],
+    imports: [MatIconModule],
     templateUrl: './addresses-entry.component.html',
 })
 export class AddressesEntryComponent {
@@ -14,12 +15,7 @@ export class AddressesEntryComponent {
     @Input() zipCode!: string;
     @Input() state!: string;
     @Input() country!: string;
-    @Input() latitude!: number;
-    @Input() longitude!: number;
-    @Input() attemptId!: string;
     @Input() order!: number;
-    @Input() createdAt!: Date;
-    @Input() updatedAt!: Date;
     getFormatedDate(date: Date): string {
         const d = new Date(date);
         return d.toLocaleDateString('pt-BR', {

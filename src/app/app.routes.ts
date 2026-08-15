@@ -17,7 +17,7 @@ export const routes: Routes = [
         children: [
             { path: 'planejamento', component: AttemptsComponent },
             { path: 'campo', component: FieldComponent },
-            { path: '', redirectTo: 'tentativas', pathMatch: 'full' },
+            { path: '', redirectTo: 'planejamento', pathMatch: 'full' },
             {
                 path: 'planejamento/:id',
                 component: PlanningComponent,

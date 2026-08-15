@@ -8,8 +8,8 @@ export class Address {
     zipCode: string;
     state: string;
     country: string;
-    latitude: number;
-    longitude: number;
+    lat: number;
+    lng: number;
     attemptId: string;
     order:number;
     createdAt: Date;
@@ -24,8 +24,8 @@ export class Address {
         zipCode: string, 
         state: string, 
         country: string, 
-        latitude: number, 
-        longitude: number, 
+        lat: number, 
+        lng: number, 
         attemptId: string,
         order: number,
         createdAt: Date,
@@ -40,8 +40,8 @@ export class Address {
         this.zipCode = zipCode;
         this.state = state;
         this.country = country;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.lat = lat;
+        this.lng = lng;
         this.attemptId = attemptId;
         this.order = order;
         this.createdAt = createdAt;

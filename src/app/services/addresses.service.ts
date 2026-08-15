@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Attempt } from '../models/attempt';
 import { Address } from '../models/address';
 const ADDRESS_MOCKS: Address[] = [
+  // attempt d001 - 4 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e001',
     'Porto Alegre',
@@ -14,7 +15,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.0277,
     -51.2075,
-    'CT-003',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d001',
     1,
     new Date('2023-01-01T09:10:00'),
     new Date('2023-01-03T14:35:00')
@@ -31,7 +32,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.0386,
     -51.2231,
-    'CT-004',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d001',
     1,
     new Date('2023-01-02T10:20:00'),
     new Date('2023-01-04T16:50:00')
@@ -48,7 +49,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -29.9177,
     -51.1836,
-    'CT-005',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d001',
     1,
     new Date('2023-01-03T08:25:00'),
     new Date('2023-01-05T11:05:00')
@@ -65,11 +66,13 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -29.9445,
     -50.9925,
-    'CT-006',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d001',
     1,
     new Date('2023-01-04T13:15:00'),
     new Date('2023-01-06T09:35:00')
   ),
+
+  // attempt d002 - 4 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e005',
     'Porto Alegre',
@@ -82,7 +85,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.0272,
     -51.1936,
-    'CT-007',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d002',
     1,
     new Date('2023-01-05T07:55:00'),
     new Date('2023-01-07T15:25:00')
@@ -99,7 +102,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.0819,
     -51.0233,
-    'CT-008',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d002',
     1,
     new Date('2023-01-06T12:05:00'),
     new Date('2023-01-08T17:15:00')
@@ -116,7 +119,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.0223,
     -51.1955,
-    'CT-009',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d002',
     1,
     new Date('2023-01-07T09:45:00'),
     new Date('2023-01-09T10:10:00')
@@ -133,11 +136,13 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -29.9925,
     -51.0836,
-    'CT-010',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d002',
     1,
     new Date('2023-01-08T11:30:00'),
     new Date('2023-01-10T13:55:00')
   ),
+
+  // attempt d003 - 4 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e009',
     'Porto Alegre',
@@ -150,7 +155,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.0491,
     -51.2225,
-    'CT-011',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d003',
     1,
     new Date('2023-01-09T08:20:00'),
     new Date('2023-01-11T16:05:00')
@@ -167,7 +172,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -29.9511,
     -51.0947,
-    'CT-012',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d003',
     1,
     new Date('2023-01-10T10:35:00'),
     new Date('2023-01-12T09:20:00')
@@ -184,7 +189,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.1097,
     -51.2517,
-    'CT-013',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d003',
     1,
     new Date('2023-01-11T14:05:00'),
     new Date('2023-01-13T15:50:00')
@@ -201,11 +206,13 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -29.6783,
     -51.1306,
-    'CT-014',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d003',
     1,
     new Date('2023-01-12T09:25:00'),
     new Date('2023-01-14T11:35:00')
   ),
+
+  // attempt d004 - 3 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e013',
     'Porto Alegre',
@@ -218,7 +225,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.0335,
     -51.2094,
-    'CT-015',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d004',
     1,
     new Date('2023-01-13T08:05:00'),
     new Date('2023-01-15T10:25:00')
@@ -235,7 +242,7 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -29.8608,
     -51.1794,
-    'CT-016',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d004',
     1,
     new Date('2023-01-14T13:45:00'),
     new Date('2023-01-16T14:05:00')
@@ -252,17 +259,16 @@ const ADDRESS_MOCKS: Address[] = [
     'Brasil',
     -30.0245,
     -51.2016,
-    'CT-017',
+    'f47ac10b-58cc-4372-a567-0e02b2c3d004',
     1,
     new Date('2023-01-15T09:15:00'),
     new Date('2023-01-17T17:05:00')
   ),
 ];
-
 @Injectable({ providedIn: 'root' })
 export class AddressesService {
-  async getAddressByAttemptId(id: string): Promise<Address | undefined> {
-    return ADDRESS_MOCKS.find(address => address.attemptId === id);
+  async getAddressByAttemptId(id: string): Promise<Address[]> {
+    return ADDRESS_MOCKS.filter(address => address.attemptId === id);
   }
  
 }

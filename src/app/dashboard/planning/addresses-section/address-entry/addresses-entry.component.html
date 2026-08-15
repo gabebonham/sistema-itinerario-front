@@ -1,21 +1,15 @@
-<div>
-    <div>
-        <div class="bg-primary p-4">{{ order }}</div>
-        <p>{{ getFormatedPlace() }}</p>
+<div class="w-full rounded-xl border-1 border-text-muted/50 bg-card-background/30 py-2">
+    <div class="flex items-center justify-between w-full px-4">
+        <div class="flex items-center gap-4">
+            <div class="rounded-full bg-quarternary text-surface py-2 px-4 flex items-center justify-center">
+                {{ order }}</div>
+            <div class="flex flex-col items-start gap-1">
+                <p class="text-text-black !font-[600]">{{street}}, {{number}} - {{complement}}</p>
+                <p class="text-text-black/50 !text-xs flex items-center"> <mat-icon [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">location_on</mat-icon>{{neighborhood}} · {{zipCode}}</p>
+            </div>
+        </div>
+        <div>
+            <mat-icon class="cursor-pointer">delete</mat-icon>
+        </div>
     </div>
-    <p><strong>Id:</strong> {{ id }}</p>
-    <p><strong>City:</strong> {{ city }}</p>
-    <p><strong>Neighborhood:</strong> {{ neighborhood }}</p>
-    <p><strong>Street:</strong> {{ street }}</p>
-    <p><strong>Number:</strong> {{ number }}</p>
-    <p><strong>Complement:</strong> {{ complement }}</p>
-    <p><strong>Zip Code:</strong> {{ zipCode }}</p>
-    <p><strong>State:</strong> {{ state }}</p>
-    <p><strong>Country:</strong> {{ country }}</p>
-    <p><strong>Latitude:</strong> {{ latitude }}</p>
-    <p><strong>Longitude:</strong> {{ longitude }}</p>
-    <p><strong>Order:</strong> {{ order }}</p>
-    <p><strong>Created At:</strong> {{ getFormatedDate(createdAt) }}</p>
-    <p><strong>UpdatedAt:</strong> {{ getFormatedDate(updatedAt) }}</p>
-    <p><strong>Place:</strong> {{ getFormatedPlace() }}</p>
 </div>

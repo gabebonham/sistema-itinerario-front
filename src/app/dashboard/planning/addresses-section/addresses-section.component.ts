@@ -1,10 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { DashboardHeaderComponent } from '../../components/header.component';
+import { AddressesEntryComponent } from './address-entry/addresses-entry.component';
+import { Address } from '../../../models/address';
 @Component({
     selector: 'app-addresses-section',
-    imports: [MatSidenavModule, DashboardHeaderComponent],
+    imports: [MatSidenavModule, AddressesEntryComponent],
     templateUrl: './addresses-section.component.html',
 })
-export class AddressesSectionComponent {
+export class AddressesSectionComponent implements OnChanges{
+    @Input() addresses: Address[] = [];
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log('AddressesSection recebeu:', changes['addresses']?.currentValue);
+    }
 }

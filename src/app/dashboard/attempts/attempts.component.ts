@@ -9,16 +9,16 @@ import { DashboardStateService } from '../../services/dashboard-state.service';
 
 
 @Component({
-  selector: 'app-attempts',
-  imports: [
-    MatSidenavModule,
-    AttemptsFilteredSearchComponent,
-    AttemptsEntriesComponent,
-    AttemptsEntriesComponent
-],
-  templateUrl: './attempts.component.html',
+    selector: 'app-attempts',
+    imports: [
+        MatSidenavModule,
+        AttemptsFilteredSearchComponent,
+        AttemptsEntriesComponent,
+        AttemptsEntriesComponent
+    ],
+    templateUrl: './attempts.component.html',
 })
-export class AttemptsComponent implements OnInit{
+export class AttemptsComponent implements OnInit {
     private attemptsService = inject(AttemptsService);
     attempts: Attempt[] = [];
     activeSection: DashboardSection = { name: 'Tentativas', icon: 'checklist', path: '/tentativas' };
@@ -26,6 +26,7 @@ export class AttemptsComponent implements OnInit{
     hasPreviousEntriesPages = false;
     currentEntriesPage = 1;
     dashboardState = inject(DashboardStateService);
+    isAttemptsLoading = true
     constructor() {
         this.dashboardState.setActiveSection({
             name: 'Tentativas',
@@ -40,6 +41,7 @@ export class AttemptsComponent implements OnInit{
             this.hasPreviousEntriesPages = attempts.hasPrevious;
             this.currentEntriesPage = attempts.page;
         });
+        this.isAttemptsLoading = false
     }
     fetchAttemptsPage(page: number): void {
         this.attemptsService.getAttempts(page, 5).then((attempts) => {

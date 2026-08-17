@@ -21,6 +21,7 @@ export class PlanningComponent implements OnInit {
     activeSection: DashboardSection = { name: 'Planejamento', icon: 'history', path: '/planejamento' };
     attempt?: Attempt;
     debtor?: Debtor;
+    isAddressesLoading = true
     addresses = signal<Address[]>([]);
     attemptsService: AttemptsService = inject(AttemptsService);
     addressesService: AddressesService = inject(AddressesService);
@@ -56,6 +57,7 @@ export class PlanningComponent implements OnInit {
         this.addressesService.getAddressByAttemptId(attemptId).then(addresses => {
             this.addresses.set(addresses);
         });
+        this.isAddressesLoading = false
     }
     getAndBuildInstallments(attemptId: string): void { }
     getAndBuildDebtor(attemptId: string): void {

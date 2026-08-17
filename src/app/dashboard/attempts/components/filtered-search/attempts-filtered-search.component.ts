@@ -27,7 +27,6 @@ export class AttemptsFilteredSearchComponent {
     searchValue: string = '';
     toDateValue: string = '';
     fromDateValue: string = '';
-
     private search$ = new Subject<string>();
 
     constructor() {
@@ -43,15 +42,15 @@ export class AttemptsFilteredSearchComponent {
     }
 
     onStatusChange(): void {
-        this.filterService.updateFilter({ status: this.selectedStatus });
+        this.filterService.updateFilter({ status: this.selectedStatus == 'Todos' ? '' : this.selectedStatus });
     }
 
     onAttemptChange(): void {
-        this.filterService.updateFilter({ attempt: this.selectedAttempt });
+        this.filterService.updateFilter({ attempt: this.selectedAttempt == 'Todas' ? '' : this.selectedAttempt });
     }
 
     onWindowChange(): void {
-        this.filterService.updateFilter({ window: this.selectedWindow });
+        this.filterService.updateFilter({ window: this.selectedWindow == 'Todas' ? '' : this.selectedWindow });
     }
 
     onFromDateInput(event: Event): void {
@@ -64,7 +63,7 @@ export class AttemptsFilteredSearchComponent {
         this.fromDateValue = value;
         input.value = value;
 
-        if (value.length === 10) this.filterService.updateFilter({ fromDate: value });
+        this.filterService.updateFilter({ fromDate: value });
     }
 
     onToDateInput(event: Event): void {
@@ -77,6 +76,6 @@ export class AttemptsFilteredSearchComponent {
         this.toDateValue = value;
         input.value = value;
 
-        if (value.length === 10) this.filterService.updateFilter({ toDate: value });
+        this.filterService.updateFilter({ toDate: value });
     }
 }

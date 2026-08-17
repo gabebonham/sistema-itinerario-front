@@ -14,7 +14,7 @@
     </div>
     <div class="flex flex-col gap-6">
       <app-attempts-filtered-search></app-attempts-filtered-search>
-      <app-attempts-entries [attempts]="attempts" [hasMorePages]="hasMoreEntriesPages"
+      <app-attempts-entries [isLoading]="isAttemptsLoading" [attempts]="attempts" [hasMorePages]="hasMoreEntriesPages"
         [hasPreviousPages]="hasPreviousEntriesPages" (nextPage)="fetchAttemptsPage($event)"
         (previousPage)="fetchAttemptsPage($event)"></app-attempts-entries>
     </div>

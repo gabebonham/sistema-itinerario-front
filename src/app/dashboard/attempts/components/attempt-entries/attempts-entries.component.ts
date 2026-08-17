@@ -1,8 +1,9 @@
-import { Component, computed, EventEmitter, inject, Input, input, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, input, OnInit, Output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AttemptEntryComponent } from './attempt-entry/attempt-entry.component';
 import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
 import { Attempt } from '../../../../models/attempt';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-attempts-entries',
@@ -10,8 +11,12 @@ import { Attempt } from '../../../../models/attempt';
     imports: [MatIconModule, AttemptEntryComponent],
     templateUrl: './attempts-entries.component.html',
 })
-export class AttemptsEntriesComponent {
+export class AttemptsEntriesComponent implements OnInit {
     private filterService = inject(AttemptsFilterService);
+    // private router = inject(Router);
+    // private route = inject(ActivatedRoute);
+    isLoading = input.required<boolean>();
+
     attempts = input.required<Attempt[]>();
 
     pageSize = 5;
@@ -19,7 +24,12 @@ export class AttemptsEntriesComponent {
 
     @Output() nextPage = new EventEmitter<number>();
     @Output() previousPage = new EventEmitter<number>();
+    ngOnInit(): void {
+        // const page = Number(this.route.snapshot.queryParamMap.get('page')) || 1;
+        // this.currentPage = page;
+        // this.onPageChange()
 
+    }
     filteredAttempts = computed(() => {
         const f = this.filterService.filter();
         return this.attempts().filter(entry => {
@@ -43,17 +53,25 @@ export class AttemptsEntriesComponent {
 
     @Input() hasMorePages!: boolean;
     @Input() hasPreviousPages!: boolean;
-
+    onPageChange() {
+        // this.router.navigate([], {
+        //     relativeTo: this.route,
+        //     queryParams: { page: this.currentPage },
+        //     queryParamsHandling: 'merge',
+        // });
+    }
     onNextPage(): void {
         if (this.hasMorePages) {
             this.nextPage.emit(this.currentPage + 1);
             this.currentPage = this.currentPage + 1
+            this.onPageChange()
         }
     }
     onPreviousPage(): void {
         if (this.hasPreviousPages) {
             this.previousPage.emit(this.currentPage - 1);
             this.currentPage = this.currentPage - 1
+            this.onPageChange()
         }
     }
 

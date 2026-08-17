@@ -1,5 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Component, Input } from '@angular/core';
+import { Component, Input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 @Component({
     selector: 'app-addresses-entry',
@@ -17,6 +17,11 @@ export class AddressesEntryComponent {
     @Input() state!: string;
     @Input() country!: string;
     @Input() order!: number;
+    delete = output<string>();
+
+    onDelete(): void {
+        this.delete.emit(this.id);
+    }
     getFormatedDate(date: Date): string {
         const d = new Date(date);
         return d.toLocaleDateString('pt-BR', {

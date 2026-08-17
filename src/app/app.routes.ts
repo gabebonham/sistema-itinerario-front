@@ -15,9 +15,9 @@ export const routes: Routes = [
         component: DashboardLayoutComponent,
         // canActivate: [authGuard], // não autenticado → vai pro auth
         children: [
-            { path: 'planejamento', component: AttemptsComponent },
+            { path: 'tentativas', component: AttemptsComponent },
             { path: 'campo', component: FieldComponent },
-            { path: '', redirectTo: 'planejamento', pathMatch: 'full' },
+            { path: '', redirectTo: 'tentativas', pathMatch: 'full' },
             {
                 path: 'planejamento/:id',
                 component: PlanningComponent,

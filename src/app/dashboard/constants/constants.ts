@@ -1,12 +1,10 @@
-export interface DashboardSection {
-    name: string;
-    icon: string;
-}
 
 export const dashboardSections = [{
-    name: 'Planejamento',
-    icon: 'tune'
+    name: 'Tentativas',
+    icon: 'checklist',
+    path: '/tentativas'
 }, {
     name: 'Campo',
-    icon: 'location_on'
+    icon: 'location_on',
+    path: '/campo'
 }];

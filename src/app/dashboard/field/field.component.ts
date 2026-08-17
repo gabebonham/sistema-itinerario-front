@@ -1,18 +1,21 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { DashboardHeaderComponent } from '../components/header.component';
+import { DashboardSection } from '../../models/dashboard-section';
+import { DashboardStateService } from '../../services/dashboard-state.service';
 
 
-interface DashboardSection {
-    name: string;
-    icon: string;
-}
 @Component({
   selector: 'app-field',
-  imports: [MatSidenavModule, DashboardHeaderComponent],
+  imports: [MatSidenavModule],
   templateUrl: './field.component.html',
 })
 export class FieldComponent {
-    activeSection: DashboardSection = { name: 'Campo', icon: 'location_on' };
-
+    dashboardState = inject(DashboardStateService);
+    constructor() {
+        this.dashboardState.setActiveSection({
+            name: 'Campo',
+            icon: 'location_on',
+            path: '/campo'
+        });
+    }
 }

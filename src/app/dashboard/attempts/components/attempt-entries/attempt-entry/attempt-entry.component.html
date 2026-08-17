@@ -1,4 +1,4 @@
-<div class="cursor-pointer w-full border-1 border-text-muted rounded-lg p-4 flex flex-col gap-4" (click)="goToAttempt(id)">
+<div class="cursor-pointer w-full border-1 border-border rounded-lg p-4 flex flex-col gap-4" (click)="goToAttempt(id)">
     <div class="flex items-center gap-6 w-full">
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-2">
@@ -16,10 +16,10 @@
             <div class="flex items-center gap-6">
                 <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{ attempt }}</span>
                 <div class="flex items-center gap-2">
-                    <mat-icon class="!text-text-muted"
+                    <mat-icon class="!text-text-muted "
                         [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{ getWindowIcon(window)
                         }}</mat-icon>
-                    <p>{{ window }}</p>
+                    <p class="!text-xs">{{ window }}</p>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <div class="flex items-center gap-2">
                 <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">calendar_today
                 </mat-icon>
-                <p class="!text-text-muted">{{ getDateFormatted(date) }}</p>
+                <p class="!text-text-muted !text-xs">{{ getDateFormatted(date) }}</p>
             </div>
             <div class="flex items-center gap-2">
                 <mat-icon class="!text-text-muted"
@@ -38,7 +38,7 @@
             </div>
             <div class="flex items-center gap-2">
                 <p class="!text-text-muted">Agente:</p>
-                <p>{{ agent }}</p>
+                <p class="!text-text-muted !font-bold">{{ agent }}</p>
             </div>
             <div class="flex items-center gap-2">
                 @if (status == "Concluído") {
@@ -47,11 +47,6 @@
                 } @else if (status == "Pendente") {
                 <span class="text-xs px-2 rounded-2xl border-1 border-warning bg-warning/10 !text-warning">{{ status
                     }}</span>
-                } @else if (status == "Em Andamento") {
-                <span class="text-xs px-2 rounded-2xl border-1 border-text-muted bg-text-muted/10 !text-text-muted">{{
-                    status }}</span>
-                } @else if (status == "Cancelada") {
-                <span class="text-xs px-2 rounded-2xl border-1 border-error bg-error/10 !text-error">{{ status }}</span>
                 } @else {
                 <span class="text-xs px-2 rounded-2xl border-1 border-text-muted bg-text-muted/10 !text-text-muted">{{
                     status }}</span>

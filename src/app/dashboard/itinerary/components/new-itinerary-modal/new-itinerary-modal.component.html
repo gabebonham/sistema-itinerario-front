@@ -1,20 +1,20 @@
 <div class="w-full flex flex-col p-8 gap-4 justify-between h-full border-1 border-border">
     <form [formGroup]="form" class="w-full flex flex-col gap-4">
         <div>
-            <h1 class="text-xl">Criar nova Tentativa</h1>
+            <h1 class="text-xl">Criar novo Itinerário</h1>
         </div>
         <div class="flex flex-col gap-6">
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
-                <mat-label>Agente</mat-label>
-                <input matInput type="text" formControlName="agent" placeholder="Nome do agente..." maxlength="10" class="!text-xs" />
+                <mat-label>Nome do Agente</mat-label>
+                <input matInput type="text" formControlName="agentName" placeholder="Nome do agente..." maxlength="10" class="!text-xs" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
-                <mat-label>Devedor</mat-label>
-                <input matInput type="text" formControlName="debtor" placeholder="Nome do devedor..." maxlength="10" class="!text-xs" />
+                <mat-label>Nome do Devedor</mat-label>
+                <input matInput type="text" formControlName="debtorName" placeholder="Nome do devedor..." maxlength="10" class="!text-xs" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
-                <mat-label>ID do contrato</mat-label>
-                <input matInput type="text" formControlName="contractId" placeholder="ID do contrato..." maxlength="10" class="!text-xs" />
+                <mat-label>Protocolo</mat-label>
+                <input matInput type="text" formControlName="protocol" placeholder="ID do contrato..." maxlength="10" class="!text-xs" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
                 <mat-label>Parcelas em atraso</mat-label>

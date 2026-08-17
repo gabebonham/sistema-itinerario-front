@@ -1,20 +1,20 @@
-<div>
+<div class="h-full">
   <div class="px-8 py-8 flex flex-col items-start gap-8">
     <div class="flex items-center justify-between w-full">
       <div>
-        <h1 class="font-semibold text-text-muted">TENTATIVA · PLANEJAMENTO</h1>
+        <h1 class="font-semibold text-text-muted">ITINERÁRIO · PLANEJAMENTO</h1>
         <h1 class="text-3xl font-bold pt-2">Itinerário de cobrança do cliente</h1>
         <p class="text-text-muted text-sm py-4 w-2/3">Registre os endereços de abordagem, distribua até três tentativas
           e envie o roteiro para o agente de campo.</p>
       </div>
       <div><button class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-xl w-52 h-12">Mandar para Campo</button></div>
     </div>
-    <div class="flex flex-col gap-6 w-full">
+    <div class="h-full flex flex-col gap-6 w-full">
       <div class="w-full h-[500px] "><app-map-section [debtor]="debtor" [addresses]="addresses()"></app-map-section>
       </div>
-      <div class="w-full flex items-center gap-6">
-        <app-addresses-section [isLoading]="isAddressesLoading" class="w-3/5 " [addresses]="addresses()"></app-addresses-section>
-        <div class="w-2/5 h-96 border-1 border-border rounded-xl">asdf</div>
+      <div class="w-full h-full flex items-start gap-6">
+        <app-addresses-section [isLoading]="isAddressesLoading" class="w-3/5 h-full " [addresses]="addresses()"></app-addresses-section>
+        <app-window [attempts]="attempts()"></app-window>
       </div>
     </div>
   </div>

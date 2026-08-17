@@ -1,40 +1,48 @@
+export type AttemptStatus = 'Entregue' | 'Pendente'
+export type AttemptOrdinal = '1ª Tentativa' | '2ª Tentativa' | '3ª Tentativa';
 export class Attempt {
     id: string;
-    clientName: string;
-    status: string;
+    status: AttemptStatus
+    protocol: string;
+    start: Date;
+    finish: Date;
+    agentName: string;
+    debtorName: string;
     window: string;
-    agent: string;
-    date: Date;
-    visitNumber: number;
-    attempt: string;
+    concludedVisitNumber: number;
+    attemptOrdinal: AttemptOrdinal;
     installmentsNumber: number;
-    contractId: string;
+    itineraryId: string;
     createdAt: Date;
     updatedAt: Date;
     constructor(
         id: string,
-        clientName: string,
-        status: string,
+        status: AttemptStatus,
+        protocol: string,
+        start: Date,
+        finish: Date,
+        agentName: string,
+        debtorName: string,
         window: string,
-        agent: string,
-        date: Date,
-        visitNumber: number,
-        attempt: string,
+        concludedVisitNumber: number,
+        attemptOrdinal: AttemptOrdinal,
         installmentsNumber: number,
-        contractId: string,
+        itineraryId: string,
         createdAt: Date,
-        updatedAt: Date
+        updatedAt: Date,
     ) {
         this.id = id;
-        this.clientName = clientName;
+        this.debtorName = debtorName;
         this.status = status;
         this.window = window;
-        this.agent = agent;
-        this.date = date;
-        this.visitNumber = visitNumber;
-        this.attempt = attempt;
+        this.agentName = agentName;
+        this.protocol = protocol;
+        this.start = start;
+        this.finish = finish;
+        this.itineraryId = itineraryId;
         this.installmentsNumber = installmentsNumber;
-        this.contractId = contractId;
+        this.attemptOrdinal = attemptOrdinal;
+        this.concludedVisitNumber = concludedVisitNumber;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

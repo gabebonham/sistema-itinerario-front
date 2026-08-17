@@ -11,46 +11,51 @@ import { DashboardStateService } from '../../services/dashboard-state.service';
 import { MapSectionComponent } from './map-section/map-section.component';
 import { Debtor } from '../../models/debtor';
 import { DebtorService } from '../../services/debtor.service';
+import { dashboardSections } from '../constants/constants';
+import { WindowComponent } from './windows-section/window.component';
+import { Itinerary } from '../../models/itinerary';
+import { ItineraryService } from '../../services/itinerary.service';
 
 @Component({
     selector: 'app-planning',
-    imports: [MatSidenavModule, AddressesSectionComponent, MapSectionComponent],
+    imports: [MatSidenavModule, AddressesSectionComponent, MapSectionComponent, WindowComponent],
     templateUrl: './planning.component.html',
 })
 export class PlanningComponent implements OnInit {
-    activeSection: DashboardSection = { name: 'Planejamento', icon: 'history', path: '/planejamento' };
-    attempt?: Attempt;
+    activeSection: DashboardSection = dashboardSections.find(section => section.name == 'Itinerário')!;
     debtor?: Debtor;
+    itinerary?: Itinerary;
+    breadCrumbs: string = ''
     isAddressesLoading = true
     addresses = signal<Address[]>([]);
+    attempts = signal<Attempt[]>([]);
+    itineraryService: ItineraryService = inject(ItineraryService);
     attemptsService: AttemptsService = inject(AttemptsService);
     addressesService: AddressesService = inject(AddressesService);
     debtorService: DebtorService = inject(DebtorService);
     private dashboardState = inject(DashboardStateService);
     constructor(private route: ActivatedRoute) {
-        this.dashboardState.setActiveSection({
-            name: 'Planejamento',
-            icon: 'checklist',
-            path: 'planejamento'
-        });
+        this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Itinerário')!);
     }
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             const id = params.get('id') ?? '';
             if (id) {
-                this.dashboardState.setActiveSection({ icon: 'checklist', name: 'Planejamento / ' + id, path: '/planejamento/ ' + id });
-                this.getAndBuildAttempt(id);
+                this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Itinerário')!);
+                this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
+                this.getAndBuildItinerary(id);
                 this.getAndBuildAddresses(id);
                 this.getAndBuildInstallments(id);
                 this.getAndBuildDebtor(id);
                 this.getAndBuildRoute(id);
+                this.breadCrumbs = this.activeSection.getPathWithId(id)
             }
         });
     }
-    getAndBuildAttempt(id: string): void {
-        this.attemptsService.getAttemptById(id).then(attempt => {
-            this.attempt = attempt;
+    getAndBuildItinerary(id: string): void {
+        this.itineraryService.getAttemptsByItineraryId(id).then(result => {
+            this.attempts.set(result.data);
         });
     }
     getAndBuildAddresses(attemptId: string): void {

@@ -4,7 +4,7 @@ import { Debtor } from '../models/debtor';
 const DEBTOR_MOCK: Debtor =
   new Debtor(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e001',
-    'Lil Marc Underground',
+    'Marcelo Lopes',
     '61857917452',
     '8514726',
     'f47ac10b-58cc-4372-a567-0e02b2c3d001',

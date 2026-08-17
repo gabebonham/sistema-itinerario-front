@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { DashboardLayoutComponent } from './dashboard/dashboard-layout.component';
-import { AttemptsComponent } from './dashboard/attempts/attempts.component';
-import { PlanningComponent } from './dashboard/planning/planning.component';
+import { ItineraryComponent } from './dashboard/itinerary/itinerary.component';
 import { FieldComponent } from './dashboard/field/field.component';
+import { PlanningComponent } from './dashboard/planning/planning.component';
 
 export const routes: Routes = [
     // {
@@ -15,11 +15,11 @@ export const routes: Routes = [
         component: DashboardLayoutComponent,
         // canActivate: [authGuard], // não autenticado → vai pro auth
         children: [
-            { path: 'tentativas', component: AttemptsComponent },
+            { path: 'itinerario', component: ItineraryComponent },
             { path: 'campo', component: FieldComponent },
-            { path: '', redirectTo: 'tentativas', pathMatch: 'full' },
+            { path: '', redirectTo: 'itinerario', pathMatch: 'full' },
             {
-                path: 'planejamento/:id',
+                path: 'itinerario/:id',
                 component: PlanningComponent,
             },
         ]

@@ -3,7 +3,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { AttemptEntryComponent } from './attempt-entry/attempt-entry.component';
 import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
 import { Attempt } from '../../../../models/attempt';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-attempts-entries',
@@ -33,11 +32,11 @@ export class AttemptsEntriesComponent implements OnInit {
     filteredAttempts = computed(() => {
         const f = this.filterService.filter();
         return this.attempts().filter(entry => {
-            const matchesSearch = !f.search || entry.clientName.toLowerCase().includes(f.search.toLowerCase());
+            const matchesSearch = !f.search || entry.debtorName.toLowerCase().includes(f.search.toLowerCase());
             const matchesStatus = !f.status || entry.status === f.status;
             const matchesWindow = !f.window || entry.window === f.window;
-            const matchesAttempt = !f.attempt || entry.attempt === f.attempt;
-            const matchesDate = this.isWithinDateRange(entry.date, f.fromDate, f.toDate);
+            const matchesAttempt = !f.attempt || entry.attemptOrdinal === f.attempt;
+            const matchesDate = this.isWithinDateRange(entry.start, f.fromDate, f.toDate);
             return matchesSearch && matchesStatus && matchesWindow && matchesAttempt && matchesDate;
         });
     });

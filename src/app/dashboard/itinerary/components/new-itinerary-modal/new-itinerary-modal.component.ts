@@ -6,27 +6,28 @@ import { MatInputModule } from '@angular/material/input';
 import { AttemptsService } from '../../../../services/attempts.service';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CreateAttemptDTO } from '../../../../models/address';
+import { ItineraryService } from '../../../../services/itinerary.service';
+import { CreateItineraryDTO } from '../../../../DTOS/create-itinerary.dto';
 
 
 @Component({
-    selector: 'app-new-attempt-modal',
+    selector: 'app-new-itinerary-modal',
     imports: [MatDialogModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
-    templateUrl: './new-attempt-modal.component.html',
+    templateUrl: './new-itinerary-modal.component.html',
 })
-export class NewAttemptModal {
+export class NewItineraryModal {
     isLoading = false
-    attemptsService = inject(AttemptsService)
+    itineraryService = inject(ItineraryService)
     private fb = inject(FormBuilder);
     form = this.fb.group({
-        agent: ['', Validators.required],
-        debtor: ['', Validators.required],
-        contractId: ['', Validators.required],
+        agentName: ['', Validators.required],
+        debtorName: ['', Validators.required],
+        protocol: ['', Validators.required],
         installmentsNumber: [0, [Validators.required, Validators.min(1)]],
     });
     constructor(
         private router: Router,
-        public dialogRef: MatDialogRef<NewAttemptModal, boolean>,
+        public dialogRef: MatDialogRef<NewItineraryModal, boolean>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
     errors: string[] = []
@@ -39,30 +40,30 @@ export class NewAttemptModal {
         }
         this.isLoading = true;
         this.errors = [];
-        const createAttemptDto: CreateAttemptDTO = {
-            agent: this.form.value.agent!,
-            contractId: this.form.value.contractId!,
-            debtor: this.form.value.debtor!,
+        const createItineraryDto: CreateItineraryDTO = {
+            agentName: this.form.value.agentName!,
+            protocol: this.form.value.protocol!,
+            debtorName: this.form.value.debtorName!,
             installmentsNumber: this.form.value.installmentsNumber!,
         }
-        this.attemptsService.create(createAttemptDto).then((result) => {
+        this.itineraryService.create(createItineraryDto).then((result) => {
             this.isLoading = false;
             if (result.success) {
                 this.dialogRef.close(true);
-                this.router.navigate(['/dashboard/planejamento/' + result.data.id]);
+                this.router.navigate(['/dashboard/itinerario/' + result.data.id]);
             } else {
-                this.errors = ['Não foi possível criar a tentativa.'];
+                this.errors = ['Não foi possível criar o itinerário.'];
             }
         }).catch((err) => {
             this.isLoading = false;
-            this.errors = ['Erro ao criar tentativa. Tente novamente.'];
+            this.errors = ['Erro ao criar itinerário. Tente novamente.'];
         });
     }
     private getFormErrors(): string[] {
         const labels: Record<string, string> = {
-            agent: 'Agente',
-            debtor: 'Devedor',
-            contractId: 'ID do contrato',
+            agentName: 'Nome do Agente',
+            debtor: 'Nome do Devedor',
+            protocol: 'Protocolo',
             installmentsNumber: 'Parcelas em atraso',
         };
 
@@ -83,7 +84,6 @@ export class NewAttemptModal {
                 }
             }
         }
-
 
         return messages;
     }

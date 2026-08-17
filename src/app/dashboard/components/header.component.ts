@@ -1,4 +1,4 @@
-import { Component, Input, output } from '@angular/core';
+import { Component, input, Input, output } from '@angular/core';
 import { MatIcon } from "@angular/material/icon";
 import { DashboardSection } from '../../models/dashboard-section';
 
@@ -10,7 +10,6 @@ import { DashboardSection } from '../../models/dashboard-section';
 
 })
 export class DashboardHeaderComponent {
-    @Input() activeSection: DashboardSection = { name: '', icon: '', path: '' };
+    breadCrumbs = input.required<string>();
     toggleSidenav = output<void>();
-
 }

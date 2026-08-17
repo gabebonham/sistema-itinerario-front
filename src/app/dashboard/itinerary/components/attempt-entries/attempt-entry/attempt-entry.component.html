@@ -1,20 +1,24 @@
-<div class="cursor-pointer w-full border-1 border-border rounded-lg p-4 flex flex-col gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100" (click)="goToAttempt(id)">
+<div class="cursor-pointer w-full border-1 border-border rounded-lg p-4 flex flex-col gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100"
+    (click)="goToAttempt(id)">
     <div class="flex items-center gap-6 w-full">
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-2">
                 <div>
-                    <div class="rounded-full bg-background p-2 flex items-center justify-center">
-                        <mat-icon>person</mat-icon>
+                    <div class="rounded-full bg-quarternary p-2 flex items-center justify-center">
+                        <mat-icon class="!text-white">person</mat-icon>
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <h1 class="font-semibold">{{ name }}</h1>
-                    <p class="!text-text-muted">Contrato {{ contractId }} · {{ installmentsNumber }} faturas pendentes
+                    <div class="flex items-center">
+                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ name }}</span> <span class="text-text-black !font-bold"> · </span> Agente <span class="sora-font text-text-black">{{ agentName }}</span></p>
+                    </div>
+                    <p class="!text-text-muted !text-xs">Protocolo {{ protocol }} · {{ installmentsNumber }} faturas pendentes
                     </p>
                 </div>
             </div>
             <div class="flex items-center gap-6">
-                <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{ attempt }}</span>
+                <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{ attemptOrdinal
+                    }}</span>
                 <div class="flex items-center gap-2">
                     <mat-icon class="!text-text-muted "
                         [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{ getWindowIcon(window)
@@ -24,28 +28,20 @@
             </div>
         </div>
         <div class="h-8 w-px bg-text-muted"></div>
-        <div class="flex items-center justify-between w-5/6">
+        <div class="flex items-center justify-between w-4/6">
             <div class="flex items-center gap-2">
                 <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">calendar_today
                 </mat-icon>
-                <p class="!text-text-muted !text-xs">{{ getDateFormatted(date) }}</p>
+                <p class="!text-text-muted !text-xs">{{ getDateFormatted(start) }}</p> · <p class="!text-text-muted !text-xs">{{ getDateFormatted(finish) }}</p>
             </div>
+
+
             <div class="flex items-center gap-2">
-                <mat-icon class="!text-text-muted"
-                    style="font-size: 16px; width: 16px; height: 16px;">location_on</mat-icon>
-                <p class="!text-text-muted">{{ visitNumber }}</p>
-                <p class="!text-text-muted">Visitas</p>
-            </div>
-            <div class="flex items-center gap-2">
-                <p class="!text-text-muted">Agente:</p>
-                <p class="!text-text-muted !font-bold">{{ agent }}</p>
-            </div>
-            <div class="flex items-center gap-2">
-                @if (status == "Concluído") {
+                @if (status == "Entregue") {
                 <span class="text-xs px-2 rounded-2xl border-1 border-success bg-success/10 !text-success">{{ status
                     }}</span>
                 } @else if (status == "Pendente") {
-                <span class="text-xs px-2 rounded-2xl border-1 border-warning bg-warning/10 !text-warning">{{ status
+                <span class="text-xs px-2 rounded-2xl border-1 border-text-muted bg-text-muted/10 !text-text-muted">{{ status
                     }}</span>
                 } @else {
                 <span class="text-xs px-2 rounded-2xl border-1 border-text-muted bg-text-muted/10 !text-text-muted">{{

@@ -48,9 +48,3 @@ export class Address {
         this.updatedAt = updatedAt;
     }
 }
-export interface CreateAttemptDTO { 
-    agent: string 
-    debtor: string 
-    contractId: string 
-    installmentsNumber: number
-}

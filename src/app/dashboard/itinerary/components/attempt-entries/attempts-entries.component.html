@@ -14,10 +14,10 @@
     } @else if (!isLoading() && filteredAttempts().length == 0) {
     <div class="flex justify-center items-center pb-4"><h1>Sem registros...</h1></div>
     } @else if (!isLoading() && filteredAttempts().length != 0) {
-    @for (item of filteredAttempts(); track item.contractId) {
-    <app-attempt-entry [name]="item.clientName" [status]="item.status" [window]="item.window" [agent]="item.agent"
-      [date]="item.date" [visitNumber]="item.visitNumber" [attempt]="item.attempt"
-      [installmentsNumber]="item.installmentsNumber" [contractId]="item.contractId" [id]="item.id"></app-attempt-entry>
+    @for (item of filteredAttempts(); track item.protocol) {
+    <app-attempt-entry [name]="item.debtorName" [status]="item.status" [window]="item.window" [agentName]="item.agentName"
+      [start]="item.start" [finish]="item.finish" [visitNumber]="item.concludedVisitNumber" [attemptOrdinal]="item.attemptOrdinal"
+      [installmentsNumber]="item.installmentsNumber" [protocol]="item.protocol" [id]="item.id"></app-attempt-entry>
     }
     }
   </div>

@@ -10,8 +10,9 @@
 
                     <nav class="flex flex-col gap-1 p-4 w-full">
                         @for (section of sections; track section.name) {
+                            <a (click)="changeSection(section)" class="cursor-pointer">
                         @if (section.name === dashboardState.activeSection().name) {
-                        <span
+                        <span 
                             class="flex items-center gap-2 bg-primary/20 p-2 rounded-md text-surface/80 border-l-3 border-l-primary !font-bold">
 
                             <mat-icon class="!text-base !w-4 !h-4 !leading-4 flex items-center justify-center">
@@ -21,22 +22,21 @@
                             {{ section.name }}
                         </span>
                         } @else {
-                        <a class="flex items-center gap-2 cursor-pointer text-secondary p-2 rounded-md"
-                            (click)="changeSection(section)">
+                        <div class="flex items-center gap-2  text-secondary p-2 rounded-md">
 
                             <mat-icon class="!text-base !w-4 !h-4 !leading-4 flex items-center justify-center">
                                 {{ section.icon }}
                             </mat-icon>
 
                             {{ section.name }}
-                        </a>
-                        }
+                        </div>
+                        }</a>
                         }
                     </nav>
                 </div>
                 <div class="p-4 flex items-center justify-between w-full">
                     <div class=" flex items-center gap-2">
-                        <mat-icon class="text-white bg-background/50 p-2 box-content rounded-full">person</mat-icon>
+                        <mat-icon class="!text-white/70 bg-primary p-2 box-content rounded-full">person</mat-icon>
                         <div>
                             <h1 class="text-white">{{currentUser()?.username}}</h1>
                             <p class="text-text-muted">{{currentUser()?.role}}</p>
@@ -50,7 +50,7 @@
         </mat-sidenav>
 
         <mat-sidenav-content class="bg-background">
-            <app-dashboard-header [activeSection]="dashboardState.activeSection()"
+            <app-dashboard-header [breadCrumbs]="dashboardState.breadCrumbs()"
                 (toggleSidenav)="toggleSidenav()"></app-dashboard-header>
             <router-outlet />
         </mat-sidenav-content>

@@ -1,0 +1,51 @@
+<div class="h-full flex flex-col justify-between border-1 shadow-lg border-border rounded-xl px-6 py-4 gap-4">
+  <div>
+    <h1 class="text-lg !font-semibold">Janelas de Cobrança</h1>
+    <p>Máximo de 3 tentativas por cliente. Cada tentativa percorre todos os endereços.</p>
+  </div>
+  <div class="flex flex-col gap-4">
+
+    @for (attempt of attemptTakenWindows; track attempt; let i = $index) {
+    <div
+      class="px-4 flex justify-between items-center w-full rounded-xl border-1 border-success bg-card-background/30 py-2 shadow-md">
+      <div class="flex items-center gap-4">
+        <div
+          class="rounded-xl  bg-quarternary text-white box-content w-10 h-10 flex items-center justify-center !font-bold">
+          {{ i + 1 }}ª</div>
+        <div>
+          <h1>{{attempt.window}} · {{getTime(attempt.start)}} - {{getTime(attempt.finish)}}</h1>
+          <p class="text-text-muted !text-xs">{{getFormattedDate(attempt.start)}} · {{attempt.concludedVisitNumber}}
+            paradas</p>
+        </div>
+      </div>
+      <div><mat-icon class="!text-success">check_circle</mat-icon></div>
+    </div>
+    }
+    @for (window of windowsLeft; track window; let i = $index) {
+    @if (i==0) {
+    <div
+    (click)="openModal()"
+      class="cursor-pointer px-4 flex items-center w-full rounded-xl border-1 border-[#EE9B2D] bg-[#FEF5EA] py-2 shadow-md">
+      <div class="flex items-center gap-4">
+        <div
+          class="rounded-xl bg-quarternary text-white box-content w-10 h-10 flex items-center justify-center !font-bold">
+          {{ attemptTakenWindows.length + i + 1 }}ª</div>
+        <div class="empty-window">
+          <h1 class="text-text-black ">Adicionar janela</h1>
+        </div>
+      </div>
+    </div>
+    } @else { <div
+      class="px-4 flex items-center w-full rounded-xl border-1 border-text-muted/50 bg-card-background/30 py-2 shadow-md">
+      <div class="flex items-center gap-4">
+        <div
+          class="rounded-xl bg-quarternary text-white box-content w-10 h-10 flex items-center justify-center !font-bold">
+          {{ attemptTakenWindows.length + i + 1 }}ª</div>
+        <div class="empty-window">
+        </div>
+      </div>
+    </div> }
+
+    }
+  </div>
+</div>

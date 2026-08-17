@@ -14,12 +14,13 @@ export class AttemptEntryComponent {
     @Input() id!: string;
     @Input() status!: string;
     @Input() window!: string;
-    @Input() agent!: string;
-    @Input() date!: Date;
+    @Input() agentName!: string;
+    @Input() start!: Date;
+    @Input() finish!: Date;
     @Input() visitNumber!: number;
-    @Input() attempt!: string;
+    @Input() attemptOrdinal!: string;
     @Input() installmentsNumber!: number;
-    @Input() contractId!: string;
+    @Input() protocol!: string;
     constructor(private router: Router) { }
 
 
@@ -29,6 +30,8 @@ export class AttemptEntryComponent {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
+            hour:'2-digit',
+            minute:'2-digit'
         });
     }
     getWindowIcon(window: string): string {
@@ -44,6 +47,6 @@ export class AttemptEntryComponent {
         }
     }
     goToAttempt(id: string): void {
-        this.router.navigate(['/dashboard/planejamento', id]);
+        this.router.navigate(['/dashboard/itinerario', id]);
     }
 }

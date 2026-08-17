@@ -1,0 +1,56 @@
+<div class="w-full flex flex-col p-8 gap-4 justify-between h-full border-1 border-border">
+    <form [formGroup]="form" class="w-full flex flex-col gap-4">
+        <div>
+            <h1 class="text-xl">Adicionar janela para a tentativa</h1>
+        </div>
+        <div class="grid grid-cols-2 gap-6">
+            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+                <mat-label>De (Hora)</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">watch</mat-icon>
+                <input matInput type="text" placeholder="HH:MM" [value]="fromTime"
+                    (input)="onFromTime($event)" maxlength="5" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+                <mat-label>Até (Hora)</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">watch</mat-icon>
+                <input matInput type="text" placeholder="HH:MM" [value]="toTime"
+                    (input)="onToTime($event)" maxlength="5" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+                <mat-label>Dia</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">calendar_today</mat-icon>
+                <input matInput type="text" placeholder="dd/mm/aaaa" [value]="dateValue"
+                    (input)="onDateInput($event)" maxlength="10" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+                <mat-label>Selecione uma Janela</mat-label>
+                <mat-select [(value)]="selectedWindow">
+                    @for (option of windowsLeft; track option) {
+                    <mat-option [value]="option">{{ option }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+
+    <div>
+        @if (errors.length > 0) {
+        @for (error of errors; track error) {
+        <p class="text-error">{{error}}</p>
+        }
+        } @else if (isLoading) {
+        <div class="flex items-center justify-center w-full h-full p-4">
+            <div class="spinner"></div>
+        </div>
+        }
+    </div>
+
+    <div class="flex items-center justify-end gap-8">
+        <button (click)="cancel()"
+            class="cursor-pointer bg-white border-1 border-error !font-semibold text-error !text-md rounded-lg w-42 h-10">
+            Cancelar</button>
+        <button (click)="confirm()" [disabled]="isLoading"
+            class="cursor-pointer bg-primary !font-semibold text-white !text-md rounded-lg w-42 h-10 disabled:opacity-50">
+            Criar</button>
+    </div>
+</div>

@@ -3,8 +3,8 @@
         <mat-sidenav mode="side" [opened]="sidenavOpened" [style.width]="'256px !important'" [style.border]="'0px'"
             [style.border-radius]="'0px !important'">
             <div class="bg-text-black h-full rounded-none">
-                <div class="p-3.5 border-b-1 border-text-muted">
-                    <h1 class="text-xl text-text-muted">{{ appName }}</h1>
+                <div class="p-3.5 border-b-1 border-border">
+                    <h1 class="text-xl !text-white">{{ appName }}</h1>
                 </div>
                 <nav class="flex flex-col gap-1 p-4">
                     @for (section of sections; track section.name) {

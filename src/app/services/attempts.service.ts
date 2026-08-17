@@ -1,5 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Attempt } from '../models/attempt';
+import { delay, of } from 'rxjs';
+import { CreateAttemptDTO } from '../models/address';
 const ATTEMPT_MOCKS = [
   // 1-67
   {
@@ -371,5 +373,11 @@ export class AttemptsService {
       hasNext: page * pageSize < total,
       hasPrevious: page > 1
     };
+  }
+  async create(dto:CreateAttemptDTO) {
+    console.log('Attempt created')
+    console.log(JSON.stringify(dto, null, 2))
+    await new Promise(resolve => setTimeout(resolve, 800));
+    return { success: true, data:{id:'f47ac10b-58cc-4372-a567-0e02b2c3d001'} };
   }
 }

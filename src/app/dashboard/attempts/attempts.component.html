@@ -9,8 +9,11 @@
           status, janela de horário, número da
           tentativa e período.</p>
       </div>
-      <div><button class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-xl w-48 h-12">+ Nova
-          Tentativa</button></div>
+      <div>
+        <button (click)="openModal()" class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-xl w-48 h-12">
+          Nova Tentativa
+        </button>
+      </div>
     </div>
     <div class="flex flex-col gap-6">
       <app-attempts-filtered-search></app-attempts-filtered-search>

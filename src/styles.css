@@ -9,7 +9,7 @@
   /* UI */
   --color-background: #F8FAFC;
   --color-surface: #FFFFFF;
-  --color-border: #e2e8f0;
+  --color-border: #D9E0E9;
   --color-card-background: oklch(0.92 0.02 251.98);
   /* Text */
   --color-text-black: #2C2F33;
@@ -44,16 +44,16 @@
 }
 
 ::ng-deep .mdc-text-field--outlined .mdc-notched-outline__leading {
-  border-color: #e2e8f0 !important;
+  border-color: #D9E0E9 !important;
 }
 
 ::ng-deep .mdc-text-field--outlined .mdc-notched-outline__notch {
-  border-top-color: #e2e8f0 !important;
-  border-bottom-color: #e2e8f0 !important;
+  border-top-color: #D9E0E9 !important;
+  border-bottom-color: #D9E0E9 !important;
 }
 
 ::ng-deep .mdc-text-field--outlined .mdc-notched-outline__trailing {
-  border-color: #e2e8f0 !important;
+  border-color: #D9E0E9 !important;
 }
 ::ng-deep .mdc-text-field--outlined .mat-mdc-form-field-infix {
   min-height: 40px !important;

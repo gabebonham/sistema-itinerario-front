@@ -6,6 +6,8 @@ import { AttemptsService } from '../../services/attempts.service';
 import { Attempt } from '../../models/attempt';
 import { DashboardSection } from '../../models/dashboard-section';
 import { DashboardStateService } from '../../services/dashboard-state.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NewAttemptModal } from './components/new-attempt-modal/new-attempt-modal.component';
 
 
 @Component({
@@ -14,7 +16,7 @@ import { DashboardStateService } from '../../services/dashboard-state.service';
         MatSidenavModule,
         AttemptsFilteredSearchComponent,
         AttemptsEntriesComponent,
-        AttemptsEntriesComponent
+        AttemptsEntriesComponent,
     ],
     templateUrl: './attempts.component.html',
 })
@@ -27,12 +29,21 @@ export class AttemptsComponent implements OnInit {
     currentEntriesPage = 1;
     dashboardState = inject(DashboardStateService);
     isAttemptsLoading = true
-    constructor() {
+    constructor(private dialog: MatDialog) {
         this.dashboardState.setActiveSection({
             name: 'Tentativas',
             icon: 'checklist',
             path: '/tentativas'
         });
+    }
+
+    openModal() {
+        const ref = this.dialog.open(NewAttemptModal, {
+            width: '1200px',
+            height:'500px',
+            data: { titulo: 'Confirmação' }
+        });
+        ref.afterClosed().subscribe(result => console.log(result));
     }
     ngOnInit(): void {
         this.attemptsService.getAttempts(this.currentEntriesPage, 5).then((attempts) => {

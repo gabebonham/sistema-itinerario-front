@@ -11,27 +11,27 @@ export class Address {
     lat: number;
     lng: number;
     attemptId: string;
-    order:number;
+    order: number;
     createdAt: Date;
     updatedAt: Date;
     constructor(
-        id: string, 
-        city: string, 
-        neighborhood: string, 
-        street: string, 
-        number: string, 
-        complement: string, 
-        zipCode: string, 
-        state: string, 
-        country: string, 
-        lat: number, 
-        lng: number, 
+        id: string,
+        city: string,
+        neighborhood: string,
+        street: string,
+        number: string,
+        complement: string,
+        zipCode: string,
+        state: string,
+        country: string,
+        lat: number,
+        lng: number,
         attemptId: string,
         order: number,
         createdAt: Date,
         updatedAt: Date
     ) {
-        this.id = id;   
+        this.id = id;
         this.city = city;
         this.neighborhood = neighborhood;
         this.street = street;
@@ -47,4 +47,10 @@ export class Address {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+}
+export interface CreateAttemptDTO { 
+    agent: string 
+    debtor: string 
+    contractId: string 
+    installmentsNumber: number
 }

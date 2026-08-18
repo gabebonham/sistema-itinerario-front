@@ -6,27 +6,39 @@
         <div class="grid grid-cols-2 gap-6">
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
                 <mat-label>De (Hora)</mat-label>
-                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">watch</mat-icon>
-                <input matInput type="text" placeholder="HH:MM" [value]="fromTime"
-                    (input)="onFromTime($event)" maxlength="5" class="!text-xs" />
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">
+                    watch
+                </mat-icon>
+
+                <input (input)="onFromTime($event)" matInput type="text" placeholder="HH:MM" formControlName="fromTime" maxlength="5"
+                    class="!text-xs" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
                 <mat-label>Até (Hora)</mat-label>
-                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">watch</mat-icon>
-                <input matInput type="text" placeholder="HH:MM" [value]="toTime"
-                    (input)="onToTime($event)" maxlength="5" class="!text-xs" />
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">
+                    watch
+                </mat-icon>
+
+                <input (input)="onToTime($event)" matInput type="text" placeholder="HH:MM" formControlName="toTime" maxlength="5"
+                    class="!text-xs" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
                 <mat-label>Dia</mat-label>
-                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">calendar_today</mat-icon>
-                <input matInput type="text" placeholder="dd/mm/aaaa" [value]="dateValue"
-                    (input)="onDateInput($event)" maxlength="10" class="!text-xs" />
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">
+                    calendar_today
+                </mat-icon>
+
+                <input (input)="onDateInput($event)" matInput type="text" placeholder="dd/mm/aaaa" formControlName="dateValue" maxlength="10"
+                    class="!text-xs" />
             </mat-form-field>
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
                 <mat-label>Selecione uma Janela</mat-label>
-                <mat-select [(value)]="selectedWindow">
+
+                <mat-select formControlName="window">
                     @for (option of windowsLeft; track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                    <mat-option [value]="option">
+                        {{ option }}
+                    </mat-option>
                     }
                 </mat-select>
             </mat-form-field>

@@ -2,6 +2,12 @@ import { Address } from "./address";
 
 export type AttemptStatus = 'Entregue' | 'Pendente'
 export type AttemptOrdinal = '1ª Tentativa' | '2ª Tentativa' | '3ª Tentativa';
+export interface WindowEntry {
+    new:boolean
+    start: Date;
+    finish: Date;
+    window: string;
+}
 export class Attempt {
     id: string;
     status: AttemptStatus
@@ -15,7 +21,7 @@ export class Attempt {
     attemptOrdinal: AttemptOrdinal;
     installmentsNumber: number;
     itineraryId: string;
-    addresses?: Address[]
+    address?: Address
     createdAt: Date;
     updatedAt: Date;
     constructor(
@@ -33,7 +39,7 @@ export class Attempt {
         itineraryId: string,
         createdAt: Date,
         updatedAt: Date,
-        addresses?: Address[],
+        address?: Address,
     ) {
         this.id = id;
         this.debtorName = debtorName;
@@ -47,7 +53,7 @@ export class Attempt {
         this.installmentsNumber = installmentsNumber;
         this.attemptOrdinal = attemptOrdinal;
         this.concludedVisitNumber = concludedVisitNumber;
-        this.addresses = addresses;
+        this.address = address;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

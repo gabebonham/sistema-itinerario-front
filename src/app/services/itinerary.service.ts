@@ -129,7 +129,7 @@ export class ItineraryService {
   }
   async getAttemptsByItineraryId(id: string) {
     await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: ATTEMPT_MOCKS.filter(att => att.itineraryId == MOCK_ITINERARY.id) };
+    return { success: true, data: ATTEMPT_MOCKS.filter(att => att.itineraryId == id) };
   }
   async getAllPaginated(page: number, pageSize: number): Promise<{ data: Itinerary[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
     const total = MOCK_ITINERARY_LIST.length;

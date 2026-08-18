@@ -12,7 +12,7 @@ const MOCK_USER: User = {
     id: '1',
     username: 'Gabriel Grote',
     email: 'gabriel@teste.com',
-    role: 'Agente de Campo',
+    role: 'Notificador',
 };
 
 @Injectable({ providedIn: 'root' })

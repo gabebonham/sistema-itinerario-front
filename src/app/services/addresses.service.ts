@@ -243,7 +243,7 @@ export const ADDRESS_MOCKS: Address[] = [
     -29.8608,
     -51.1794,
     'f47ac10b-58cc-4372-a567-0e02b2c3d004',
-    1,
+    2,
     new Date('2023-01-14T13:45:00'),
     new Date('2023-01-16T14:05:00')
   ),
@@ -260,7 +260,7 @@ export const ADDRESS_MOCKS: Address[] = [
     -30.0245,
     -51.2016,
     'f47ac10b-58cc-4372-a567-0e02b2c3d004',
-    1,
+    3,
     new Date('2023-01-15T09:15:00'),
     new Date('2023-01-17T17:05:00')
   ),

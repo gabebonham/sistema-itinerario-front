@@ -1,5 +1,5 @@
 <div class="cursor-pointer w-full border-1 border-border rounded-lg p-4 flex flex-col gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100"
-    (click)="goToAttempt(id)">
+    (click)="goToAttempt(itineraryId)">
     <div class="flex items-center gap-6 w-full">
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-2">
@@ -10,7 +10,7 @@
                 </div>
                 <div class="flex flex-col">
                     <div class="flex items-center">
-                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ name }}</span> <span class="text-text-black !font-bold"> · </span> Agente <span class="sora-font text-text-black">{{ agentName }}</span></p>
+                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ name }}</span> <span class="text-text-black !font-bold"> · </span> Notificador <span class="sora-font text-text-black">{{ agentName }}</span></p>
                     </div>
                     <p class="!text-text-muted !text-xs">Protocolo {{ protocol }} · {{ installmentsNumber }} faturas pendentes
                     </p>

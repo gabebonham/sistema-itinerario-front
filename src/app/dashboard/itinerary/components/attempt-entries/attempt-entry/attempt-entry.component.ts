@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class AttemptEntryComponent {
     @Input() name!: string;
     @Input() id!: string;
+    @Input() itineraryId!: string;
     @Input() status!: string;
     @Input() window!: string;
     @Input() agentName!: string;

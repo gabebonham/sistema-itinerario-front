@@ -26,10 +26,9 @@
         <app-map-section class="w-2/3"></app-map-section>
       </div>
       <div class="flex flex-col gap-4">
-        @if (attempt?.addresses) {
+        <!-- @if (attempt?.addresses) {
         <app-addresses-section [isLoading]="false" [addresses]="attempt?.addresses ?? []"></app-addresses-section>
-
-        }
+        } -->
         <app-addresses-section [isLoading]="false" [addresses]="[]"></app-addresses-section>
       </div>
     </div>

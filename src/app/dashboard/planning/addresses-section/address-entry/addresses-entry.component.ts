@@ -17,8 +17,8 @@ export class AddressesEntryComponent {
     @Input() state!: string;
     @Input() country!: string;
     @Input() order!: number;
+    @Input() isNew!: boolean;
     delete = output<string>();
-
     onDelete(): void {
         this.delete.emit(this.id);
     }
@@ -33,6 +33,7 @@ export class AddressesEntryComponent {
             second: '2-digit',
         });
     }
+
     getFormatedPlace(): string {
         return `${this.street}, ${this.number} - ${this.neighborhood}, ${this.city} - ${this.state}, ${this.zipCode}`;
     }

@@ -1,8 +1,11 @@
 import { Component, computed, EventEmitter, input, Output, signal, effect } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AddressesEntryComponent } from './address-entry/addresses-entry.component';
-import { Address } from '../../../models/address';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Address, AddressEntry } from '../../../models/address';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialog } from '@angular/material/dialog';
+import { NewAddressModal } from './new-address-modal/new-address-modal.component';
+
 
 @Component({
     selector: 'app-addresses-section',
@@ -12,31 +15,45 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
 export class AddressesSectionComponent {
     addresses = input<Address[]>([]);
     isLoading = input.required<boolean>();
-
+    newAddressCreated = signal(false);
     @Output() orderChanged = new EventEmitter<Address[]>();
 
-    // cópia local editável, sincronizada sempre que o input mudar
-    localAddresses = signal<Address[]>([]);
+    localAddresses = signal<AddressEntry[]>([]);
 
-    constructor() {
+    constructor(private dialog: MatDialog) {
         effect(() => {
-            this.localAddresses.set([...this.addresses()]);
+            this.localAddresses.set(this.addresses().map(address => ({
+                new: false,
+                city: address.city,
+                neighborhood: address.neighborhood,
+                street: address.street,
+                number: address.number,
+                complement: address.complement,
+                zipCode: address.zipCode,
+                state: address.state,
+                country: address.country,
+                lat: address.lat,
+                lng: address.lng,
+                attemptId: address.attemptId,
+                order: address.order,
+            })));
         });
     }
-    deleteAddress(id:string) {
-        this.localAddresses.set(this.localAddresses().filter(address=>address.id!=id))
+    openModal() {
+        const ref = this.dialog.open(NewAddressModal, {
+            width: '1200px',
+            height: '500px',
+            data: {}
+        });
+        ref.afterClosed().subscribe(result => {
+            if (result.success) {
+                this.localAddresses.set([...this.addresses(), result.data]);
+
+                this.newAddressCreated.set(true)
+            }
+        });
     }
-    drop(event: CdkDragDrop<Address[]>) {
-        const updated = [...this.localAddresses()];
-        moveItemInArray(updated, event.previousIndex, event.currentIndex);
-
-        // reatribui o campo `order` de cada item conforme a nova posição
-        const reordered = updated.map((address, index) => ({
-            ...address,
-            order: index + 1, // ou index, dependendo se sua ordem começa em 0 ou 1
-        }));
-
-        this.localAddresses.set(reordered);
-        this.orderChanged.emit(reordered);
+    deleteNewAddress() {
+        this.localAddresses.set(this.localAddresses().filter(address => !address.new))
     }
 }

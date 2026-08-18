@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import { Attempt } from "../models/attempt";
 import { CreateAttemptDTO } from "../DTOS/create-attempt.dto";
 import { ADDRESS_MOCKS } from "./addresses.service";
-function getAddressesFor(attemptId: string) {
-  return ADDRESS_MOCKS.filter(a => a.attemptId === attemptId);
+function getaddressFor(attemptId: string) {
+  return ADDRESS_MOCKS.find((a:any) => a.attemptId === attemptId);
 }
 export const ATTEMPT_MOCKS: Attempt[] = [
   {
@@ -19,7 +19,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 3,
     itineraryId: 'IT-01-CT-006',
-    addresses:getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d004'),
+    address:getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d004'),
     createdAt: new Date('2023-01-04T13:10:00.000Z'),
     updatedAt: new Date('2023-01-06T09:30:00.000Z')
   },
@@ -36,7 +36,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '3ª Tentativa',
     installmentsNumber: 6,
     itineraryId: 'IT-03-CT-018',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d016'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d016'),
     createdAt: new Date('2023-01-16T11:00:00.000Z'),
     updatedAt: new Date('2023-01-18T08:50:00.000Z')
   },
@@ -53,7 +53,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 5,
     itineraryId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d001'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d001'),
     createdAt: new Date('2023-01-01T09:00:00.000Z'),
     updatedAt: new Date('2023-01-03T14:30:00.000Z')
   }, 
@@ -70,7 +70,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '2ª Tentativa',
     installmentsNumber: 4,
     itineraryId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d003'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d003'),
     createdAt: new Date('2023-01-03T08:20:00.000Z'),
     updatedAt: new Date('2023-01-05T11:00:00.000Z')
   },
@@ -87,7 +87,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '3ª Tentativa',
     installmentsNumber: 1,
     itineraryId: 'IT-03-CT-004',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d002'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d002'),
     createdAt: new Date('2023-01-02T10:15:00.000Z'),
     updatedAt: new Date('2023-01-04T16:45:00.000Z')
   },
@@ -105,7 +105,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 2,
     itineraryId: 'IT-01-CT-007',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d005'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d005'),
     createdAt: new Date('2023-01-05T07:50:00.000Z'),
     updatedAt: new Date('2023-01-07T15:20:00.000Z')
   },
@@ -122,7 +122,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '2ª Tentativa',
     installmentsNumber: 6,
     itineraryId: 'IT-02-CT-008',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d006'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d006'),
     createdAt: new Date('2023-01-06T12:00:00.000Z'),
     updatedAt: new Date('2023-01-08T17:10:00.000Z')
   },
@@ -139,7 +139,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '3ª Tentativa',
     installmentsNumber: 1,
     itineraryId: 'IT-03-CT-009',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d007'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d007'),
     createdAt: new Date('2023-01-07T09:40:00.000Z'),
     updatedAt: new Date('2023-01-09T10:05:00.000Z')
   },
@@ -156,7 +156,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 4,
     itineraryId: 'IT-01-CT-010',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d008'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d008'),
     createdAt: new Date('2023-01-08T11:25:00.000Z'),
     updatedAt: new Date('2023-01-10T13:50:00.000Z')
   },
@@ -173,7 +173,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '2ª Tentativa',
     installmentsNumber: 3,
     itineraryId: 'IT-02-CT-011',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d009'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d009'),
     createdAt: new Date('2023-01-09T08:15:00.000Z'),
     updatedAt: new Date('2023-01-11T16:00:00.000Z')
   },
@@ -190,7 +190,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 2,
     itineraryId: 'IT-01-CT-012',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d010'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d010'),
     createdAt: new Date('2023-01-10T10:30:00.000Z'),
     updatedAt: new Date('2023-01-12T09:15:00.000Z')
   },
@@ -207,7 +207,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '2ª Tentativa',
     installmentsNumber: 5,
     itineraryId: 'IT-02-CT-013',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d011'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d011'),
     createdAt: new Date('2023-01-11T14:00:00.000Z'),
     updatedAt: new Date('2023-01-13T15:45:00.000Z')
   },
@@ -224,7 +224,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '3ª Tentativa',
     installmentsNumber: 1,
     itineraryId: 'IT-03-CT-014',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d012'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d012'),
     createdAt: new Date('2023-01-12T09:20:00.000Z'),
     updatedAt: new Date('2023-01-14T11:30:00.000Z')
   },
@@ -241,7 +241,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 3,
     itineraryId: 'IT-01-CT-015',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d013'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d013'),
     createdAt: new Date('2023-01-13T08:00:00.000Z'),
     updatedAt: new Date('2023-01-15T10:20:00.000Z')
   },
@@ -258,7 +258,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '2ª Tentativa',
     installmentsNumber: 4,
     itineraryId: 'IT-02-CT-016',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d014'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d014'),
     createdAt: new Date('2023-01-14T13:40:00.000Z'),
     updatedAt: new Date('2023-01-16T14:00:00.000Z')
   },
@@ -275,7 +275,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 2,
     itineraryId: 'IT-01-CT-017',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d015'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d015'),
     createdAt: new Date('2023-01-15T09:10:00.000Z'),
     updatedAt: new Date('2023-01-17T17:00:00.000Z')
   },
@@ -292,7 +292,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '2ª Tentativa',
     installmentsNumber: 1,
     itineraryId: 'IT-02-CT-019',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d017'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d017'),
     createdAt: new Date('2023-01-17T15:30:00.000Z'),
     updatedAt: new Date('2023-01-19T16:10:00.000Z')
   },
@@ -309,7 +309,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 5,
     itineraryId: 'IT-01-CT-020',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d018'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d018'),
     createdAt: new Date('2023-01-18T10:00:00.000Z'),
     updatedAt: new Date('2023-01-20T09:40:00.000Z')
   },
@@ -326,7 +326,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '2ª Tentativa',
     installmentsNumber: 3,
     itineraryId: 'IT-02-CT-021',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d019'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d019'),
     createdAt: new Date('2023-01-19T08:25:00.000Z'),
     updatedAt: new Date('2023-01-21T12:00:00.000Z')
   },
@@ -343,7 +343,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 2,
     itineraryId: 'IT-01-CT-022',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d020'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d020'),
     createdAt: new Date('2023-01-20T14:15:00.000Z'),
     updatedAt: new Date('2023-01-22T15:30:00.000Z')
   },
@@ -360,7 +360,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '3ª Tentativa',
     installmentsNumber: 4,
     itineraryId: 'IT-03-CT-023',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d021'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d021'),
     createdAt: new Date('2023-01-21T09:50:00.000Z'),
     updatedAt: new Date('2023-01-23T11:20:00.000Z')
   },
@@ -377,7 +377,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '1ª Tentativa',
     installmentsNumber: 1,
     itineraryId: 'IT-01-CT-024',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d022'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d022'),
     createdAt: new Date('2023-01-22T07:40:00.000Z'),
     updatedAt: new Date('2023-01-24T08:10:00.000Z')
   },
@@ -394,7 +394,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '2ª Tentativa',
     installmentsNumber: 3,
     itineraryId: 'IT-02-CT-025',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d023'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d023'),
     createdAt: new Date('2023-01-23T13:00:00.000Z'),
     updatedAt: new Date('2023-01-25T14:45:00.000Z')
   },
@@ -411,7 +411,7 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     attemptOrdinal: '3ª Tentativa',
     installmentsNumber: 2,
     itineraryId: 'IT-03-CT-026',
-    addresses: getAddressesFor('f47ac10b-58cc-4372-a567-0e02b2c3d024'),
+    address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d024'),
     createdAt: new Date('2023-01-24T10:10:00.000Z'),
     updatedAt: new Date('2023-01-26T16:30:00.000Z')
   }

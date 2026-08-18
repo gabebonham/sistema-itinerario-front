@@ -46,7 +46,6 @@ export class PlanningComponent implements OnInit {
                 this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
                 this.breadCrumbs = this.activeSection.getPathWithId(id)
                 this.getAndBuildItinerary(id);
-                this.getAndBuildAddresses(id);
                 this.getAndBuildInstallments(id);
                 this.getAndBuildDebtor(id);
                 this.getAndBuildRoute(id);
@@ -56,14 +55,19 @@ export class PlanningComponent implements OnInit {
     getAndBuildItinerary(id: string): void {
         this.itineraryService.getAttemptsByItineraryId(id).then(result => {
             this.attempts.set(result.data);
+            this.getAndBuildAddresses(id);
         });
     }
+    
     getAndBuildAddresses(attemptId: string): void {
-        this.addressesService.getAddressByAttemptId(attemptId).then(addresses => {
-            this.addresses.set(addresses);
-        });
-        this.isAddressesLoading = false
+        const addresses = this.attempts()
+            .map(attempt => attempt.address)
+            .filter((address): address is Address => address !== undefined);
+
+        this.addresses.set(addresses);
+        this.isAddressesLoading = false;
     }
+
     getAndBuildInstallments(attemptId: string): void { }
     getAndBuildDebtor(attemptId: string): void {
         this.debtorService.getDebtorByAttemptId(attemptId).then(debtor => {

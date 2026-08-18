@@ -3,19 +3,18 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AttemptsService } from '../../../../services/attempts.service';
-import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ItineraryService } from '../../../../services/itinerary.service';
 import { CreateItineraryDTO } from '../../../../DTOS/create-itinerary.dto';
+import { AddressEntry } from '../../../../models/address';
 
 
 @Component({
-    selector: 'app-new-itinerary-modal',
+    selector: 'app-new-address-modal',
     imports: [MatDialogModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
-    templateUrl: './new-itinerary-modal.component.html',
+    templateUrl: './new-address-modal.component.html',
 })
-export class NewItineraryModal {
+export class NewAddressModal {
     isLoading = false
     itineraryService = inject(ItineraryService)
     private fb = inject(FormBuilder);
@@ -26,8 +25,7 @@ export class NewItineraryModal {
         installmentsNumber: [0, [Validators.required, Validators.min(1)]],
     });
     constructor(
-        private router: Router,
-        public dialogRef: MatDialogRef<NewItineraryModal, boolean>,
+        public dialogRef: MatDialogRef<NewAddressModal, { success: boolean, data: AddressEntry | null }>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
     errors: string[] = []
@@ -49,14 +47,29 @@ export class NewItineraryModal {
         this.itineraryService.create(createItineraryDto).then((result) => {
             this.isLoading = false;
             if (result.success) {
-                this.dialogRef.close(true);
-                this.router.navigate(['/dashboard/itinerario/' + result.data.id]);
+                this.dialogRef.close({
+                    success: true, data: {
+                        new: true,
+                        city: 'Esteio',
+                        neighborhood: 'Centro',
+                        street: 'Rua Getúlio Vargas',
+                        number: '333',
+                        complement: '',
+                        zipCode: '93260-020',
+                        state: 'RS',
+                        country: 'Brasil',
+                        lat: -29.8608,
+                        lng: -51.1794,
+                        attemptId: 'f47ac10b-58cc-4372-a567-0e02b2c3d004',
+                        order: 2,
+                    }
+                });
             } else {
-                this.errors = ['Não foi possível criar o itinerário.'];
+                this.errors = ['Não foi possível adicionar endereço.'];
             }
         }).catch((err) => {
             this.isLoading = false;
-            this.errors = ['Erro ao criar itinerário. Tente novamente.'];
+            this.errors = ['Erro ao adicionar endereço. Tente novamente.'];
         });
     }
     private getFormErrors(): string[] {
@@ -88,7 +101,7 @@ export class NewItineraryModal {
         return messages;
     }
     cancel() {
-        this.dialogRef.close(false);
+        this.dialogRef.close({ success: false, data: null });
     }
 
 }

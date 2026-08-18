@@ -1,3 +1,18 @@
+export interface AddressEntry {
+    new:boolean
+    city: string;
+    neighborhood: string;
+    street: string;
+    number: string;
+    complement: string;
+    zipCode: string;
+    state: string;
+    country: string;
+    lat: number;
+    lng: number;
+    attemptId: string;
+    order: number;
+}
 export class Address {
     id: string;
     city: string;

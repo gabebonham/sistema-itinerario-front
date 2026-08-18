@@ -44,12 +44,12 @@ export class PlanningComponent implements OnInit {
             if (id) {
                 this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Itinerário')!);
                 this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
+                this.breadCrumbs = this.activeSection.getPathWithId(id)
                 this.getAndBuildItinerary(id);
                 this.getAndBuildAddresses(id);
                 this.getAndBuildInstallments(id);
                 this.getAndBuildDebtor(id);
                 this.getAndBuildRoute(id);
-                this.breadCrumbs = this.activeSection.getPathWithId(id)
             }
         });
     }

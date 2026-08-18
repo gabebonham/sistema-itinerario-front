@@ -1,0 +1,31 @@
+<div class="h-full px-8 py-8">
+  <div>
+    <h1 class="font-semibold text-text-muted">ITINERÁRIOS · HISTÓRICO</h1>
+    <h1 class="text-3xl font-bold pt-2">Histórico de Itinerários</h1>
+    <p class="text-text-muted text-sm py-4 w-2/3">Consulte todos os itinerários registrados, com o fluxo completo de
+      diligências.</p>
+  </div>
+  <div class="px-6 py-8 flex flex-col gap-8 border-border border-1 shadow-lg rounded-xl bg-white">
+
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <mat-icon class="!text-text-muted !text-lg !h-7">history</mat-icon>
+        <h1 class="text-lg font-bold text-text-black">Consultar histórico</h1>
+      </div>
+      <div class="flex justify-center items-center pr-24">
+        <div class="flex items-center gap-8">
+          <mat-icon
+            class="{{ hasPreviousPages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
+            (click)="onPreviousPage()">arrow_back</mat-icon>
+          {{ currentPage }}
+          <mat-icon
+            class="{{ hasMorePages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
+            (click)="onNextPage()">arrow_forward</mat-icon>
+        </div>
+      </div>
+    </div>
+    @for (itinerary of itineraryList(); track itinerary) {
+    <app-itinerary-entry [itinerary]="itinerary"></app-itinerary-entry>
+    }
+  </div>
+</div>

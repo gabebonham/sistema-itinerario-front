@@ -77,12 +77,15 @@
 ::ng-deep .mat-mdc-option {
   background-color: #ffffff !important;
 }
+:host ::ng-deep .mat-expansion-panel-header {
+  padding: 20px 24px !important;
+  height: auto !important; 
+}
 html,
 body {
   height: 100%;
   margin: 0;
 }
-
 h1 {
   font-family: "Sora", sans-serif;
   font-optical-sizing: auto;

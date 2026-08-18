@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Attempt } from '../models/attempt';
 import { Address } from '../models/address';
-const ADDRESS_MOCKS: Address[] = [
+export const ADDRESS_MOCKS: Address[] = [
   // attempt d001 - 4 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e001',

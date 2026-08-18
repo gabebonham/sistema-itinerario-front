@@ -1,3 +1,5 @@
+import { Address } from "./address";
+
 export type AttemptStatus = 'Entregue' | 'Pendente'
 export type AttemptOrdinal = '1ª Tentativa' | '2ª Tentativa' | '3ª Tentativa';
 export class Attempt {
@@ -13,6 +15,7 @@ export class Attempt {
     attemptOrdinal: AttemptOrdinal;
     installmentsNumber: number;
     itineraryId: string;
+    addresses?: Address[]
     createdAt: Date;
     updatedAt: Date;
     constructor(
@@ -30,6 +33,7 @@ export class Attempt {
         itineraryId: string,
         createdAt: Date,
         updatedAt: Date,
+        addresses?: Address[],
     ) {
         this.id = id;
         this.debtorName = debtorName;
@@ -43,6 +47,7 @@ export class Attempt {
         this.installmentsNumber = installmentsNumber;
         this.attemptOrdinal = attemptOrdinal;
         this.concludedVisitNumber = concludedVisitNumber;
+        this.addresses = addresses;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

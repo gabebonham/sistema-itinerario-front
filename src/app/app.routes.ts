@@ -4,6 +4,7 @@ import { FieldComponent } from './dashboard/field/field.component';
 import { PlanningComponent } from './dashboard/planning/planning.component';
 import { HistoryComponent } from './dashboard/history/history.component';
 import { AttemptComponent } from './dashboard/attempt/attempt.component';
+import { NotificatorsComponent } from './dashboard/notificators/notificators.component';
 
 export const routes: Routes = [
     // {
@@ -20,6 +21,7 @@ export const routes: Routes = [
             { path: 'tentativas/:id', component: PlanningComponent},
             { path: 'campo', component: FieldComponent },
             { path: 'historico', component: HistoryComponent },
+            { path: 'notificadores', component: NotificatorsComponent },
             { path: '', redirectTo: 'tentativas', pathMatch: 'full' },
         ]
     },

@@ -1,6 +1,5 @@
 import { Component, input, Input, output } from '@angular/core';
 import { MatIcon } from "@angular/material/icon";
-import { DashboardSection } from '../../models/dashboard-section';
 
 @Component({
     selector: 'app-dashboard-header',

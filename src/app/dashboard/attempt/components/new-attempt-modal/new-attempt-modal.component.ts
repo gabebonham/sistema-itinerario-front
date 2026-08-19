@@ -3,21 +3,20 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AttemptsService } from '../../../../services/attempts.service';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ItineraryService } from '../../../../services/itinerary.service';
-import { CreateItineraryDTO } from '../../../../DTOS/create-itinerary.dto';
+import { AttemptService } from '../../../../services/attempt.service';
+import { CreateAttemptDTO } from '../../../../DTOS/create-itinerary.dto';
 
 
 @Component({
-    selector: 'app-new-itinerary-modal',
+    selector: 'app-new-attempt-modal',
     imports: [MatDialogModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
-    templateUrl: './new-itinerary-modal.component.html',
+    templateUrl: './new-attempt-modal.component.html',
 })
-export class NewItineraryModal {
+export class NewAttemptModal {
     isLoading = false
-    itineraryService = inject(ItineraryService)
+    attemptService = inject(AttemptService)
     private fb = inject(FormBuilder);
     form = this.fb.group({
         agentName: ['', Validators.required],
@@ -27,7 +26,7 @@ export class NewItineraryModal {
     });
     constructor(
         private router: Router,
-        public dialogRef: MatDialogRef<NewItineraryModal, boolean>,
+        public dialogRef: MatDialogRef<NewAttemptModal, boolean>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
     errors: string[] = []
@@ -40,23 +39,23 @@ export class NewItineraryModal {
         }
         this.isLoading = true;
         this.errors = [];
-        const createItineraryDto: CreateItineraryDTO = {
+        const createAttemptDto: CreateAttemptDTO = {
             agentName: this.form.value.agentName!,
             protocol: this.form.value.protocol!,
             debtorName: this.form.value.debtorName!,
             installmentsNumber: this.form.value.installmentsNumber!,
         }
-        this.itineraryService.create(createItineraryDto).then((result) => {
+        this.attemptService.create(createAttemptDto).then((result) => {
             this.isLoading = false;
             if (result.success) {
                 this.dialogRef.close(true);
-                this.router.navigate(['/dashboard/itinerario/' + result.data.id]);
+                this.router.navigate(['/dashboard/tentativas/' + result.data.id]);
             } else {
-                this.errors = ['Não foi possível criar o itinerário.'];
+                this.errors = ['Não foi possível criar a tentativa.'];
             }
         }).catch((err) => {
             this.isLoading = false;
-            this.errors = ['Erro ao criar itinerário. Tente novamente.'];
+            this.errors = ['Erro ao criar tentativa. Tente novamente.'];
         });
     }
     private getFormErrors(): string[] {

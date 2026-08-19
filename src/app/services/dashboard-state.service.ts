@@ -2,8 +2,6 @@ import { Injectable, signal } from '@angular/core';
 import { DashboardSection } from '../models/dashboard-section';
 import { dashboardSections } from '../dashboard/constants/constants';
 
-
-
 @Injectable({
   providedIn: 'root'
 })

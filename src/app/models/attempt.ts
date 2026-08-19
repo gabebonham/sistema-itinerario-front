@@ -1,59 +1,30 @@
-import { Address } from "./address";
+import { Diligence } from "./diligence";
 
-export type AttemptStatus = 'Entregue' | 'Pendente'
-export type AttemptOrdinal = '1ª Tentativa' | '2ª Tentativa' | '3ª Tentativa';
-export interface WindowEntry {
-    new:boolean
-    start: Date;
-    finish: Date;
-    window: string;
-}
 export class Attempt {
     id: string;
-    status: AttemptStatus
+    debtorId: string;
     protocol: string;
-    start: Date;
-    finish: Date;
-    agentName: string;
-    debtorName: string;
-    window: string;
+    lastDiligenceId: string;
     concludedVisitNumber: number;
-    attemptOrdinal: AttemptOrdinal;
-    installmentsNumber: number;
-    itineraryId: string;
-    address?: Address
+    diligences?: Diligence[]
     createdAt: Date;
     updatedAt: Date;
     constructor(
         id: string,
-        status: AttemptStatus,
+        debtorId: string,
         protocol: string,
-        start: Date,
-        finish: Date,
-        agentName: string,
-        debtorName: string,
-        window: string,
         concludedVisitNumber: number,
-        attemptOrdinal: AttemptOrdinal,
-        installmentsNumber: number,
-        itineraryId: string,
+        lastDiligenceId: string,
         createdAt: Date,
         updatedAt: Date,
-        address?: Address,
+        diligences?: Diligence[],
     ) {
         this.id = id;
-        this.debtorName = debtorName;
-        this.status = status;
-        this.window = window;
-        this.agentName = agentName;
         this.protocol = protocol;
-        this.start = start;
-        this.finish = finish;
-        this.itineraryId = itineraryId;
-        this.installmentsNumber = installmentsNumber;
-        this.attemptOrdinal = attemptOrdinal;
+        this.diligences = diligences;
         this.concludedVisitNumber = concludedVisitNumber;
-        this.address = address;
+        this.debtorId = debtorId;
+        this.lastDiligenceId = lastDiligenceId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

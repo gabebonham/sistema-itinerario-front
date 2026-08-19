@@ -4,26 +4,26 @@ import { Router } from '@angular/router';
 
 
 @Component({
-    selector: 'app-attempt-entry',
+    selector: 'app-diligence-entry',
     standalone: true,
     imports: [MatIconModule],
-    templateUrl: './attempt-entry.component.html',
+    templateUrl: './diligence-entry.component.html',
 })
-export class AttemptEntryComponent {
+export class DiligenceEntryComponent {
     @Input() name!: string;
     @Input() id!: string;
-    @Input() itineraryId!: string;
+    @Input() attemptId!: string;
     @Input() status!: string;
     @Input() window!: string;
     @Input() agentName!: string;
     @Input() start!: Date;
     @Input() finish!: Date;
     @Input() visitNumber!: number;
-    @Input() attemptOrdinal!: string;
+    @Input() diligenceOrdinal!: string;
     @Input() installmentsNumber!: number;
     @Input() protocol!: string;
-    constructor(private router: Router) { }
 
+    constructor(private router: Router) { }
 
     getDateFormatted(date: Date): string {
         const d = new Date(date);
@@ -47,7 +47,7 @@ export class AttemptEntryComponent {
                 return 'help_outline';
         }
     }
-    goToAttempt(id: string): void {
-        this.router.navigate(['/dashboard/itinerario', id]);
+    goToDiligence(id: string): void {
+        this.router.navigate(['/dashboard/tentativas', id]);
     }
 }

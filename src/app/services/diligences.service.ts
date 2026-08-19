@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Attempt } from "../models/attempt";
-import { CreateAttemptDTO } from "../DTOS/create-attempt.dto";
 import { ADDRESS_MOCKS } from "./addresses.service";
-function getaddressFor(attemptId: string) {
-  return ADDRESS_MOCKS.find((a:any) => a.attemptId === attemptId);
+import { Diligence } from "../models/diligence";
+import { CreateDiligenceDTO } from "../DTOS/create-attempt.dto";
+function getaddressFor(diligenceId: string) {
+  return ADDRESS_MOCKS.find((a:any) => a.diligenceId === diligenceId);
 }
-export const ATTEMPT_MOCKS: Attempt[] = [
+export const DILIGENCE_MOCKS: Diligence[] = [
   {
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3d004',
     status: 'Pendente',
@@ -16,9 +16,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Ricardo Santos',
     window: 'Sábado',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 3,
-    itineraryId: 'IT-01-CT-006',
+    attemptId: 'IT-01-CT-006',
     address:getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d004'),
     createdAt: new Date('2023-01-04T13:10:00.000Z'),
     updatedAt: new Date('2023-01-06T09:30:00.000Z')
@@ -33,9 +33,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Gustavo Lima',
     window: 'Manhã',
     concludedVisitNumber: 3,
-    attemptOrdinal: '3ª Tentativa',
+    diligenceOrdinal: '3ª Diligência',
     installmentsNumber: 6,
-    itineraryId: 'IT-03-CT-018',
+    attemptId: 'IT-03-CT-018',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d016'),
     createdAt: new Date('2023-01-16T11:00:00.000Z'),
     updatedAt: new Date('2023-01-18T08:50:00.000Z')
@@ -50,9 +50,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Mariana Costa',
     window: 'Sábado',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 5,
-    itineraryId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
+    attemptId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d001'),
     createdAt: new Date('2023-01-01T09:00:00.000Z'),
     updatedAt: new Date('2023-01-03T14:30:00.000Z')
@@ -67,9 +67,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Mariana Costa',
     window: 'Manhã',
     concludedVisitNumber: 2,
-    attemptOrdinal: '2ª Tentativa',
+    diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 4,
-    itineraryId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
+    attemptId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d003'),
     createdAt: new Date('2023-01-03T08:20:00.000Z'),
     updatedAt: new Date('2023-01-05T11:00:00.000Z')
@@ -84,9 +84,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Carlos Souza',
     window: 'Tarde',
     concludedVisitNumber: 3,
-    attemptOrdinal: '3ª Tentativa',
+    diligenceOrdinal: '3ª Diligência',
     installmentsNumber: 1,
-    itineraryId: 'IT-03-CT-004',
+    attemptId: 'IT-03-CT-004',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d002'),
     createdAt: new Date('2023-01-02T10:15:00.000Z'),
     updatedAt: new Date('2023-01-04T16:45:00.000Z')
@@ -102,9 +102,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Fernanda Lima',
     window: 'Manhã',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 2,
-    itineraryId: 'IT-01-CT-007',
+    attemptId: 'IT-01-CT-007',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d005'),
     createdAt: new Date('2023-01-05T07:50:00.000Z'),
     updatedAt: new Date('2023-01-07T15:20:00.000Z')
@@ -119,9 +119,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Bruno Alencar',
     window: 'Tarde',
     concludedVisitNumber: 2,
-    attemptOrdinal: '2ª Tentativa',
+    diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 6,
-    itineraryId: 'IT-02-CT-008',
+    attemptId: 'IT-02-CT-008',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d006'),
     createdAt: new Date('2023-01-06T12:00:00.000Z'),
     updatedAt: new Date('2023-01-08T17:10:00.000Z')
@@ -136,9 +136,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Juliana Vieira',
     window: 'Manhã',
     concludedVisitNumber: 3,
-    attemptOrdinal: '3ª Tentativa',
+    diligenceOrdinal: '3ª Diligência',
     installmentsNumber: 1,
-    itineraryId: 'IT-03-CT-009',
+    attemptId: 'IT-03-CT-009',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d007'),
     createdAt: new Date('2023-01-07T09:40:00.000Z'),
     updatedAt: new Date('2023-01-09T10:05:00.000Z')
@@ -153,9 +153,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Lucas Ferreira',
     window: 'Sábado',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 4,
-    itineraryId: 'IT-01-CT-010',
+    attemptId: 'IT-01-CT-010',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d008'),
     createdAt: new Date('2023-01-08T11:25:00.000Z'),
     updatedAt: new Date('2023-01-10T13:50:00.000Z')
@@ -170,9 +170,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Beatriz Rocha',
     window: 'Tarde',
     concludedVisitNumber: 2,
-    attemptOrdinal: '2ª Tentativa',
+    diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 3,
-    itineraryId: 'IT-02-CT-011',
+    attemptId: 'IT-02-CT-011',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d009'),
     createdAt: new Date('2023-01-09T08:15:00.000Z'),
     updatedAt: new Date('2023-01-11T16:00:00.000Z')
@@ -187,9 +187,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Rodrigo Melo',
     window: 'Manhã',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 2,
-    itineraryId: 'IT-01-CT-012',
+    attemptId: 'IT-01-CT-012',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d010'),
     createdAt: new Date('2023-01-10T10:30:00.000Z'),
     updatedAt: new Date('2023-01-12T09:15:00.000Z')
@@ -204,9 +204,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Camila Pires',
     window: 'Tarde',
     concludedVisitNumber: 2,
-    attemptOrdinal: '2ª Tentativa',
+    diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 5,
-    itineraryId: 'IT-02-CT-013',
+    attemptId: 'IT-02-CT-013',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d011'),
     createdAt: new Date('2023-01-11T14:00:00.000Z'),
     updatedAt: new Date('2023-01-13T15:45:00.000Z')
@@ -221,9 +221,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Thiago Ribeiro',
     window: 'Sábado',
     concludedVisitNumber: 3,
-    attemptOrdinal: '3ª Tentativa',
+    diligenceOrdinal: '3ª Diligência',
     installmentsNumber: 1,
-    itineraryId: 'IT-03-CT-014',
+    attemptId: 'IT-03-CT-014',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d012'),
     createdAt: new Date('2023-01-12T09:20:00.000Z'),
     updatedAt: new Date('2023-01-14T11:30:00.000Z')
@@ -238,9 +238,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Amanda Martins',
     window: 'Manhã',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 3,
-    itineraryId: 'IT-01-CT-015',
+    attemptId: 'IT-01-CT-015',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d013'),
     createdAt: new Date('2023-01-13T08:00:00.000Z'),
     updatedAt: new Date('2023-01-15T10:20:00.000Z')
@@ -255,9 +255,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Felipe Cardoso',
     window: 'Sábado',
     concludedVisitNumber: 2,
-    attemptOrdinal: '2ª Tentativa',
+    diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 4,
-    itineraryId: 'IT-02-CT-016',
+    attemptId: 'IT-02-CT-016',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d014'),
     createdAt: new Date('2023-01-14T13:40:00.000Z'),
     updatedAt: new Date('2023-01-16T14:00:00.000Z')
@@ -272,9 +272,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Larissa Nunes',
     window: 'Tarde',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 2,
-    itineraryId: 'IT-01-CT-017',
+    attemptId: 'IT-01-CT-017',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d015'),
     createdAt: new Date('2023-01-15T09:10:00.000Z'),
     updatedAt: new Date('2023-01-17T17:00:00.000Z')
@@ -289,9 +289,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Patricia Mendes',
     window: 'Tarde',
     concludedVisitNumber: 2,
-    attemptOrdinal: '2ª Tentativa',
+    diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 1,
-    itineraryId: 'IT-02-CT-019',
+    attemptId: 'IT-02-CT-019',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d017'),
     createdAt: new Date('2023-01-17T15:30:00.000Z'),
     updatedAt: new Date('2023-01-19T16:10:00.000Z')
@@ -306,9 +306,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Leonardo Cruz',
     window: 'Sábado',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 5,
-    itineraryId: 'IT-01-CT-020',
+    attemptId: 'IT-01-CT-020',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d018'),
     createdAt: new Date('2023-01-18T10:00:00.000Z'),
     updatedAt: new Date('2023-01-20T09:40:00.000Z')
@@ -323,9 +323,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Isabela Fontes',
     window: 'Manhã',
     concludedVisitNumber: 2,
-    attemptOrdinal: '2ª Tentativa',
+    diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 3,
-    itineraryId: 'IT-02-CT-021',
+    attemptId: 'IT-02-CT-021',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d019'),
     createdAt: new Date('2023-01-19T08:25:00.000Z'),
     updatedAt: new Date('2023-01-21T12:00:00.000Z')
@@ -340,9 +340,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Daniel Barbosa',
     window: 'Tarde',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 2,
-    itineraryId: 'IT-01-CT-022',
+    attemptId: 'IT-01-CT-022',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d020'),
     createdAt: new Date('2023-01-20T14:15:00.000Z'),
     updatedAt: new Date('2023-01-22T15:30:00.000Z')
@@ -357,9 +357,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Vanessa Dias',
     window: 'Sábado',
     concludedVisitNumber: 3,
-    attemptOrdinal: '3ª Tentativa',
+    diligenceOrdinal: '3ª Diligência',
     installmentsNumber: 4,
-    itineraryId: 'IT-03-CT-023',
+    attemptId: 'IT-03-CT-023',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d021'),
     createdAt: new Date('2023-01-21T09:50:00.000Z'),
     updatedAt: new Date('2023-01-23T11:20:00.000Z')
@@ -374,9 +374,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Renan Moreira',
     window: 'Manhã',
     concludedVisitNumber: 1,
-    attemptOrdinal: '1ª Tentativa',
+    diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 1,
-    itineraryId: 'IT-01-CT-024',
+    attemptId: 'IT-01-CT-024',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d022'),
     createdAt: new Date('2023-01-22T07:40:00.000Z'),
     updatedAt: new Date('2023-01-24T08:10:00.000Z')
@@ -391,9 +391,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Gabriela Ramos',
     window: 'Tarde',
     concludedVisitNumber: 2,
-    attemptOrdinal: '2ª Tentativa',
+    diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 3,
-    itineraryId: 'IT-02-CT-025',
+    attemptId: 'IT-02-CT-025',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d023'),
     createdAt: new Date('2023-01-23T13:00:00.000Z'),
     updatedAt: new Date('2023-01-25T14:45:00.000Z')
@@ -408,9 +408,9 @@ export const ATTEMPT_MOCKS: Attempt[] = [
     debtorName: 'Eduardo Antunes',
     window: 'Sábado',
     concludedVisitNumber: 3,
-    attemptOrdinal: '3ª Tentativa',
+    diligenceOrdinal: '3ª Diligência',
     installmentsNumber: 2,
-    itineraryId: 'IT-03-CT-026',
+    attemptId: 'IT-03-CT-026',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d024'),
     createdAt: new Date('2023-01-24T10:10:00.000Z'),
     updatedAt: new Date('2023-01-26T16:30:00.000Z')
@@ -419,16 +419,15 @@ export const ATTEMPT_MOCKS: Attempt[] = [
 
 
 @Injectable({ providedIn: 'root' })
-export class AttemptsService {
-  async getAttemptById(id: string) {
+export class DiligencesService {
+  async getDiligenceById(id: string) {
     // Simula uma busca no banco de dados
-    return { success: true, data: ATTEMPT_MOCKS.find(attempt => attempt.id === id) };
+    return { success: true, data: DILIGENCE_MOCKS.find(diligence => diligence.id === id) };
   }
-  async create(dto: CreateAttemptDTO) {
-    console.log('Attempt created')
+  async create(dto: CreateDiligenceDTO) {
+    console.log('Diligence created')
     console.log(JSON.stringify(dto, null, 2))
     await new Promise(resolve => setTimeout(resolve, 800));
     return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };
   }
-
 }

@@ -3,12 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AttemptsService } from '../../../../services/attempts.service';
-import { CreateAttemptDTO } from '../../../../DTOS/create-attempt.dto';
 import { MatSelectModule } from '@angular/material/select';
-import { WindowEntry } from '../../../../models/attempt';
+import { DiligencesService } from '../../../../services/diligences.service';
+import { DiligenceOrdinal, WindowEntry } from '../../../../models/diligence';
 
 @Component({
     selector: 'app-new-window-modal',
@@ -21,7 +19,7 @@ export class NewWindowModal {
 
     windowsLeft: string[] = [];
 
-    attemptsService = inject(AttemptsService);
+    diligencesService = inject(DiligencesService);
     private fb = inject(FormBuilder);
 
     form = this.fb.group({
@@ -32,12 +30,11 @@ export class NewWindowModal {
     });
 
     constructor(
-        private router: Router,
         public dialogRef: MatDialogRef<
             NewWindowModal,
             { success: boolean; data: WindowEntry | null }
         >,
-        @Inject(MAT_DIALOG_DATA) public data: { windowsLeft: string[] }
+        @Inject(MAT_DIALOG_DATA) public data: { windowsLeft: string[], diligenceOrdinal:DiligenceOrdinal }
     ) {
         this.windowsLeft = data.windowsLeft;
     }
@@ -58,7 +55,7 @@ export class NewWindowModal {
             dateValue: this.form.value.dateValue!,
         };
 
-        this.attemptsService.create(createWindowDto)
+        this.diligencesService.create(createWindowDto)
             .then(result => {
                 this.isLoading = false;
 
@@ -69,20 +66,20 @@ export class NewWindowModal {
                             finish: new Date(),
                             start: new Date(),
                             new: true,
-                            window: this.form.value.window!
+                            window: this.form.value.window!,
+                            diligenceOrdinal:this.data.diligenceOrdinal
                         }
                     });
-
                 } else {
                     this.errors = [
-                        'Não foi possível criar o itinerário.'
+                        'Não foi possível criar a tentativa.'
                     ];
                 }
             })
             .catch(() => {
                 this.isLoading = false;
                 this.errors = [
-                    'Erro ao criar itinerário. Tente novamente.'
+                    'Erro ao criar tentativa. Tente novamente.'
                 ];
             });
     }

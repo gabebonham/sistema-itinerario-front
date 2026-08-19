@@ -14,7 +14,7 @@ const DEBTOR_MOCK: Debtor =
 
 @Injectable({ providedIn: 'root' })
 export class DebtorService {
-  async getDebtorByAttemptId(id: string): Promise<Debtor> {
+  async getDebtorByDiligenceId(id: string): Promise<Debtor> {
     return DEBTOR_MOCK;
   }
 }

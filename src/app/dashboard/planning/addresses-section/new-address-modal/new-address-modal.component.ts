@@ -4,9 +4,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ItineraryService } from '../../../../services/itinerary.service';
-import { CreateItineraryDTO } from '../../../../DTOS/create-itinerary.dto';
+import { AttemptService } from '../../../../services/attempt.service';
 import { AddressEntry } from '../../../../models/address';
+import { CreateAttemptDTO } from '../../../../DTOS/create-itinerary.dto';
 
 
 @Component({
@@ -16,13 +16,10 @@ import { AddressEntry } from '../../../../models/address';
 })
 export class NewAddressModal {
     isLoading = false
-    itineraryService = inject(ItineraryService)
+    attemptService = inject(AttemptService)
     private fb = inject(FormBuilder);
     form = this.fb.group({
-        agentName: ['', Validators.required],
-        debtorName: ['', Validators.required],
-        protocol: ['', Validators.required],
-        installmentsNumber: [0, [Validators.required, Validators.min(1)]],
+        address: ['', Validators.required],
     });
     constructor(
         public dialogRef: MatDialogRef<NewAddressModal, { success: boolean, data: AddressEntry | null }>,
@@ -38,13 +35,13 @@ export class NewAddressModal {
         }
         this.isLoading = true;
         this.errors = [];
-        const createItineraryDto: CreateItineraryDTO = {
-            agentName: this.form.value.agentName!,
-            protocol: this.form.value.protocol!,
-            debtorName: this.form.value.debtorName!,
-            installmentsNumber: this.form.value.installmentsNumber!,
+        const createAttemptDto: CreateAttemptDTO = {
+            agentName: '',
+            protocol: '',
+            debtorName: '',
+            installmentsNumber: 0,
         }
-        this.itineraryService.create(createItineraryDto).then((result) => {
+        this.attemptService.create(createAttemptDto).then((result) => {
             this.isLoading = false;
             if (result.success) {
                 this.dialogRef.close({
@@ -60,8 +57,6 @@ export class NewAddressModal {
                         country: 'Brasil',
                         lat: -29.8608,
                         lng: -51.1794,
-                        attemptId: 'f47ac10b-58cc-4372-a567-0e02b2c3d004',
-                        order: 2,
                     }
                 });
             } else {

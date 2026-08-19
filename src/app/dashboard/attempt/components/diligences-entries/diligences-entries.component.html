@@ -2,22 +2,22 @@
   <div class="pb-6 flex flex-col hap-4">
     <div class="flex items-center gap-4">
       <mat-icon class="!text-text-muted !text-lg !h-7">route</mat-icon>
-      <h1 class="text-lg font-bold text-text-black">Retomar um itinerário</h1>
+      <h1 class="text-lg font-bold text-text-black">Retomar uma tentativa</h1>
     </div>
-    <p class="!text-text-muted !text-xs">Clique no itinerário para criar mais uma tentativa.</p>
+    <p class="!text-text-muted !text-xs">Clique na tentativa para criar mais uma tentativa.</p>
   </div>
   <div class="flex flex-col gap-3">
     @if (isLoading()) {
     <div class="flex items-center justify-center w-full h-full p-4">
       <div class="spinner"></div>
     </div>
-    } @else if (!isLoading() && filteredAttempts().length == 0) {
+    } @else if (!isLoading() && filteredDiligences().length == 0) {
     <div class="flex justify-center items-center pb-4"><h1>Sem registros...</h1></div>
-    } @else if (!isLoading() && filteredAttempts().length != 0) {
-    @for (item of filteredAttempts(); track item.protocol) {
-    <app-attempt-entry [itineraryId]="item.itineraryId" [name]="item.debtorName" [status]="item.status" [window]="item.window" [agentName]="item.agentName"
-      [start]="item.start" [finish]="item.finish" [visitNumber]="item.concludedVisitNumber" [attemptOrdinal]="item.attemptOrdinal"
-      [installmentsNumber]="item.installmentsNumber" [protocol]="item.protocol" [id]="item.id"></app-attempt-entry>
+    } @else if (!isLoading() && filteredDiligences().length != 0) {
+    @for (item of filteredDiligences(); track item.protocol) {
+    <app-diligence-entry [attemptId]="item.attemptId" [name]="item.debtorName" [status]="item.status" [window]="item.window" [agentName]="item.agentName"
+      [start]="item.start" [finish]="item.finish" [visitNumber]="item.concludedVisitNumber" [diligenceOrdinal]="item.diligenceOrdinal"
+      [installmentsNumber]="item.installmentsNumber" [protocol]="item.protocol" [id]="item.id"></app-diligence-entry>
     }
     }
   </div>

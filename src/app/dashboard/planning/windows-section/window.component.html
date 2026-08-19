@@ -5,8 +5,13 @@
     </p>
   </div>
   <div class="flex flex-col gap-4">
+    @if (isLoading()){
+    <div class="flex items-center justify-center w-full h-full p-4">
+      <div class="spinner"></div>
+    </div>
+    } @else {
 
-    @for (attempt of takenWindows; track attempt; let i = $index) {
+    @for (diligence of takenWindows; track diligence; let i = $index) {
     <div
       class="px-4 flex justify-between items-center w-full rounded-xl border-1 border-success bg-card-background/30 py-2 shadow-md">
       <div class="flex items-center gap-4">
@@ -14,9 +19,9 @@
           class="rounded-xl  bg-quarternary text-white box-content w-10 h-10 flex items-center justify-center !font-bold">
           {{ i + 1 }}ª</div>
         <div>
-          <h1>{{attempt.window}} · {{getTime(attempt.start)}} - {{getTime(attempt.finish)}}</h1>
-          <p class="text-text-muted !text-xs">{{getFormattedDate(attempt.start)}}
-            </p>
+          <h1>{{diligence.window}} · {{getTime(diligence.start)}} - {{getTime(diligence.finish)}}</h1>
+          <p class="text-text-muted !text-xs">{{getFormattedDate(diligence.start)}}
+          </p>
         </div>
       </div>
       <div>
@@ -27,14 +32,15 @@
     @for (window of windowsLeft; track window; let i = $index) {
     @if (i==0) {
     @if (newWindowEntry()) {
-    <div 
+    <div
       class=" px-4 justify-between flex items-center w-full rounded-xl border-1 border-[#EE9B2D] bg-[#FEF5EA] py-2 shadow-md">
       <div class="flex items-center gap-4">
         <div
           class="rounded-xl  bg-quarternary text-white box-content w-10 h-10 flex items-center justify-center !font-bold">
           {{ i + 1 }}ª</div>
         <div>
-          <h1>{{newWindowEntry()?.window}} · {{getTime(newWindowEntry()?.start!)}} - {{getTime(newWindowEntry()?.finish!)}}</h1>
+          <h1>{{newWindowEntry()?.window}} · {{getTime(newWindowEntry()?.start!)}} -
+            {{getTime(newWindowEntry()?.finish!)}}</h1>
 
         </div>
       </div>
@@ -68,7 +74,7 @@
         </div>
       </div>
     </div> }
-
+    }
     }
   </div>
 </div>

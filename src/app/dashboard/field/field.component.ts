@@ -4,9 +4,9 @@ import { DashboardStateService } from '../../services/dashboard-state.service';
 import { dashboardSections } from '../constants/constants';
 import { MapSectionComponent } from './map-section/map-section.component';
 import { AddressesSectionComponent } from './addresses-section/addresses-section.component';
-import { AttemptsService } from '../../services/attempts.service';
-import { Attempt } from '../../models/attempt';
 import { ActivatedRoute } from '@angular/router';
+import { Diligence } from '../../models/diligence';
+import { DiligencesService } from '../../services/diligences.service';
 
 
 @Component({
@@ -16,8 +16,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class FieldComponent implements OnInit {
     dashboardState = inject(DashboardStateService);
-    private attemptsService = inject(AttemptsService);
-    attempt?: Attempt
+    private diligencesService = inject(DiligencesService);
+    diligence?: Diligence
     constructor(private route: ActivatedRoute) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Campo')!);
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
@@ -26,8 +26,8 @@ export class FieldComponent implements OnInit {
         this.route.paramMap.subscribe(params => {
             const id = params.get('id') ?? 'f47ac10b-58cc-4372-a567-0e02b2c3d004';
             if (id) {
-                this.attemptsService.getAttemptById(id).then(result => {
-                    this.attempt = result.data
+                this.diligencesService.getDiligenceById(id).then(result => {
+                    this.diligence = result.data
                 })
             }
         })

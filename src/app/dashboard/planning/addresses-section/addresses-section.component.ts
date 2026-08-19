@@ -34,8 +34,7 @@ export class AddressesSectionComponent {
                 country: address.country,
                 lat: address.lat,
                 lng: address.lng,
-                attemptId: address.attemptId,
-                order: address.order,
+                diligenceId: address.diligenceId,
             })));
         });
     }

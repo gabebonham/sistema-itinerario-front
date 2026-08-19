@@ -10,8 +10,6 @@ export interface AddressEntry {
     country: string;
     lat: number;
     lng: number;
-    attemptId: string;
-    order: number;
 }
 export class Address {
     id: string;
@@ -25,8 +23,7 @@ export class Address {
     country: string;
     lat: number;
     lng: number;
-    attemptId: string;
-    order: number;
+    diligenceId: string;
     createdAt: Date;
     updatedAt: Date;
     constructor(
@@ -41,8 +38,7 @@ export class Address {
         country: string,
         lat: number,
         lng: number,
-        attemptId: string,
-        order: number,
+        diligenceId: string,
         createdAt: Date,
         updatedAt: Date
     ) {
@@ -57,8 +53,7 @@ export class Address {
         this.country = country;
         this.lat = lat;
         this.lng = lng;
-        this.attemptId = attemptId;
-        this.order = order;
+        this.diligenceId = diligenceId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

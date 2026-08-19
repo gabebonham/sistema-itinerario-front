@@ -1,8 +1,8 @@
 <div class="h-full px-8 py-8">
   <div>
-    <h1 class="font-semibold text-text-muted">ITINERÁRIOS · HISTÓRICO</h1>
-    <h1 class="text-3xl font-bold pt-2">Histórico de Itinerários</h1>
-    <p class="text-text-muted text-sm py-4 w-2/3">Consulte todos os itinerários registrados, com o fluxo completo de
+    <h1 class="font-semibold text-text-muted">TENTATIVAS · HISTÓRICO</h1>
+    <h1 class="text-3xl font-bold pt-2">Histórico de Tentativas</h1>
+    <p class="text-text-muted text-sm py-4 w-2/3">Consulte todas as tentativas registrados, com o fluxo completo de
       diligências.</p>
   </div>
   <div class="px-6 py-8 flex flex-col gap-8 border-border border-1 shadow-lg rounded-xl bg-white">
@@ -24,8 +24,8 @@
         </div>
       </div>
     </div>
-    @for (itinerary of itineraryList(); track itinerary) {
-    <app-itinerary-entry [itinerary]="itinerary"></app-itinerary-entry>
+    @for (attempt of attemptList(); track attempt) {
+    <app-attempt-entry [attempt]="attempt"></app-attempt-entry>
     }
   </div>
 </div>

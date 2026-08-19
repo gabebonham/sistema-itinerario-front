@@ -1,9 +1,9 @@
-export const ATTEMPTS = {
+export const DILIGENCES = {
   OPTIONS: ['Todas', '1ª Tentativa', '2ª Tentativa', '3ª Tentativa'],
 };
-export const ATTEMPTS_STATUS = {
+export const DILIGENCE_STATUS = {
   OPTIONS: ['Todos', 'Entregue', 'Pendente'],
 };
-export const ATTEMPTS_WINDOW = {
+export const DILIGENCE_WINDOW = {
   OPTIONS: ['Todas', 'Manhã', 'Tarde', 'Sábado'],
 };

@@ -2,7 +2,7 @@
     class="w-full flex flex-col items-start gap-4 border-1 shadow-lg border-border rounded-xl px-6 pt-4 pb-6 h-full">
     <div class="flex items-center justify-between w-full">
         <div class="flex flex-col items-start gap-2 pb-2">
-            <h1 class="text-xl">Endereços do Itinerário</h1>
+            <h1 class="text-xl">Endereços da Tentativa</h1>
             <p class="text-xs text-text-muted">{{localAddresses().length}} paradas · ordem como prevista na lista</p>
         </div>
         <div>
@@ -23,7 +23,7 @@
         </div>
         } @else if (!isLoading() && addresses().length != 0) {
         @for (address of localAddresses(); track address) {
-        <app-addresses-entry class="w-full" (delete)="deleteNewAddress()" [isNew]="address.new" [order]="address.order" [country]="address.country" [state]="address.state"
+        <app-addresses-entry class="w-full" (delete)="deleteNewAddress()" [isNew]="address.new" [country]="address.country" [state]="address.state"
             [zipCode]="address.zipCode" [complement]="address.complement" [number]="address.number"
             [street]="address.street" [neighborhood]="address.neighborhood" [city]="address.city"
             ></app-addresses-entry>

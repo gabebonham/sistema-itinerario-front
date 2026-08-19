@@ -5,24 +5,24 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, Subject } from 'rxjs';
 
-import { ATTEMPTS_STATUS, ATTEMPTS, ATTEMPTS_WINDOW } from '../../constants/constants';
-import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
+import { DILIGENCES,DILIGENCE_STATUS,DILIGENCE_WINDOW } from '../../constants/constants';
+import { DiligencesFilterService } from '../../../../services/diligences-filter.service';
 
 @Component({
-    selector: 'app-attempts-filtered-search',
+    selector: 'app-diligences-filtered-search',
     standalone: true,
     imports: [MatIconModule, MatSelectModule, MatFormFieldModule, MatInputModule],
-    templateUrl: './attempts-filtered-search.component.html',
+    templateUrl: './diligences-filtered-search.component.html',
 })
-export class AttemptsFilteredSearchComponent {
-    private filterService = inject(AttemptsFilterService);
+export class DiligencesFilteredSearchComponent {
+    private filterService = inject(DiligencesFilterService);
 
-    attempts = ATTEMPTS.OPTIONS;
-    statuses = ATTEMPTS_STATUS.OPTIONS;
-    windows = ATTEMPTS_WINDOW.OPTIONS;
+    diligences = DILIGENCES.OPTIONS;
+    statuses = DILIGENCE_STATUS.OPTIONS;
+    windows = DILIGENCE_WINDOW.OPTIONS;
 
     selectedStatus: string = this.statuses[0];
-    selectedAttempt: string = this.attempts[0];
+    selectedDiligence: string = this.diligences[0];
     selectedWindow: string = this.windows[0];
     searchValue: string = '';
     toDateValue: string = '';
@@ -45,8 +45,8 @@ export class AttemptsFilteredSearchComponent {
         this.filterService.updateFilter({ status: this.selectedStatus == 'Todos' ? '' : this.selectedStatus });
     }
 
-    onAttemptChange(): void {
-        this.filterService.updateFilter({ attempt: this.selectedAttempt == 'Todas' ? '' : this.selectedAttempt });
+    onDiligenceChange(): void {
+        this.filterService.updateFilter({ diligence: this.selectedDiligence == 'Todas' ? '' : this.selectedDiligence });
     }
 
     onWindowChange(): void {

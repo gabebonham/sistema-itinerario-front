@@ -35,8 +35,8 @@
 
       <mat-form-field appearance="outline" class="!w-1/5">
         <mat-label>Selecione uma Tentativa</mat-label>
-        <mat-select [(value)]="selectedAttempt" (selectionChange)="onAttemptChange()">
-          @for (option of attempts; track option) {
+        <mat-select [(value)]="selectedDiligence" (selectionChange)="onDiligenceChange()">
+          @for (option of diligences; track option) {
           <mat-option [value]="option">{{ option }}</mat-option>
           }
         </mat-select>

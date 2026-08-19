@@ -3,30 +3,30 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CommonModule } from '@angular/common';
-import { ItineraryService } from '../../services/itinerary.service';
-import { Itinerary } from '../../models/itinerary';
-import { ItineraryEntryComponent } from './itinerary-entry/itinerary-entry.component';
+import { AttemptService } from '../../services/attempt.service';
 import { DashboardStateService } from '../../services/dashboard-state.service';
 import { dashboardSections } from '../constants/constants';
+import { AttemptEntryComponent } from './attempt-entry/attempt-entry.component';
+import { Attempt } from '../../models/attempt';
 
 
 @Component({
     selector: 'app-history',
-    imports: [CommonModule, MatSidenavModule, MatIconModule, ItineraryEntryComponent],
+    imports: [CommonModule, MatSidenavModule, MatIconModule, AttemptEntryComponent],
     templateUrl: './history.component.html',
 })
 export class HistoryComponent implements OnInit {
-    itineraryService: ItineraryService = inject(ItineraryService)
+    attemptService: AttemptService = inject(AttemptService)
     dashboardState: DashboardStateService = inject(DashboardStateService)
-    itineraryList = signal<Itinerary[]>([])
+    attemptList = signal<Attempt[]>([])
     breadCrumbs: string = ''
 
     ngOnInit(): void {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Histórico')!);
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
         this.breadCrumbs = this.dashboardState.activeSection.name
-        this.itineraryService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
-            this.itineraryList.set(result.data)
+        this.attemptService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
+            this.attemptList.set(result.data)
             this.hasMorePages = result.hasNext;
             this.hasPreviousPages = result.hasPrevious;
             this.currentPage = result.page;
@@ -37,12 +37,12 @@ export class HistoryComponent implements OnInit {
     pageSize = 5;
     currentPage = 1;
     totalPages = computed(() =>
-        Math.max(1, Math.ceil(this.itineraryList().length / this.pageSize))
+        Math.max(1, Math.ceil(this.attemptList().length / this.pageSize))
     );
 
-    paginatedAttempts = computed(() => {
+    paginatedDiligences = computed(() => {
         const start = (this.currentPage - 1) * this.pageSize;
-        return this.itineraryList().slice(start, start + this.pageSize);
+        return this.attemptList().slice(start, start + this.pageSize);
     });
 
     hasMorePages?: boolean;
@@ -50,18 +50,18 @@ export class HistoryComponent implements OnInit {
     onNextPage(): void {
         if (this.hasMorePages) {
             this.currentPage = this.currentPage + 1
-            this.fetchItineraryPage()
+            this.fetchAttemptPage()
         }
     }
     onPreviousPage(): void {
         if (this.hasPreviousPages) {
             this.currentPage = this.currentPage - 1
-            this.fetchItineraryPage()
+            this.fetchAttemptPage()
         }
     }
-    fetchItineraryPage(): void {
-        this.itineraryService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
-            this.itineraryList.set(result.data)
+    fetchAttemptPage(): void {
+        this.attemptService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
+            this.attemptList.set(result.data)
             this.hasMorePages = result.hasNext;
             this.hasPreviousPages = result.hasPrevious;
             this.currentPage = result.page;

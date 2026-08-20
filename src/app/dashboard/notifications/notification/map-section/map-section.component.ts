@@ -9,6 +9,6 @@ import { Debtor } from '../../../../models/debtor';
     templateUrl: './map-section.component.html',
 })
 export class MapSectionComponent {
-    addresses = input<Address[]>([]);
+    address = input.required<Address|undefined>();
     debtor = input<Debtor>();
 }

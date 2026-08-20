@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Debtor } from '../models/debtor';
 
-const DEBTOR_MOCK: Debtor =
+export const DEBTOR_MOCK: Debtor =
   new Debtor(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e001',
     'Marcelo Lopes',

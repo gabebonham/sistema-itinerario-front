@@ -1,0 +1,29 @@
+<div class="w-full flex flex-col p-8 gap-4 justify-between h-full border-1 border-border rounded-xl ">
+    <div class="w-full flex flex-col gap-4">
+        <div>
+            <h1 class="text-xl">Observações de suporte</h1>
+        </div>
+        <div class="flex flex-col gap-6 ">
+            <div>
+                <h1>Sinteze dos Fatos</h1>
+                @for (obs of factsObservations(); track $index) {
+                <p> - {{obs}}</p>
+                }
+            </div>
+
+            <div>
+                <h1>Observações do Imóvel</h1>
+                @for (obs of propertyObservations(); track $index) {
+                <p> - {{obs}}</p>
+                } 
+            </div>
+            <div>
+                <h1>Observações Gerais</h1>
+                @for (obs of generalObservations(); track $index) {
+                <p> - {{obs}}</p>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

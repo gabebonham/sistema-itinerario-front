@@ -1,0 +1,49 @@
+<div class="w-full h-full p-4 rounded-xl border-1 border-border shadow-lg">
+    <div>
+        <h1 class="text-text-muted">DEVEDOR</h1>
+        <p>{{debtor()?.name}}</p>
+    </div>
+    <div>
+        <h1>Devedor encontrado?</h1>
+        <div class="flex items-center gap-4 h-24">
+            <div class="rounded-xl w-1/2 h-full">
+                <mat-icon>person_check</mat-icon>
+            </div>
+            <div class="rounded-xl w-1/2 h-full">
+                <mat-icon>person_cancel</mat-icon>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h1>Comprovação fotográfica</h1>
+        <div class="flex items-center flex-col justify-center w-full h-24">
+            <mat-icon>photo_camera</mat-icon>
+            <h1>Anexar Foto</h1>
+        </div>
+    </div>
+    <div>
+        <h1>Observações</h1>
+        <form [formGroup]="form" class="w-full flex flex-col gap-4">
+            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+                <mat-label>Sinteze de fatos</mat-label>
+                <input matInput type="text" formControlName="factsObservations" placeholder="Sinteze de fatos..."
+                    maxlength="10" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+                <mat-label>Observações do Imóvel</mat-label>
+                <input matInput type="text" formControlName="propertyObservations"
+                    placeholder="Observações do Imóvel..." maxlength="10" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+                <mat-label>Observações Gerais</mat-label>
+                <input matInput type="text" formControlName="generalObservations" placeholder="Observações Gerais..."
+                    maxlength="10" class="!text-xs" />
+            </mat-form-field>
+        </form>
+    </div>
+    <div>
+        <button  
+            class="cursor-pointer bg-primary !font-semibold text-white !text-md rounded-lg w-42 h-10 disabled:opacity-50">
+            Concluir Parada</button>
+    </div>
+</div>

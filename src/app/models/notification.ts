@@ -20,6 +20,7 @@ export class Notification {
     diligenceId: string;
     diligence?: Diligence
     attempt?: Attempt
+    debtorId: string;
     createdAt: Date;
     updatedAt: Date;
     constructor(
@@ -27,6 +28,7 @@ export class Notification {
         notificatorId: string,
         attemptId: string,
         diligenceId: string,
+        debtorId: string,
         createdAt: Date,
         updatedAt: Date,
         diligence?: Diligence,
@@ -37,6 +39,7 @@ export class Notification {
         this.attemptId = attemptId
         this.diligenceId = diligenceId
         this.diligence = diligence
+        this.debtorId = debtorId
         this.attempt = attempt
         this.createdAt = createdAt
         this.updatedAt = updatedAt

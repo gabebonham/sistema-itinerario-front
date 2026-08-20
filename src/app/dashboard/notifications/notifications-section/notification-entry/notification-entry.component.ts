@@ -1,26 +1,25 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-
+import { DiligenceOrdinal } from '../../../../models/diligence';
 
 @Component({
-    selector: 'app-diligence-entry',
+    selector: 'app-notification-entry',
     standalone: true,
     imports: [MatIconModule],
-    templateUrl: './diligence-entry.component.html',
+    templateUrl: './notification-entry.component.html',
 })
-export class DiligenceEntryComponent {
-    @Input() name!: string;
-    @Input() id!: string;
-    @Input() attemptId!: string;
-    @Input() window!: string;
-    @Input() notificatorName!: string;
-    @Input() start!: Date;
-    @Input() finish!: Date;
-    @Input() visitNumber!: number;
-    @Input() diligenceOrdinal!: string;
-    @Input() installmentsNumber!: number;
-    @Input() protocol!: string;
+export class NotificationEntryComponent {
+    id = input.required<string>();
+    notificatorName = input.required<string>();
+    diligenceOrdinal = input.required<DiligenceOrdinal>();
+    diligenceWindow = input.required<string>();
+    diligenceStart = input.required<Date>();
+    diligenceFinish = input.required<Date>();
+    address = input.required<string>();
+    debtorName = input.required<string>();
+    protocol = input.required<string>();
+    createdAt = input.required<Date>();
 
     constructor(private router: Router) { }
 
@@ -46,7 +45,7 @@ export class DiligenceEntryComponent {
                 return 'help_outline';
         }
     }
-    goToDiligence(id: string): void {
-        this.router.navigate(['/dashboard/tentativas', id]);
+    goToNotification(id: string): void {
+        this.router.navigate(['/dashboard/notificacoes', id]);
     }
 }

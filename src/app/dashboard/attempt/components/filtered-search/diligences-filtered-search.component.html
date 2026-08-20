@@ -13,15 +13,6 @@
     </div>
     <div class="flex items-center gap-4 my-8">
 
-      <mat-form-field appearance="outline" class="!w-1/5 ">
-        <mat-label>Selecione um Status</mat-label>
-        <mat-select [(value)]="selectedStatus" (selectionChange)="onStatusChange()">
-          @for (option of statuses; track option) {
-          <mat-option [value]="option">{{ option }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
 
       <mat-form-field appearance="outline" class="!w-1/5">
         <mat-label>Selecione uma Janela</mat-label>

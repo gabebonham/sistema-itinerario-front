@@ -5,6 +5,7 @@ import { Attempt } from "../models/attempt";
 import { CreateAttemptDTO } from "../DTOS/create-itinerary.dto";
 export const MOCK_ATTEMPT: Attempt = {
   id: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
+  status: 'Pendente',
   createdAt: new Date(),
   updatedAt: new Date(),
   debtorId: 'f47ac10b-fs87-0003-a567-0e02b2c3d003',
@@ -20,6 +21,7 @@ function getDiligencesFor(attemptId: string, max = 3) {
 export const MOCK_ATTEMPT_LIST: Attempt[] = [
   {
     id: 'IT-01-CT-006',
+    status: 'Pendente',
     concludedVisitNumber: 2,
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e001',
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d004',
@@ -30,6 +32,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
   },
   {
     id: 'IT-03-CT-018',
+    status: 'Pendente',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e002',
     concludedVisitNumber: 2,
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d016',
@@ -40,6 +43,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
   },
   {
     id: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
+    status: 'Entregue',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e003',
     protocol: '123',
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d003',
@@ -50,6 +54,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
   },
   {
     id: 'IT-03-CT-004',
+    status: 'Pendente',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e004',
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d002',
     concludedVisitNumber: 2,
@@ -60,6 +65,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
   },
   {
     id: 'IT-01-CT-007',
+    status: 'Cancelada',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e005',
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d005',
     concludedVisitNumber: 2,
@@ -70,6 +76,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
   },
   {
     id: 'IT-02-CT-008',
+    status: 'Cancelada',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e006',
     concludedVisitNumber: 2,
     protocol: '123',
@@ -81,6 +88,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
   {
     id: 'IT-03-CT-009',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e007',
+    status: 'Pendente',
     concludedVisitNumber: 2,
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d007',
     createdAt: new Date('2023-01-07T09:40:00.000Z'),
@@ -92,6 +100,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     id: 'IT-01-CT-010',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e008',
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d008',
+    status: 'Entregue',
     concludedVisitNumber: 2,
     protocol: '123',
     createdAt: new Date('2023-01-08T11:25:00.000Z'),
@@ -100,6 +109,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
   },
   {
     id: 'IT-02-CT-011',
+    status: 'Pendente',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e009',
     concludedVisitNumber: 2,
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d009',
@@ -111,6 +121,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
   {
     id: 'IT-01-CT-012',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e010',
+    status: 'Pendente',
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d010',
     createdAt: new Date('2023-01-10T10:30:00.000Z'),
     concludedVisitNumber: 2,
@@ -160,6 +171,23 @@ export class AttemptService {
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     const data = MOCK_ATTEMPT_LIST.slice(start, end);
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+      hasNext: page * pageSize < total,
+      hasPrevious: page > 1
+    };
+  }
+  async getConcludedPaginated(page: number, pageSize: number): Promise<{ data: Attempt[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
+    const total = MOCK_ATTEMPT_LIST.length;
+
+    // fatia o mock pra simular paginação de verdade
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const data = MOCK_ATTEMPT_LIST.filter(attempt => attempt.status == 'Entregue' || attempt.status == 'Cancelada').slice(start, end);
 
     return {
       data,

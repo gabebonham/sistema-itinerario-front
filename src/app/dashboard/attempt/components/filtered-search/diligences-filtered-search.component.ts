@@ -18,10 +18,8 @@ export class DiligencesFilteredSearchComponent {
     private filterService = inject(DiligencesFilterService);
 
     diligences = DILIGENCES.OPTIONS;
-    statuses = DILIGENCE_STATUS.OPTIONS;
     windows = DILIGENCE_WINDOW.OPTIONS;
 
-    selectedStatus: string = this.statuses[0];
     selectedDiligence: string = this.diligences[0];
     selectedWindow: string = this.windows[0];
     searchValue: string = '';
@@ -39,10 +37,6 @@ export class DiligencesFilteredSearchComponent {
         const value = (event.target as HTMLInputElement).value;
         this.searchValue = value;
         this.search$.next(value);
-    }
-
-    onStatusChange(): void {
-        this.filterService.updateFilter({ status: this.selectedStatus == 'Todos' ? '' : this.selectedStatus });
     }
 
     onDiligenceChange(): void {

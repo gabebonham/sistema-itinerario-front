@@ -1,7 +1,10 @@
 import { Diligence } from "./diligence";
 
+export type AttemptStatus = 'Entregue' | 'Pendente' | 'Cancelada'
+
 export class Attempt {
     id: string;
+    status: AttemptStatus;
     debtorId: string;
     protocol: string;
     lastDiligenceId: string;
@@ -11,6 +14,7 @@ export class Attempt {
     updatedAt: Date;
     constructor(
         id: string,
+        status: AttemptStatus,
         debtorId: string,
         protocol: string,
         concludedVisitNumber: number,
@@ -20,6 +24,7 @@ export class Attempt {
         diligences?: Diligence[],
     ) {
         this.id = id;
+        this.status = status;
         this.protocol = protocol;
         this.diligences = diligences;
         this.concludedVisitNumber = concludedVisitNumber;

@@ -1,0 +1,29 @@
+<div
+    class="w-full border-1 border-border rounded-lg p-4 flex items-center gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100">
+    <div class="flex items-center gap-6 w-full">
+        <div class="flex items-center gap-2 w-3/5">
+            <div>
+                <div class="rounded-full bg-quarternary p-2 flex items-center justify-center">
+                    <mat-icon class="!text-white">person</mat-icon>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <p class="text-text-muted"> <span class="sora-font text-text-black">{{ name() }}</span></p>
+                <p class="!text-text-muted"> <span class="sora-font ">{{ email() }}</span>
+                </p>
+            </div>
+        </div>
+        <div class="h-8 w-px bg-text-muted"></div>
+        <div class="flex items-center justify-between w-2/5">
+            <div class="flex items-center gap-2">
+                <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">
+                    calendar_today
+                </mat-icon>
+                <p class="!text-text-muted !text-xs">{{ getDateFormatted(createdAt()) }}</p>
+            </div>
+            <div class="flex items-center"><mat-icon (click)="onDelete()"
+                    class="cursor-pointer !text-error/50 hover:!text-error transition-color duration-100">delete</mat-icon>
+            </div>
+        </div>
+    </div>
+</div>

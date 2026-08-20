@@ -1,5 +1,5 @@
 <div class="cursor-pointer w-full border-1 border-border rounded-lg p-4 flex flex-col gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100"
-    (click)="goToDiligence(attemptId)">
+    (click)="goToNotification(id())">
     <div class="flex items-center gap-6 w-full">
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-2">
@@ -10,20 +10,20 @@
                 </div>
                 <div class="flex flex-col">
                     <div class="flex items-center">
-                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ name }}</span> <span class="text-text-black !font-bold"> · </span> Notificador <span class="sora-font text-text-black">{{ notificatorName }}</span></p>
+                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ debtorName() }}</span> <span class="text-text-black !font-bold"> · </span> Notificador <span class="sora-font text-text-black">{{ notificatorName() }}</span></p>
                     </div>
-                    <p class="!text-text-muted !text-xs">Protocolo {{ protocol }} · {{ installmentsNumber }} faturas pendentes
+                    <p class="!text-text-muted !text-xs">Protocolo {{ protocol() }}
                     </p>
                 </div>
             </div>
             <div class="flex items-center gap-6">
-                <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{ diligenceOrdinal
+                <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{ diligenceOrdinal()
                     }}</span>
                 <div class="flex items-center gap-2">
                     <mat-icon class="!text-text-muted "
-                        [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{ getWindowIcon(window)
+                        [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{ getWindowIcon(diligenceWindow())
                         }}</mat-icon>
-                    <p class="!text-xs">{{ window }}</p>
+                    <p class="!text-xs">{{ diligenceWindow() }}</p>
                 </div>
             </div>
         </div>
@@ -32,12 +32,7 @@
             <div class="flex items-center gap-2">
                 <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">calendar_today
                 </mat-icon>
-                <p class="!text-text-muted !text-xs">{{ getDateFormatted(start) }}</p> · <p class="!text-text-muted !text-xs">{{ getDateFormatted(finish) }}</p>
-            </div>
-
-
-            <div class="flex items-center gap-2">
-                <span class="text-xs px-2 rounded-2xl border-1 border-text-muted bg-text-muted/10 !text-text-muted">Pendente</span>
+                <p class="!text-text-muted !text-xs">{{ getDateFormatted(diligenceStart()) }}</p> · <p class="!text-text-muted !text-xs">{{ getDateFormatted(diligenceFinish()) }}</p>
             </div>
         </div>
     </div>

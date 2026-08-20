@@ -1,6 +1,6 @@
 export interface CreateAttemptDTO { 
-    agentName: string 
-    debtorName: string 
+    notificatorName: string 
+    debtorName: string
     protocol: string 
     installmentsNumber: number
 }

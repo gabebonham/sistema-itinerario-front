@@ -19,7 +19,7 @@ export class NewAttemptModal {
     attemptService = inject(AttemptService)
     private fb = inject(FormBuilder);
     form = this.fb.group({
-        agentName: ['', Validators.required],
+        notificatorName: ['', Validators.required],
         debtorName: ['', Validators.required],
         protocol: ['', Validators.required],
         installmentsNumber: [0, [Validators.required, Validators.min(1)]],
@@ -40,7 +40,7 @@ export class NewAttemptModal {
         this.isLoading = true;
         this.errors = [];
         const createAttemptDto: CreateAttemptDTO = {
-            agentName: this.form.value.agentName!,
+            notificatorName: this.form.value.notificatorName!,
             protocol: this.form.value.protocol!,
             debtorName: this.form.value.debtorName!,
             installmentsNumber: this.form.value.installmentsNumber!,
@@ -60,7 +60,7 @@ export class NewAttemptModal {
     }
     private getFormErrors(): string[] {
         const labels: Record<string, string> = {
-            agentName: 'Nome do Notificador',
+            notificatorName: 'Nome do Notificador',
             debtor: 'Nome do Devedor',
             protocol: 'Protocolo',
             installmentsNumber: 'Parcelas em atraso',

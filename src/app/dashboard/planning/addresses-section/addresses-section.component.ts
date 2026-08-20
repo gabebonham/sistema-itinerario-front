@@ -23,6 +23,7 @@ export class AddressesSectionComponent {
     constructor(private dialog: MatDialog) {
         effect(() => {
             this.localAddresses.set(this.addresses().map(address => ({
+                name:address.name,
                 new: false,
                 city: address.city,
                 neighborhood: address.neighborhood,

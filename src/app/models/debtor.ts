@@ -1,17 +1,17 @@
 export class Debtor {
     id: string;
     name: string;
-    cpf: string;
+    cpfCnpj: string;
     cep: string;
-    contractId: string;
+    rg: string;
     createdAt:Date;
     updatedAt:Date;
-    constructor(id:string, name: string, cpf: string,cep: string,contractId: string, createdAt:Date,updatedAt:Date) {
+    constructor(id:string, name: string, cpfCnpj: string,cep: string,rg: string, createdAt:Date,updatedAt:Date) {
         this.id = id;
         this.name = name;
-        this.cpf = cpf;
+        this.cpfCnpj = cpfCnpj;
         this.cep = cep;
-        this.contractId = contractId;
+        this.rg = rg;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

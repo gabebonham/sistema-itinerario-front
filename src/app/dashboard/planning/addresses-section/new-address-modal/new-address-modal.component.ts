@@ -36,7 +36,7 @@ export class NewAddressModal {
         this.isLoading = true;
         this.errors = [];
         const createAttemptDto: CreateAttemptDTO = {
-            agentName: '',
+            notificatorName: '',
             protocol: '',
             debtorName: '',
             installmentsNumber: 0,
@@ -47,6 +47,7 @@ export class NewAddressModal {
                 this.dialogRef.close({
                     success: true, data: {
                         new: true,
+                        name: 'Rua Getúlio Vargas, 333',
                         city: 'Esteio',
                         neighborhood: 'Centro',
                         street: 'Rua Getúlio Vargas',
@@ -69,7 +70,7 @@ export class NewAddressModal {
     }
     private getFormErrors(): string[] {
         const labels: Record<string, string> = {
-            agentName: 'Nome do Notificador',
+            notificatorName: 'Nome do Notificador',
             debtor: 'Nome do Devedor',
             protocol: 'Protocolo',
             installmentsNumber: 'Parcelas em atraso',

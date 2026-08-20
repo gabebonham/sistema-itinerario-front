@@ -7,7 +7,7 @@ const DEBTOR_MOCK: Debtor =
     'Marcelo Lopes',
     '61857917452',
     '8514726',
-    'f47ac10b-58cc-4372-a567-0e02b2c3d001',
+    '8795683215',
     new Date('2023-01-01T09:10:00'),
     new Date('2023-01-03T14:35:00')
   );
@@ -16,5 +16,8 @@ const DEBTOR_MOCK: Debtor =
 export class DebtorService {
   async getDebtorByDiligenceId(id: string): Promise<Debtor> {
     return DEBTOR_MOCK;
+  }
+  async getById(id: string) {
+    return {success:true,data:DEBTOR_MOCK};
   }
 }

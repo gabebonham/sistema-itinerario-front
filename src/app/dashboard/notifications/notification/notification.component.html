@@ -21,16 +21,9 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-6">
-      <div>
-        <app-map-section class="w-2/3"></app-map-section>
-      </div>
-      <div class="flex flex-col gap-4">
-        <!-- @if (diligence?.addresses) {
-        <app-addresses-section [isLoading]="false" [addresses]="diligence?.addresses ?? []"></app-addresses-section>
-        } -->
-        <app-addresses-section [isLoading]="false" [addresses]="[]"></app-addresses-section>
-      </div>
-    </div>
+<div>
+  <app-map-section [addresses]="[]" [debtor]=""></app-map-section>
+  <app-addresses-section [isLoading]="isAddressesLoading()" [addresses]="[]"></app-addresses-section>
+</div>
   </div>
 </div>

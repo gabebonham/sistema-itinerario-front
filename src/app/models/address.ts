@@ -1,5 +1,6 @@
 export interface AddressEntry {
-    new:boolean
+    new: boolean
+    name: string;
     city: string;
     neighborhood: string;
     street: string;
@@ -13,6 +14,7 @@ export interface AddressEntry {
 }
 export class Address {
     id: string;
+    name: string;
     city: string;
     neighborhood: string;
     street: string;
@@ -28,6 +30,7 @@ export class Address {
     updatedAt: Date;
     constructor(
         id: string,
+        name: string,
         city: string,
         neighborhood: string,
         street: string,
@@ -40,7 +43,7 @@ export class Address {
         lng: number,
         diligenceId: string,
         createdAt: Date,
-        updatedAt: Date
+        updatedAt: Date,
     ) {
         this.id = id;
         this.city = city;
@@ -56,5 +59,6 @@ export class Address {
         this.diligenceId = diligenceId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.name = name;
     }
 }

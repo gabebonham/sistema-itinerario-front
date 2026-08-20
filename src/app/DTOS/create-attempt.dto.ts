@@ -1,7 +1,8 @@
-import { DiligenceOrdinal, DiligenceStatus } from "../models/diligence";
+import { AttemptStatus } from "../models/attempt";
+import { DiligenceOrdinal } from "../models/diligence";
 
 export interface CreateDiligenceDTO { 
-    status: DiligenceStatus;
+    status: AttemptStatus;
     start: Date;
     finish: Date;
     notificatorId: string;

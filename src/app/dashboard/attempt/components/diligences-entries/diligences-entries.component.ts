@@ -33,11 +33,10 @@ export class DiligencesEntriesComponent implements OnInit {
         const f = this.filterService.filter();
         return this.diligences().filter(entry => {
             const matchesSearch = !f.search || entry.debtorName.toLowerCase().includes(f.search.toLowerCase());
-            const matchesStatus = !f.status || entry.status === f.status;
             const matchesWindow = !f.window || entry.window === f.window;
             const matchesDiligence = !f.diligence || entry.diligenceOrdinal === f.diligence;
             const matchesDate = this.isWithinDateRange(entry.start, f.fromDate, f.toDate);
-            return matchesSearch && matchesStatus && matchesWindow && matchesDiligence && matchesDate;
+            return matchesSearch && matchesWindow && matchesDiligence && matchesDate;
         });
     });
 

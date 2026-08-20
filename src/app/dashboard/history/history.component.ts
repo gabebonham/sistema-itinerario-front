@@ -25,13 +25,14 @@ export class HistoryComponent implements OnInit {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Histórico')!);
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
         this.breadCrumbs = this.dashboardState.activeSection.name
-        this.attemptService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
+        this.attemptService.getConcludedPaginated(this.currentPage, this.pageSize).then((result) => {
             this.attemptList.set(result.data)
             this.hasMorePages = result.hasNext;
             this.hasPreviousPages = result.hasPrevious;
             this.currentPage = result.page;
         });
     }
+
     isLoading = input.required<boolean>();
 
     pageSize = 5;
@@ -67,4 +68,5 @@ export class HistoryComponent implements OnInit {
             this.currentPage = result.page;
         });
     }
+
 }

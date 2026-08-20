@@ -9,10 +9,10 @@ export interface User {
 }
 
 const MOCK_USER: User = {
-    id: '1',
+    id: 'f47ac10b-58cc-4372-a567-0e02b2c3n001',
     username: 'Gabriel Grote',
     email: 'gabriel@teste.com',
-    role: 'Notificador',
+    role: 'admin',
 };
 
 @Injectable({ providedIn: 'root' })

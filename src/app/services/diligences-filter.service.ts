@@ -2,7 +2,6 @@ import { Injectable, signal } from '@angular/core';
 
 export interface DiligencesFilter {
   search: string;
-  status: string;
   window: string;
   diligence: string;
   fromDate: string;
@@ -13,7 +12,6 @@ export interface DiligencesFilter {
 export class DiligencesFilterService {
   filter = signal<DiligencesFilter>({
     search: '',
-    status: '',
     window: '',
     diligence: '',
     fromDate: '',

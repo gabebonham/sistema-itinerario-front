@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterOutlet } from '@angular/router';
@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
     templateUrl: './dashboard-layout.component.html',
 })
 export class DashboardLayoutComponent implements OnInit {
-    sections: DashboardSection[] = dashboardSections;
+    sections: DashboardSection[] = [];
     appName = environment.appName;
     sidenavOpened = true;
     dashboardState = inject(DashboardStateService);
@@ -25,11 +25,20 @@ export class DashboardLayoutComponent implements OnInit {
     currentUser = this.authService.currentUser;
     private breakpointObserver = inject(BreakpointObserver);
 
-    constructor(private router: Router) { }
+    constructor(private router: Router) {
+        effect(() => {
+            if (this.authService.currentUser()?.role == 'admin') {
+                this.sections = dashboardSections
+
+            } else {
+
+                this.sections = dashboardSections.filter(section => section.role == (this.authService.currentUser()?.role!))
+            }
+        })
+    }
 
     ngOnInit(): void {
         this.authService.checkSession().subscribe();
-
         this.breakpointObserver
             .observe([Breakpoints.Handset, Breakpoints.Tablet])
             .subscribe(result => {

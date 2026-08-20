@@ -1,8 +1,8 @@
 import { Component, computed, EventEmitter, input, Output, signal, effect } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AddressesEntryComponent } from './address-entry/addresses-entry.component';
-import { Address } from '../../../models/address';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Address } from '../../../../models/address';
 
 @Component({
     selector: 'app-addresses-section',

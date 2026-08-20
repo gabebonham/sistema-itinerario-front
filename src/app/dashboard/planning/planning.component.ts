@@ -102,7 +102,7 @@ export class PlanningComponent implements OnInit {
                 notificatorId,
                 diligenceOrdinal: this.windowEntry.diligenceOrdinal,
                 attemptId: this.attempt.id,
-                status: 'Pendente'
+                status:'Pendente'
             } as CreateDiligenceDTO
         }
         return newDiligence;

@@ -15,7 +15,7 @@
     <div class="flex justify-center items-center pb-4"><h1>Sem registros...</h1></div>
     } @else if (!isLoading() && filteredDiligences().length != 0) {
     @for (item of filteredDiligences(); track item.protocol) {
-    <app-diligence-entry [attemptId]="item.attemptId" [name]="item.debtorName"  [window]="item.window" [notificatorName]="item.notificatorName"
+    <app-diligence-entry [loadingCancel]="loadingCancel()" (cancelAttempt)="handleCancelAttempt($event)" [attemptId]="item.attemptId" [name]="item.debtorName"  [window]="item.window" [notificatorName]="item.notificatorName"
       [start]="item.start" [finish]="item.finish" [visitNumber]="item.concludedVisitNumber" [diligenceOrdinal]="item.diligenceOrdinal"
       [installmentsNumber]="item.installmentsNumber" [protocol]="item.protocol" [id]="item.id"></app-diligence-entry>
     }

@@ -4,78 +4,75 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <div class="flex items-center gap-6 w-full justify-between">
-            <div class="flex items-center justify-between w-full">
-              <div class="flex items-center gap-2">
-                <div class="flex items-center">
-                  @if (attempt().status === 'Entregue') {
-                  <mat-icon class="!text-success/60"
-                    [style]="{ 'font-size': '28px', 'width': '28px', 'height': '28px' }">
-                    check_circle
-                  </mat-icon>
-                  } @else {
-                  <mat-icon class="!text-error/60" [style]="{ 'font-size': '28px', 'width': '28px', 'height': '28px' }">
-                    cancel
-                  </mat-icon>
-                  }
+          <div class="flex items-center justify-between w-full gap-3">
 
-                </div>
-                <div class="flex flex-col">
-                  <div class="flex items-center">
-                    <p class="text-text-muted">
-                      Devedor <span class="sora-font text-text-black">{{ lastDiligence.debtorName }}</span>
-                      <span class="text-text-black !font-bold"> · </span>
-                      Notificador <span class="sora-font text-text-black">{{ lastDiligence.notificatorName }}</span>
-                    </p>
-                  </div>
-                  <p class="!text-text-muted !text-xs">
-                    Protocolo {{ lastDiligence.protocol }} · {{ lastDiligence.installmentsNumber }} faturas pendentes
-                  </p>
-                </div>
+            <!-- Identidade: avatar de iniciais + devedor/notificador -->
+            <div class="flex items-center gap-3 min-w-0">
+              <div
+                class="flex items-center justify-center shrink-0 w-9 h-9 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                {{ getInitials(lastDiligence.debtorName) }}
+              </div>
+              <div class="flex flex-col min-w-0">
+                <p class="text-text-muted text-sm truncate">
+                  <span class="sora-font text-text-black">{{ lastDiligence.debtorName }}</span>
+                  <span class="text-text-black/40"> · </span>
+                  Notificador <span class="sora-font text-text-black">{{ lastDiligence.notificatorName }}</span>
+                </p>
+                <p class="!text-text-muted !text-xs">
+                  Protocolo {{ lastDiligence.protocol }} · {{ lastDiligence.installmentsNumber }} faturas pendentes
+                </p>
               </div>
             </div>
-            <div class="flex items-center justify-end w-full gap-8">
-              <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">
-                {{ lastDiligence.diligenceOrdinal }}
-              </span>
-              <span class="px-2 rounded-2xl text-xs font-medium" [ngClass]="attempt().status === 'Entregue'
-                  ? 'bg-success/10 text-success'
-                  : 'bg-error/10 text-error'">
-                {{ attempt().status }}
-              </span>
-            </div>
+
+            <!-- Único badge de status: sem repetir o ordinal, que já aparece na timeline -->
+            <span class="px-2.5 py-0.5 rounded-2xl text-xs font-medium shrink-0" [ngClass]="attempt().status === 'Entregue'
+                ? 'bg-success/10 text-success'
+                : attempt().status === 'Cancelada' ? 'bg-error/10 text-error' : 'bg-text-muted/10 text-text-muted'">
+              {{ attempt().status }}
+            </span>
           </div>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
+      <!-- Ação secundária: Exportar PDF sai do nível do CTA principal -->
+      <div class="flex justify-end pt-1 pb-2">
+        <button (click)="exportPdf()"
+          class="cursor-pointer flex items-center gap-1.5 text-sm text-text-black border border-text-muted/30 rounded-lg px-3 h-9 hover:bg-text-muted/5 transition-colors">
+          <mat-icon [style]="{ 'font-size': '18px', 'width': '18px', 'height': '18px' }">download</mat-icon>
+          Exportar PDF
+        </button>
+      </div>
+
       <!-- Timeline de tentativas -->
-      <div class="flex items-start justify-between">
+      <div class="flex flex-col pl-2">
+        <div *ngFor="let a of attempt().diligences; let last = last" class="flex gap-3">
 
-        <div class="flex flex-col px-8 pt-2">
-          <div *ngFor="let a of attempt().diligences; let last = last" class="flex gap-3">
+          <!-- Coluna do indicador (bolinha + linha conectora contínua) -->
+          <div class="flex flex-col items-center w-3 shrink-0">
+            @if (last) {
+            <span class="rounded-full shrink-0 z-10 w-3.5 h-3.5 ring-2" [ngClass]="attempt().status === 'Entregue'
+              ? 'bg-success ring-success/30'
+              : 'bg-error ring-error/30'">
+            </span>
+            } @else {
+            <span class="rounded-full shrink-0 z-10 w-3 h-3 border-1.5 border-text-muted/50 bg-white"></span>
+            }
+            <div *ngIf="!last" class="w-px flex-1 bg-text-muted/40"></div>
+          </div>
 
-            <!-- Coluna do indicador (bolinha + linha) -->
-            <div class="flex flex-col items-center w-3 shrink-0">
-              @if (last) {
-              <span class="rounded-full shrink-0 z-10" [ngClass]="attempt().status === 'Entregue'
-          ? 'w-3 h-3 border-1 border-text-muted bg-success'
-          : 'w-3 h-3 border-1 border-text-muted bg-error'">
-              </span>
-              } @else {
-              <span class="rounded-full shrink-0 z-10" [ngClass]="'w-3 h-3 border-1 border-text-muted bg-white'">
-              </span>
-              }
-
-              <div *ngIf="!last" class="w-px flex-1 bg-text-muted"></div>
-            </div>
-
-            <!-- Conteúdo -->
-            <div class="flex flex-col gap-1" [ngClass]="last ? 'pb-0' : 'pb-6'">
+          <!-- Conteúdo -->
+          <div class="flex items-start justify-between w-full gap-3" [ngClass]="last ? 'pb-1' : 'pb-6'">
+            <div class="flex flex-col gap-1">
               <div class="flex items-center gap-2">
-                <span class="text-text-muted text-sm">{{ a.diligenceOrdinal }}</span>
-                <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">
+                <span class="text-sm" [ngClass]="last ? 'text-text-black font-semibold' : 'text-text-muted'">
+                  {{ a.diligenceOrdinal }}
+                </span>
+                <span class="bg-text-muted/10 text-text-muted px-2 py-0.5 rounded-2xl text-xs">
                   {{ a.window }}
                 </span>
+                @if (a.porHoraCerta) {
+                <span class="text-xs text-quaternary">Por Hora Certa</span>
+                }
               </div>
               <p class="font-semibold text-sm">
                 {{ a.start | date: 'dd/MM/yyyy HH:mm' }} - {{ a.finish | date: 'HH:mm' }}
@@ -85,12 +82,15 @@
                 <span *ngIf="attempt().status === 'Entregue'"> · Entregue</span>
               </p>
             </div>
+
+            <!-- CTA: destaque só na etapa ativa (last); anteriores ficam discretas -->
+            <button (click)="openObservationsModal(a)" [ngClass]="
+               'bg-white text-primary border border-primary/60 hover:bg-text-primary/5'"
+              class="cursor-pointer !font-semibold text-sm rounded-lg w-42 h-10 shrink-0 transition-colors">
+              Ver observações
+            </button>
           </div>
         </div>
-        <div> <button (click)="openModal()"
-            class="cursor-pointer bg-primary !font-semibold text-white text-md rounded-lg w-48 h-12">
-            Exportar PDF
-          </button></div>
       </div>
 
     </mat-expansion-panel>

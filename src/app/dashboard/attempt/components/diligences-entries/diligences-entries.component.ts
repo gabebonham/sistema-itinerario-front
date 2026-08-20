@@ -1,23 +1,31 @@
-import { Component, computed, EventEmitter, inject, Input, input, OnInit, Output, signal } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, Input, input, OnInit, Output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { DiligenceEntryComponent } from './diligence-entry/diligence-entry.component';
 import { DiligencesFilterService } from '../../../../services/diligences-filter.service';
 import { Diligence } from '../../../../models/diligence';
+import { AttemptService } from '../../../../services/attempt.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-diligences-entries',
     standalone: true,
-    imports: [MatIconModule, DiligenceEntryComponent],
+    imports: [
+        MatIconModule,
+        MatSnackBarModule,
+        DiligenceEntryComponent
+    ],
     templateUrl: './diligences-entries.component.html',
 })
 export class DiligencesEntriesComponent implements OnInit {
+    private snackBar = inject(MatSnackBar);
     private filterService = inject(DiligencesFilterService);
+    private attemptService = inject(AttemptService);
     // private router = inject(Router);
     // private route = inject(ActivatedRoute);
     isLoading = input.required<boolean>();
-
+    loadingCancel = signal<string|undefined>(undefined)
     diligences = input.required<Diligence[]>();
-
+    localDiligences = signal<Diligence[]>([])
     pageSize = 5;
     currentPage = 1;
 
@@ -29,9 +37,16 @@ export class DiligencesEntriesComponent implements OnInit {
         // this.onPageChange()
 
     }
+    constructor() {
+        effect(() => {
+
+            this.localDiligences.set(this.diligences())
+        }
+        )
+    }
     filteredDiligences = computed(() => {
         const f = this.filterService.filter();
-        return this.diligences().filter(entry => {
+        return this.localDiligences().filter(entry => {
             const matchesSearch = !f.search || entry.debtorName.toLowerCase().includes(f.search.toLowerCase());
             const matchesWindow = !f.window || entry.window === f.window;
             const matchesDiligence = !f.diligence || entry.diligenceOrdinal === f.diligence;
@@ -83,5 +98,23 @@ export class DiligencesEntriesComponent implements OnInit {
         if (from && entryTime < parseFilterDate(from)) return false;
         if (to && entryTime > parseFilterDate(to)) return false;
         return true;
+    }
+    handleCancelAttempt(id: string) {
+        this.loadingCancel.set(id)
+        this.attemptService.cancelAttempt(id).then(result => {
+            if (result.success) {
+                this.localDiligences.set(this.localDiligences().filter(diligence => diligence.attemptId != id))
+                this.loadingCancel.set(undefined)
+            } else {
+                this.showToast("Erro ao cancelar tentativa.")
+            }
+        })
+    }
+    showToast(text: string) {
+        this.snackBar.open(text, 'Fechar', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+        });
     }
 }

@@ -30,10 +30,11 @@ export class HistoryComponent implements OnInit {
             this.hasMorePages = result.hasNext;
             this.hasPreviousPages = result.hasPrevious;
             this.currentPage = result.page;
+            this.isLoading.set(false)
         });
     }
 
-    isLoading = input.required<boolean>();
+    isLoading = signal<boolean>(true);
 
     pageSize = 5;
     currentPage = 1;
@@ -61,11 +62,13 @@ export class HistoryComponent implements OnInit {
         }
     }
     fetchAttemptPage(): void {
+            this.isLoading.set(true)
         this.attemptService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
             this.attemptList.set(result.data)
             this.hasMorePages = result.hasNext;
             this.hasPreviousPages = result.hasPrevious;
             this.currentPage = result.page;
+            this.isLoading.set(false)
         });
     }
 

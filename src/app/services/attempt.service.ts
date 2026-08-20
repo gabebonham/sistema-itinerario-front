@@ -134,6 +134,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
 export class AttemptService {
 
   async getLastDiligences(page: number, pageSize: number): Promise<{ data: Diligence[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
+    await new Promise(resolve => setTimeout(resolve, 800));
     const total = DILIGENCE_MOCKS.length;
 
     // fatia o mock pra simular paginação de verdade
@@ -165,6 +166,7 @@ export class AttemptService {
     return { success: true, data: DILIGENCE_MOCKS.filter(att => att.attemptId == id) };
   }
   async getAllPaginated(page: number, pageSize: number): Promise<{ data: Attempt[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
+    await new Promise(resolve => setTimeout(resolve, 800));
     const total = MOCK_ATTEMPT_LIST.length;
 
     // fatia o mock pra simular paginação de verdade
@@ -182,12 +184,13 @@ export class AttemptService {
     };
   }
   async getConcludedPaginated(page: number, pageSize: number): Promise<{ data: Attempt[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
+    await new Promise(resolve => setTimeout(resolve, 800));
     const total = MOCK_ATTEMPT_LIST.length;
 
     // fatia o mock pra simular paginação de verdade
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
-    const data = MOCK_ATTEMPT_LIST.filter(attempt => attempt.status == 'Entregue' || attempt.status == 'Cancelada').slice(start, end);
+    const data = MOCK_ATTEMPT_LIST.slice(start, end);
 
     return {
       data,
@@ -197,5 +200,9 @@ export class AttemptService {
       hasNext: page * pageSize < total,
       hasPrevious: page > 1
     };
+  }
+  async cancelAttempt(id: string) {
+    await new Promise(resolve => setTimeout(resolve, 800));
+    return { success: true, data: {attemptId:id} }
   }
 }

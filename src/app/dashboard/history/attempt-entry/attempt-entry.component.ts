@@ -3,20 +3,24 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CommonModule } from '@angular/common';
-import { Attempt, AttemptStatus } from '../../../models/attempt';
+import { Attempt } from '../../../models/attempt';
 import { Diligence } from '../../../models/diligence';
 import { baixarRelatorio, Diligencia, RelatorioIntimacaoData } from '../../../utils/pdf';
 import { DebtorService } from '../../../services/debtor.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { ExportPdfModal } from './export-pdf-modal/export-pdf-modal.component';
+import { ShowObservationsModal } from './show-observations-modal/show-observations-modal.component';
 
 
 @Component({
     selector: 'app-attempt-entry',
-    imports: [CommonModule,
+    imports: [
+        CommonModule,
         MatSnackBarModule,
-        MatSidenavModule, MatIconModule, MatExpansionModule],
+        MatSidenavModule,
+        MatIconModule,
+        MatExpansionModule
+    ],
     templateUrl: './attempt-entry.component.html',
 })
 export class AttemptEntryComponent implements OnInit {
@@ -27,12 +31,18 @@ export class AttemptEntryComponent implements OnInit {
     constructor(private dialog: MatDialog) {
     }
 
-    openModal() {
-        const ref = this.dialog.open(ExportPdfModal, {
+
+    openObservationsModal(diligence: Diligence) {
+        const ref = this.dialog.open(ShowObservationsModal, {
             width: '1200px',
             height: '500px',
+            data: {
+                generalObservations: diligence.generalObservations,
+                factsObservations: diligence.factsObservations,
+                propertyObservations: diligence.propertyObservations
+            }
         });
-        ref.afterClosed().subscribe(result => this.exportPdf(result.observation));
+        ref.afterClosed().subscribe();
     }
     ngOnInit(): void {
         if (this.attempt().diligences) {
@@ -43,7 +53,7 @@ export class AttemptEntryComponent implements OnInit {
     getDiligencesInAscOrder(diligences: Diligence[]) {
         return [...diligences].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
     }
-    exportPdf(observations: string) {
+    exportPdf() {
         this.debtorService.getById(this.attempt().debtorId).then(result => {
             if (result.success) {
                 const diligencesInput: Diligencia[] = (this.attempt().diligences ?? []).map(diligence => ({
@@ -51,11 +61,11 @@ export class AttemptEntryComponent implements OnInit {
                     forma: 'Pessoal',
                     porHoraCerta: diligence.porHoraCerta,
                     positiva: this.attempt().status == 'Entregue',
-                    tipoNotificacao: diligence.id == this.attempt().lastDiligenceId ? diligence.diligenceOrdinal + "positiva" : diligence.diligenceOrdinal + "negativa",
+                    tipoNotificacao: diligence.id == this.attempt().lastDiligenceId ? diligence.diligenceOrdinal + " positiva" : diligence.diligenceOrdinal + "negativa",
                     sinteseDosFatos: diligence.factsObservations,
                     observacoesImovel: diligence.propertyObservations,
                     endereco: diligence.address?.name!,
-                    observacoes: observations
+                    observacoes: diligence.generalObservations.join(' | ')
                 }))
                 const report: RelatorioIntimacaoData = {
                     nomeIntimado: result.data.name,
@@ -84,5 +94,12 @@ export class AttemptEntryComponent implements OnInit {
             horizontalPosition: 'right',
             verticalPosition: 'top',
         });
+    }
+    getInitials(name: string): string {
+        if (!name) return '';
+        const parts = name.trim().split(/\s+/);
+        const first = parts[0]?.[0] ?? '';
+        const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
+        return (first + last).toUpperCase();
     }
 }

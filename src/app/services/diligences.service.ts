@@ -18,6 +18,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 3,
     attemptId: 'IT-01-CT-006',
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d004'),
     factsObservations: [
       "Morador não foi localizado no imóvel no momento da diligência.",
@@ -40,6 +41,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     debtorName: 'Gustavo Lima',
     window: 'Manhã',
     concludedVisitNumber: 3,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     diligenceOrdinal: '3ª Diligência',
     installmentsNumber: 6,
     attemptId: 'IT-03-CT-018',
@@ -65,6 +67,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     debtorName: 'Mariana Costa',
     window: 'Sábado',
     concludedVisitNumber: 1,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 5,
     attemptId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
@@ -87,6 +90,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     start: new Date('2023-01-05T00:00:00.000Z'),
     finish: new Date('2023-01-05T02:00:00.000Z'),
     notificatorName: 'Marcelo Lopes',
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     debtorName: 'Mariana Costa',
     window: 'Manhã',
     concludedVisitNumber: 2,
@@ -109,6 +113,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
   {
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3d002',
     protocol: 'CT-004',
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     start: new Date('2023-01-04T00:00:00.000Z'),
     finish: new Date('2023-01-04T02:00:00.000Z'),
     notificatorName: 'Gabriel Grote',
@@ -143,6 +148,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 2,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     attemptId: 'IT-01-CT-007',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d005'),
     factsObservations: [
@@ -163,6 +169,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     start: new Date('2023-01-08T00:00:00.000Z'),
     finish: new Date('2023-01-08T02:00:00.000Z'),
     notificatorName: 'Gabriel Grote',
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     debtorName: 'Bruno Alencar',
     window: 'Tarde',
     concludedVisitNumber: 2,
@@ -193,6 +200,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     concludedVisitNumber: 3,
     diligenceOrdinal: '3ª Diligência',
     installmentsNumber: 1,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     attemptId: 'IT-03-CT-009',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d007'),
     factsObservations: [
@@ -215,6 +223,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     notificatorName: 'Gabriel Grote',
     debtorName: 'Lucas Ferreira',
     window: 'Sábado',
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 4,
@@ -240,6 +249,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     notificatorName: 'Marcelo Lopes',
     debtorName: 'Beatriz Rocha',
     window: 'Tarde',
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
     installmentsNumber: 3,
@@ -266,6 +276,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     debtorName: 'Rodrigo Melo',
     window: 'Manhã',
     concludedVisitNumber: 1,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     diligenceOrdinal: '1ª Diligência',
     installmentsNumber: 2,
     attemptId: 'IT-01-CT-012',
@@ -288,6 +299,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     start: new Date('2023-01-13T00:00:00.000Z'),
     finish: new Date('2023-01-13T02:00:00.000Z'),
     notificatorName: 'Marcelo Lopes',
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     debtorName: 'Camila Pires',
     window: 'Tarde',
     concludedVisitNumber: 2,
@@ -312,6 +324,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     protocol: 'CT-014',
     start: new Date('2023-01-14T00:00:00.000Z'),
     finish: new Date('2023-01-14T02:00:00.000Z'),
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     notificatorName: 'Gabriel Grote',
     debtorName: 'Thiago Ribeiro',
     window: 'Sábado',
@@ -336,6 +349,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3d013',
     protocol: 'CT-015',
     start: new Date('2023-01-15T00:00:00.000Z'),
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     finish: new Date('2023-01-15T02:00:00.000Z'),
     notificatorName: 'Marcelo Lopes',
     debtorName: 'Amanda Martins',
@@ -379,6 +393,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Numeração visível junto ao portão."
     ],
     porHoraCerta: false,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     createdAt: new Date('2023-01-14T13:40:00.000Z'),
     updatedAt: new Date('2023-01-16T14:00:00.000Z')
   },
@@ -404,6 +419,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Caixa de correio apresenta acúmulo de correspondências."
     ],
     porHoraCerta: false,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     createdAt: new Date('2023-01-15T09:10:00.000Z'),
     updatedAt: new Date('2023-01-17T17:00:00.000Z')
   },
@@ -429,6 +445,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Portão principal possui interfone."
     ],
     porHoraCerta: true,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     createdAt: new Date('2023-01-17T15:30:00.000Z'),
     updatedAt: new Date('2023-01-19T16:10:00.000Z')
   },
@@ -455,6 +472,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     ],
     porHoraCerta: false,
     createdAt: new Date('2023-01-18T10:00:00.000Z'),
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     updatedAt: new Date('2023-01-20T09:40:00.000Z')
   },
   {
@@ -480,6 +498,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     ],
     porHoraCerta: true,
     createdAt: new Date('2023-01-19T08:25:00.000Z'),
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     updatedAt: new Date('2023-01-21T12:00:00.000Z')
   },
   {
@@ -505,6 +524,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     ],
     porHoraCerta: false,
     createdAt: new Date('2023-01-20T14:15:00.000Z'),
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     updatedAt: new Date('2023-01-22T15:30:00.000Z')
   },
   {
@@ -529,6 +549,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Número do imóvel visível na fachada."
     ],
     porHoraCerta: false,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     createdAt: new Date('2023-01-21T09:50:00.000Z'),
     updatedAt: new Date('2023-01-23T11:20:00.000Z')
   },
@@ -554,6 +575,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Campainha instalada junto ao portão."
     ],
     porHoraCerta: true,
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     createdAt: new Date('2023-01-22T07:40:00.000Z'),
     updatedAt: new Date('2023-01-24T08:10:00.000Z')
   },
@@ -578,6 +600,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Residência com fachada em reforma.",
       "Numeração temporária afixada próxima à entrada."
     ],
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     porHoraCerta: false,
     createdAt: new Date('2023-01-23T13:00:00.000Z'),
     updatedAt: new Date('2023-01-25T14:45:00.000Z')
@@ -603,6 +626,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Casa residencial com portão de correr.",
       "Acesso principal livre e endereço devidamente identificado."
     ],
+    generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     porHoraCerta: true,
     createdAt: new Date('2023-01-24T10:10:00.000Z'),
     updatedAt: new Date('2023-01-26T16:30:00.000Z')

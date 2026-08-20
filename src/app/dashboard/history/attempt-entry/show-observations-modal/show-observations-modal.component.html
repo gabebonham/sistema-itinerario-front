@@ -1,0 +1,37 @@
+<div class="w-full flex flex-col p-8 gap-4 justify-between h-full ">
+    <div class="w-full flex flex-col gap-4">
+        <div>
+            <h1 class="text-xl">Visualizar observações</h1>
+        </div>
+        <div class="flex flex-col gap-6 ">
+            <div>
+                <h1>Sinteze dos Fatos</h1>
+                @for (obs of factsObservations(); track $index) {
+                <p> - {{obs}}</p>
+                }
+            </div>
+
+            <div>
+                <h1>Observações do Imóvel</h1>
+                @for (obs of propertyObservations(); track $index) {
+                <p> - {{obs}}</p>
+                } 
+            </div>
+            <div>
+                <h1>Observações Gerais</h1>
+                @for (obs of generalObservations(); track $index) {
+                <p> - {{obs}}</p>
+                }
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="flex items-center justify-end gap-8 py-4">
+        <button (click)="confirm()"
+            class="cursor-pointer bg-primary border-1 !font-semibold text-white !text-md rounded-lg w-42 h-10">
+            Fechar
+        </button>
+    </div>
+</div>

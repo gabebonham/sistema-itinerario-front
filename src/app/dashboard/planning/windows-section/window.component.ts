@@ -19,7 +19,6 @@ export class WindowComponent {
     constructor(private dialog: MatDialog) {
         effect(() => {
             const diligences = this.diligences();
-            console.log(this.diligences().length)
             if (diligences.length > 0) {
                 this.takenWindows = this.getDiligencesInAscOrder(diligences)
                     .map(diligence => this.mapToWindowEntry(diligence));

@@ -17,7 +17,7 @@
     </div>
     <div class="flex flex-col gap-6">
       <app-diligences-filtered-search></app-diligences-filtered-search>
-      <app-diligences-entries [isLoading]="isDiligencesLoading" [diligences]="diligences" [hasMorePages]="hasMoreEntriesPages"
+      <app-diligences-entries [isLoading]="isDiligencesLoading()" [diligences]="diligences()" [hasMorePages]="hasMoreEntriesPages"
         [hasPreviousPages]="hasPreviousEntriesPages" (nextPage)="fetchDiligencesPage($event)"
         (previousPage)="fetchDiligencesPage($event)"></app-diligences-entries>
     </div>

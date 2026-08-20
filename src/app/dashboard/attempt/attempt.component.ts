@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DashboardSection } from '../../models/dashboard-section';
 import { DashboardStateService } from '../../services/dashboard-state.service';
@@ -22,13 +22,13 @@ import { NewAttemptModal } from './components/new-attempt-modal/new-attempt-moda
 })
 export class AttemptComponent implements OnInit {
     private attemptService = inject(AttemptService);
-    diligences: Diligence[] = [];
+    diligences = signal<Diligence[]>([]);
     activeSection: DashboardSection = dashboardSections.find(section => section.name == 'Tentativas')!;
     hasMoreEntriesPages = false;
     hasPreviousEntriesPages = false;
     currentEntriesPage = 1;
     dashboardState = inject(DashboardStateService);
-    isDiligencesLoading = true
+    isDiligencesLoading = signal(true)
     constructor(private dialog: MatDialog) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Tentativas')!);
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
@@ -38,25 +38,26 @@ export class AttemptComponent implements OnInit {
         const ref = this.dialog.open(NewAttemptModal, {
             width: '1200px',
             height: '500px',
-            data: { titulo: 'Confirmação' }
         });
-        ref.afterClosed().subscribe(result => console.log(result));
+        ref.afterClosed().subscribe();
     }
     ngOnInit(): void {
         this.attemptService.getLastDiligences(this.currentEntriesPage, 5).then((result) => {
-            this.diligences = result.data;
+            this.diligences.set(result.data);
             this.hasMoreEntriesPages = result.hasNext;
             this.hasPreviousEntriesPages = result.hasPrevious;
             this.currentEntriesPage = result.page;
+            this.isDiligencesLoading.set(false)
         });
-        this.isDiligencesLoading = false
     }
     fetchDiligencesPage(page: number): void {
+        this.isDiligencesLoading.set(true)
         this.attemptService.getLastDiligences(page, 5).then((result) => {
-            this.diligences = result.data;
+            this.diligences.set(result.data);
             this.hasMoreEntriesPages = result.hasNext;
             this.hasPreviousEntriesPages = result.hasPrevious;
             this.currentEntriesPage = result.page;
+            this.isDiligencesLoading.set(false)
         });
     }
 }

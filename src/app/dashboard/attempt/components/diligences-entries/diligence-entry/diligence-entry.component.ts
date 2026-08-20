@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
@@ -21,7 +21,8 @@ export class DiligenceEntryComponent {
     @Input() diligenceOrdinal!: string;
     @Input() installmentsNumber!: number;
     @Input() protocol!: string;
-
+    cancelAttempt = output<string>()
+    loadingCancel = input.required<string|undefined>()
     constructor(private router: Router) { }
 
     getDateFormatted(date: Date): string {
@@ -48,5 +49,8 @@ export class DiligenceEntryComponent {
     }
     goToDiligence(id: string): void {
         this.router.navigate(['/dashboard/tentativas', id]);
+    }
+    onCancelAttempt(attemptId:string) {
+        this.cancelAttempt.emit(attemptId)
     }
 }

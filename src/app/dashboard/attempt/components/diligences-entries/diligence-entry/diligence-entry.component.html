@@ -10,9 +10,13 @@
                 </div>
                 <div class="flex flex-col">
                     <div class="flex items-center">
-                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ name }}</span> <span class="text-text-black !font-bold"> · </span> Notificador <span class="sora-font text-text-black">{{ notificatorName }}</span></p>
+                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ name }}</span>
+                            <span class="text-text-black !font-bold"> · </span> Notificador <span
+                                class="sora-font text-text-black">{{ notificatorName }}</span>
+                        </p>
                     </div>
-                    <p class="!text-text-muted !text-xs">Protocolo {{ protocol }} · {{ installmentsNumber }} faturas pendentes
+                    <p class="!text-text-muted !text-xs">Protocolo {{ protocol }} · {{ installmentsNumber }} faturas
+                        pendentes
                     </p>
                 </div>
             </div>
@@ -32,12 +36,22 @@
             <div class="flex items-center gap-2">
                 <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">calendar_today
                 </mat-icon>
-                <p class="!text-text-muted !text-xs">{{ getDateFormatted(start) }}</p> · <p class="!text-text-muted !text-xs">{{ getDateFormatted(finish) }}</p>
+                <p class="!text-text-muted !text-xs">{{ getDateFormatted(start) }}</p> · <p
+                    class="!text-text-muted !text-xs">{{ getDateFormatted(finish) }}</p>
             </div>
 
 
             <div class="flex items-center gap-2">
-                <span class="text-xs px-2 rounded-2xl border-1 border-text-muted bg-text-muted/10 !text-text-muted">Pendente</span>
+                <button (click)="onCancelAttempt(attemptId); $event.stopPropagation()"
+                    class="cursor-pointer bg-error !font-semibold text-white text-sm rounded-lg w-42 h-8">
+                    @if(loadingCancel()==attemptId) {
+                    <div class="flex items-center justify-center w-full h-full p-4">
+                        <div class="spinner" style="width: 20px; height: 20px; border-width: 2px;"></div>
+                    </div>
+                    } @else {
+                    <span>Cancelar Tentativa</span>
+                    }
+                </button>
             </div>
         </div>
     </div>

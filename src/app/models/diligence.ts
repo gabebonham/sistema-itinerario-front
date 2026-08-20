@@ -18,12 +18,13 @@ export class Diligence {
     window: string;
     factsObservations: string[];
     propertyObservations: string[];
+    generalObservations: string[];
     concludedVisitNumber: number;
     diligenceOrdinal: DiligenceOrdinal;
     installmentsNumber: number;
     attemptId: string;
     address?: Address;
-    porHoraCerta:boolean;
+    porHoraCerta: boolean;
     createdAt: Date;
     updatedAt: Date;
     constructor(
@@ -36,13 +37,14 @@ export class Diligence {
         window: string,
         factsObservations: string[],
         propertyObservations: string[],
+        generalObservations: string[],
         concludedVisitNumber: number,
         diligenceOrdinal: DiligenceOrdinal,
         installmentsNumber: number,
         attemptId: string,
         createdAt: Date,
         updatedAt: Date,
-    porHoraCerta:boolean,
+        porHoraCerta: boolean,
         address?: Address,
     ) {
         this.id = id;
@@ -53,6 +55,7 @@ export class Diligence {
         this.start = start;
         this.factsObservations = factsObservations;
         this.propertyObservations = propertyObservations;
+        this.generalObservations = generalObservations;
         this.finish = finish;
         this.attemptId = attemptId;
         this.installmentsNumber = installmentsNumber;

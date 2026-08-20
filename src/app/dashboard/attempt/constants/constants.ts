@@ -1,5 +1,5 @@
 export const DILIGENCES = {
-  OPTIONS: ['Todas', '1ª Tentativa', '2ª Tentativa', '3ª Tentativa'],
+  OPTIONS: ['Todas', '1ª Diligência', '2ª Diligência', '3ª Diligência'],
 };
 export const DILIGENCE_STATUS = {
   OPTIONS: ['Todos', 'Entregue', 'Pendente'],

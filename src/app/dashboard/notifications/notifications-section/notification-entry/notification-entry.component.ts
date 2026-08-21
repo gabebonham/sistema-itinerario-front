@@ -28,10 +28,18 @@ export class NotificationEntryComponent {
         return d.toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
-            year: 'numeric',
-            hour:'2-digit',
-            minute:'2-digit'
+            hour: '2-digit',
+            minute: '2-digit'
         });
+    }
+    getHourFormatted(date?: Date): string {
+        if (!date) return '';
+
+        const d = new Date(date);
+        const hours = d.getHours().toString().padStart(2, '0');
+        const minutes = d.getMinutes().toString().padStart(2, '0');
+
+        return `${hours}:${minutes}`;
     }
     getWindowIcon(window: string): string {
         switch (window) {

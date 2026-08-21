@@ -25,6 +25,7 @@ export class DashboardLayoutComponent implements OnInit {
     currentUser = this.authService.currentUser;
     private breakpointObserver = inject(BreakpointObserver);
 
+    isMobile = false;
     constructor(private router: Router) {
         effect(() => {
             if (this.authService.currentUser()?.role == 'admin') {
@@ -42,6 +43,7 @@ export class DashboardLayoutComponent implements OnInit {
         this.breakpointObserver
             .observe([Breakpoints.Handset, Breakpoints.Tablet])
             .subscribe(result => {
+                this.isMobile = result.matches;
                 this.sidenavOpened = !result.matches;
             });
     }
@@ -51,6 +53,9 @@ export class DashboardLayoutComponent implements OnInit {
     }
 
     changeSection(section: DashboardSection): void {
+        if (this.isMobile) {
+            this.toggleSidenav()
+        }
         this.router.navigate([`/dashboard/${section.path}`]);
     }
 }

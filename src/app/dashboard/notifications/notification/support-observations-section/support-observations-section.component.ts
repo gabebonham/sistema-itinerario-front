@@ -10,4 +10,5 @@ export class SupportObservationsSectionComponent {
     factsObservations = input<string[]>([]);
     generalObservations = input<string[]>([]);
     propertyObservations = input<string[]>([]);
+    plannerObservations = input<string|undefined>();
 }

@@ -41,8 +41,8 @@ export class PlanningComponent implements OnInit {
     isAddressesLoading = signal(true)
     isAttemptLoading = signal(true)
 
-    attempt?: Attempt;
-    debtor?: Debtor;
+    attempt = signal<Attempt | undefined>(undefined);
+    debtor = signal<Debtor | undefined>(undefined);
     addresses = signal<Address[]>([]);
     diligences = signal<Diligence[]>([]);
 
@@ -92,6 +92,7 @@ export class PlanningComponent implements OnInit {
     }
 
     buildNewDiligence(observation: string, notificatorId: string): CreateDiligenceDTO | null {
+        if (!this.attempt()) return null;
         let newDiligence = null;
         if (this.windowEntry && this.attempt) {
             newDiligence = {
@@ -101,8 +102,8 @@ export class PlanningComponent implements OnInit {
                 observation,
                 notificatorId,
                 diligenceOrdinal: this.windowEntry.diligenceOrdinal,
-                attemptId: this.attempt.id,
-                status:'Pendente'
+                attemptId: this.attempt()?.id,
+                status: 'Pendente'
             } as CreateDiligenceDTO
         }
         return newDiligence;
@@ -135,7 +136,7 @@ export class PlanningComponent implements OnInit {
 
     getAndBuildDebtor(diligenceId: string): void {
         this.debtorService.getDebtorByDiligenceId(diligenceId).then(debtor => {
-            this.debtor = (debtor);
+            this.debtor.set(debtor);
         });
     }
 
@@ -146,6 +147,9 @@ export class PlanningComponent implements OnInit {
             data: {}
         });
         ref.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
             if (result.success) {
                 this.createDiligenceAndAddress(result.data.observation, result.data.notificatorId)
             }

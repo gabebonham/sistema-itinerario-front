@@ -5,20 +5,22 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, Subject } from 'rxjs';
 
-import { DILIGENCES, DILIGENCE_WINDOW } from '../../constants/constants';
-import { DiligencesFilterService } from '../../../../services/diligences-filter.service';
+import { ATTEMPT_STATUS, DILIGENCE_WINDOW, DILIGENCES } from '../../attempt/constants/constants';
+import { DiligencesFilterService } from '../../../services/diligences-filter.service';
+import { AttemptsFilterService } from '../../../services/attempts-filter.service';
 
 @Component({
-    selector: 'app-diligences-filtered-search',
+    selector: 'app-attempts-filtered-search',
     standalone: true,
     imports: [MatIconModule, MatSelectModule, MatFormFieldModule, MatInputModule],
-    templateUrl: './diligences-filtered-search.component.html',
+    templateUrl: './attempts-filtered-search.component.html',
 })
-export class DiligencesFilteredSearchComponent {
-    private filterService = inject(DiligencesFilterService);
+export class AttemptFilteredSearchComponent {
+    private filterService = inject(AttemptsFilterService);
 
     diligences = DILIGENCES.OPTIONS;
     windows = DILIGENCE_WINDOW.OPTIONS;
+    statuses = ATTEMPT_STATUS
 
     selectedDiligence: string = this.diligences[0];
     selectedWindow: string = this.windows[0];
@@ -55,14 +57,6 @@ export class DiligencesFilteredSearchComponent {
         const value = (event.target as HTMLInputElement).value;
         this.searchProtocolValue = value;
         this.protocolSearch$.next(value);
-    }
-
-    onDiligenceChange(): void {
-        this.filterService.updateFilter({ diligence: this.selectedDiligence == 'Todas' ? '' : this.selectedDiligence });
-    }
-
-    onWindowChange(): void {
-        this.filterService.updateFilter({ window: this.selectedWindow == 'Todas' ? '' : this.selectedWindow });
     }
 
     onFromDateInput(event: Event): void {

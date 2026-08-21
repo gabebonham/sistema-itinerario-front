@@ -13,6 +13,7 @@ export class ShowObservationsModal {
     generalObservations = signal<string[]>([])
     factsObservations = signal<string[]>([])
     propertyObservations = signal<string[]>([])
+    plannerObservations = signal<string|undefined>(undefined)
     constructor(
         public dialogRef: MatDialogRef<ShowObservationsModal, boolean>,
         @Inject(MAT_DIALOG_DATA) public data: any
@@ -20,6 +21,7 @@ export class ShowObservationsModal {
         this.generalObservations.set(data.generalObservations)
         this.factsObservations.set(data.factsObservations)
         this.propertyObservations.set(data.propertyObservations)
+        this.plannerObservations.set(data.plannerObservations)
      }
     confirm() {
         this.dialogRef.close(true);

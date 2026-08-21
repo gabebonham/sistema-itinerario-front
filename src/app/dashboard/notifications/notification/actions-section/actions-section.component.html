@@ -1,49 +1,70 @@
-<div class="w-full h-full p-4 rounded-xl border-1 border-border shadow-lg">
+<div class="flex flex-col gap-4 w-full h-full p-4 rounded-xl border-1 border-border shadow-lg">
     <div>
         <h1 class="text-text-muted">DEVEDOR</h1>
-        <p>{{debtor()?.name}}</p>
+        <h1>{{debtor()?.name}}</h1>
     </div>
-    <div>
-        <h1>Devedor encontrado?</h1>
+    <div class="flex flex-col gap-2">
+        <p>Devedor encontrado?</p>
         <div class="flex items-center gap-4 h-24">
-            <div class="rounded-xl w-1/2 h-full">
-                <mat-icon>person_check</mat-icon>
+            <div (click)="onFound(true)"
+                [ngClass]="debtorFound() === true ? 'border-success !text-success !bg-success/10' : debtorFound() === undefined ? 'border-border' : 'border-border'"
+                class="border-1 flex items-center justify-center rounded-xl w-1/2 h-full cursor-pointer">
+                <mat-icon>check_circle</mat-icon>
             </div>
-            <div class="rounded-xl w-1/2 h-full">
-                <mat-icon>person_cancel</mat-icon>
+
+            <div (click)="onFound(false)"
+                [ngClass]="debtorFound() === false ? 'border-error !text-error !bg-error/10' : debtorFound() === undefined ? 'border-border' : 'border-border'"
+                class="border-1 flex items-center justify-center rounded-xl w-1/2 h-full cursor-pointer">
+                <mat-icon>cancel</mat-icon>
             </div>
         </div>
     </div>
-    <div>
+    <div class="flex flex-col gap-2">
         <h1>Comprovação fotográfica</h1>
-        <div class="flex items-center flex-col justify-center w-full h-24">
-            <mat-icon>photo_camera</mat-icon>
-            <h1>Anexar Foto</h1>
+
+        <div class="rounded-xl bg-text-muted/10 border-border border-dashed border-2 gap-3 flex items-center flex-col justify-center w-full h-24"
+            (click)="fileInput.click()">
+            <mat-icon class="!text-text-muted">photo_camera</mat-icon>
+            <h1 class="text-text-muted">Tirar Foto</h1>
+        </div>
+
+        <input #fileInput type="file" accept="image/*" capture="environment" hidden (change)="onFileSelected($event)">
+        <div class="flex flex-wrap gap-2" *ngIf="photos().length">
+            <div *ngFor="let photo of photos(); let i = index" class="relative">
+                <img [src]="photo.preview" class="rounded-lg w-20 h-20 object-cover" />
+                <button (click)="removePhoto(i)"
+                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs">
+                    ✕
+                </button>
+            </div>
         </div>
     </div>
-    <div>
+    <div class="flex flex-col gap-2">
+
         <h1>Observações</h1>
-        <form [formGroup]="form" class="w-full flex flex-col gap-4">
-            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+        <p class="!italic text-xs text-tertiary pb-2">Separe observações por ponto e virgula (;)</p>
+        <form [formGroup]="form" class="w-full flex flex-col">
+            <mat-form-field appearance="outline" class="!w-full !h-36" floatLabel="always">
                 <mat-label>Sinteze de fatos</mat-label>
-                <input matInput type="text" formControlName="factsObservations" placeholder="Sinteze de fatos..."
-                    maxlength="10" class="!text-xs" />
+                <textarea matInput formControlName="factsObservations" placeholder="..."
+                    class="!text-xs !h-28 !min-h-28 !placeholder-text-muted !overflow-y-auto"></textarea>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+            <mat-form-field appearance="outline" class="!w-full !h-36" floatLabel="always">
                 <mat-label>Observações do Imóvel</mat-label>
-                <input matInput type="text" formControlName="propertyObservations"
-                    placeholder="Observações do Imóvel..." maxlength="10" class="!text-xs" />
+                <textarea matInput formControlName="propertyObservations" placeholder="..."
+                    class="!text-xs !h-28 !min-h-28 !placeholder-text-muted !overflow-y-auto"></textarea>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+            <mat-form-field appearance="outline" class="!w-full !h-36" floatLabel="always">
                 <mat-label>Observações Gerais</mat-label>
-                <input matInput type="text" formControlName="generalObservations" placeholder="Observações Gerais..."
-                    maxlength="10" class="!text-xs" />
+                <textarea matInput formControlName="generalObservations" placeholder="..."
+                    class=" !text-xs !h-28 !min-h-28 !placeholder-text-muted !overflow-y-auto"></textarea>
             </mat-form-field>
         </form>
     </div>
     <div>
-        <button  
-            class="cursor-pointer bg-primary !font-semibold text-white !text-md rounded-lg w-42 h-10 disabled:opacity-50">
+        <button
+        (click)="finish()"
+            class="cursor-pointer bg-primary !font-semibold text-white !text-md rounded-lg w-full h-10 disabled:opacity-50">
             Concluir Parada</button>
     </div>
 </div>

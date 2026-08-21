@@ -23,7 +23,7 @@ export class DiligencesEntriesComponent implements OnInit {
     // private router = inject(Router);
     // private route = inject(ActivatedRoute);
     isLoading = input.required<boolean>();
-    loadingCancel = signal<string|undefined>(undefined)
+    loadingCancel = signal<string | undefined>(undefined)
     diligences = input.required<Diligence[]>();
     localDiligences = signal<Diligence[]>([])
     pageSize = 5;
@@ -45,16 +45,30 @@ export class DiligencesEntriesComponent implements OnInit {
         )
     }
     filteredDiligences = computed(() => {
-        const f = this.filterService.filter();
-        return this.localDiligences().filter(entry => {
-            const matchesSearch = !f.search || entry.debtorName.toLowerCase().includes(f.search.toLowerCase());
-            const matchesWindow = !f.window || entry.window === f.window;
-            const matchesDiligence = !f.diligence || entry.diligenceOrdinal === f.diligence;
-            const matchesDate = this.isWithinDateRange(entry.start, f.fromDate, f.toDate);
-            return matchesSearch && matchesWindow && matchesDiligence && matchesDate;
+        const filter = this.filterService.filter();
+
+        return this.diligences().filter(diligence => {
+
+            const matchesDebtor =
+                !filter.debtor ||
+                diligence.debtorName
+                    .toLowerCase()
+                    .includes(filter.debtor.toLowerCase());
+
+            const matchesProtocol =
+                !filter.protocol ||
+                diligence.protocol
+                    .toLowerCase()
+                    .includes(filter.protocol.toLowerCase());
+            const matchesDate = this.isWithinDateRange(
+                diligence.createdAt,
+                filter.fromDate,
+                filter.toDate
+            );
+
+            return matchesDebtor && matchesProtocol && matchesDate;
         });
     });
-
     totalPages = computed(() =>
         Math.max(1, Math.ceil(this.filteredDiligences().length / this.pageSize))
     );

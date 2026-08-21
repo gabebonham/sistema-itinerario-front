@@ -27,6 +27,7 @@ export class NewAddressModal {
     ) { }
     errors: string[] = []
     confirm() {
+        // só pra ter referencia de como vai ser, nao vai ser esse fluxo com essas models
         if (this.form.invalid) {
             this.form.markAllAsTouched();
             this.errors = this.getFormErrors();
@@ -36,10 +37,9 @@ export class NewAddressModal {
         this.isLoading = true;
         this.errors = [];
         const createAttemptDto: CreateAttemptDTO = {
-            notificatorName: '',
+            debtorId: '',
             protocol: '',
-            debtorName: '',
-            installmentsNumber: 0,
+            notificatorId: '',
         }
         this.attemptService.create(createAttemptDto).then((result) => {
             this.isLoading = false;

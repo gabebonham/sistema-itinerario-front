@@ -3,35 +3,52 @@
         <div>
             <h1 class="text-xl">Criar nova Tentativa</h1>
         </div>
-        <div class="flex flex-col gap-6">
-            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
-                <mat-label>Nome do Notificador</mat-label>
-                <input matInput type="text" formControlName="notificatorName" placeholder="Nome do notificador..." maxlength="10" class="!text-xs" />
+        <div class="flex grid grid-cols-2 gap-6">
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Selecione um Notificador</mat-label>
+                <mat-select [(value)]="notificatorId">
+                    @for (option of notificators(); track option) {
+                    <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                    }
+                </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+            <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Nome do Devedor</mat-label>
-                <input matInput type="text" formControlName="debtorName" placeholder="Nome do devedor..." maxlength="10" class="!text-xs" />
+                <input matInput type="text" formControlName="debtorName" placeholder="Nome do devedor..." maxlength="10"
+                    class="!text-xs" />
             </mat-form-field>
-            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>RG do Devedor</mat-label>
+                <input matInput type="text" formControlName="debtorRg" placeholder="RG do devedor..." maxlength="10"
+                    class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline"  floatLabel="always">
+                <mat-label>CPF/CNPJ do Devedor</mat-label>
+                <input matInput type="text" formControlName="debtorCpfCnpj" placeholder="CPF/CNPJ do devedor..."
+                    maxlength="10" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline"  floatLabel="always">
+                <mat-label>Endereço do Devedor</mat-label>
+                <input matInput type="text" formControlName="debtorAddress" placeholder="Endereço do devedor..." maxlength="10"
+                    class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline"  floatLabel="always">
                 <mat-label>Protocolo</mat-label>
-                <input matInput type="text" formControlName="protocol" placeholder="ID do contrato..." maxlength="10" class="!text-xs" />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
-                <mat-label>Parcelas em atraso</mat-label>
-                <input matInput type="text" formControlName="installmentsNumber" placeholder="Nº de parcelas..." maxlength="10" class="!text-xs" />
+                <input matInput type="text" formControlName="protocol" placeholder="ID do protocolo..." maxlength="10"
+                    class="!text-xs" />
             </mat-form-field>
         </div>
     </form>
 
     <div>
         @if (errors.length > 0) {
-            @for (error of errors; track error) {
-                <p class="text-error">{{error}}</p>
-            }
+        @for (error of errors; track error) {
+        <p class="text-error">{{error}}</p>
+        }
         } @else if (isLoading) {
-            <div class="flex items-center justify-center w-full h-full p-4">
-                <div class="spinner"></div>
-            </div>
+        <div class="flex items-center justify-center w-full h-full p-4">
+            <div class="spinner"></div>
+        </div>
         }
     </div>
 

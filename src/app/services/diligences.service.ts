@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { ADDRESS_MOCKS } from "./addresses.service";
 import { Diligence } from "../models/diligence";
 import { CreateDiligenceDTO } from "../DTOS/create-attempt.dto";
+import { UpdateDiligenceDTO } from "../DTOS/update-diligence.dto";
 function getaddressFor(diligenceId: string) {
   return ADDRESS_MOCKS.find((a: any) => a.diligenceId === diligenceId);
 }
@@ -16,7 +17,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 3,
+    plannerObservations:"Casa residencial com portão de correr.",
     attemptId: 'IT-01-CT-006',
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d004'),
@@ -43,7 +44,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     concludedVisitNumber: 3,
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     diligenceOrdinal: '3ª Diligência',
-    installmentsNumber: 6,
     attemptId: 'IT-03-CT-018',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d016'),
     factsObservations: [
@@ -69,7 +69,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     concludedVisitNumber: 1,
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 5,
     attemptId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d001'),
     factsObservations: [
@@ -95,7 +94,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Manhã',
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    installmentsNumber: 4,
     attemptId: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d003'),
     factsObservations: [
@@ -117,11 +115,11 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     start: new Date('2023-01-04T00:00:00.000Z'),
     finish: new Date('2023-01-04T02:00:00.000Z'),
     notificatorName: 'Gabriel Grote',
+    plannerObservations:"Casa residencial com portão de correr.",
     debtorName: 'Carlos Souza',
     window: 'Tarde',
     concludedVisitNumber: 3,
     diligenceOrdinal: '3ª Diligência',
-    installmentsNumber: 1,
     attemptId: 'IT-03-CT-004',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d002'),
     factsObservations: [
@@ -147,7 +145,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Manhã',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 2,
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     attemptId: 'IT-01-CT-007',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d005'),
@@ -174,7 +171,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Tarde',
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    installmentsNumber: 6,
     attemptId: 'IT-02-CT-008',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d006'),
     factsObservations: [
@@ -199,7 +195,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Manhã',
     concludedVisitNumber: 3,
     diligenceOrdinal: '3ª Diligência',
-    installmentsNumber: 1,
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     attemptId: 'IT-03-CT-009',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d007'),
@@ -225,8 +220,8 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     concludedVisitNumber: 1,
+    plannerObservations:"Casa residencial com portão de correr.",
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 4,
     attemptId: 'IT-01-CT-010',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d008'),
     factsObservations: [
@@ -252,7 +247,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    installmentsNumber: 3,
     attemptId: 'IT-02-CT-011',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d009'),
     factsObservations: [
@@ -278,7 +272,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     concludedVisitNumber: 1,
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 2,
     attemptId: 'IT-01-CT-012',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d010'),
     factsObservations: [
@@ -291,6 +284,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     ],
     porHoraCerta: false,
     createdAt: new Date('2023-01-10T10:30:00.000Z'),
+    plannerObservations:"Casa residencial com portão de correr.",
     updatedAt: new Date('2023-01-12T09:15:00.000Z')
   },
   {
@@ -304,7 +298,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Tarde',
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    installmentsNumber: 5,
     attemptId: 'IT-02-CT-013',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d011'),
     factsObservations: [
@@ -330,7 +323,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     concludedVisitNumber: 3,
     diligenceOrdinal: '3ª Diligência',
-    installmentsNumber: 1,
     attemptId: 'IT-03-CT-014',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d012'),
     factsObservations: [
@@ -356,7 +348,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Manhã',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 3,
     attemptId: 'IT-01-CT-015',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d013'),
     factsObservations: [
@@ -381,7 +372,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    installmentsNumber: 4,
+    plannerObservations:"Casa residencial com portão de correr.",
     attemptId: 'IT-02-CT-016',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d014'),
     factsObservations: [
@@ -407,7 +398,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Tarde',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 2,
+    plannerObservations:"Casa residencial com portão de correr.",
     attemptId: 'IT-01-CT-017',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d015'),
     factsObservations: [
@@ -433,7 +424,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Tarde',
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    installmentsNumber: 1,
     attemptId: 'IT-02-CT-019',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d017'),
     factsObservations: [
@@ -459,8 +449,8 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 5,
     attemptId: 'IT-01-CT-020',
+    plannerObservations:"Casa residencial com portão de correr.",
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d018'),
     factsObservations: [
       "Não houve atendimento no endereço.",
@@ -485,7 +475,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Manhã',
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    installmentsNumber: 3,
     attemptId: 'IT-02-CT-021',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d019'),
     factsObservations: [
@@ -511,9 +500,9 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Tarde',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 2,
     attemptId: 'IT-01-CT-022',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d020'),
+    plannerObservations:"Casa residencial com portão de correr.",
     factsObservations: [
       "Morador informou que o devedor não se encontrava no local.",
       "Foi orientado a repassar o contato da administradora."
@@ -537,7 +526,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     concludedVisitNumber: 3,
     diligenceOrdinal: '3ª Diligência',
-    installmentsNumber: 4,
     attemptId: 'IT-03-CT-023',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d021'),
     factsObservations: [
@@ -563,7 +551,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Manhã',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    installmentsNumber: 1,
     attemptId: 'IT-01-CT-024',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d022'),
     factsObservations: [
@@ -576,6 +563,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     ],
     porHoraCerta: true,
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
+    plannerObservations:"Casa residencial com portão de correr.",
     createdAt: new Date('2023-01-22T07:40:00.000Z'),
     updatedAt: new Date('2023-01-24T08:10:00.000Z')
   },
@@ -589,7 +577,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Tarde',
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    installmentsNumber: 3,
     attemptId: 'IT-02-CT-025',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d023'),
     factsObservations: [
@@ -601,6 +588,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Numeração temporária afixada próxima à entrada."
     ],
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
+    plannerObservations:"Casa residencial com portão de correr.",
     porHoraCerta: false,
     createdAt: new Date('2023-01-23T13:00:00.000Z'),
     updatedAt: new Date('2023-01-25T14:45:00.000Z')
@@ -615,7 +603,6 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     concludedVisitNumber: 3,
     diligenceOrdinal: '3ª Diligência',
-    installmentsNumber: 2,
     attemptId: 'IT-03-CT-026',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d024'),
     factsObservations: [
@@ -627,6 +614,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Acesso principal livre e endereço devidamente identificado."
     ],
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
+    plannerObservations:"Casa residencial com portão de correr.",
     porHoraCerta: true,
     createdAt: new Date('2023-01-24T10:10:00.000Z'),
     updatedAt: new Date('2023-01-26T16:30:00.000Z')
@@ -642,6 +630,12 @@ export class DiligencesService {
   }
   async create(dto: CreateDiligenceDTO) {
     console.log('Diligence created')
+    console.log(JSON.stringify(dto, null, 2))
+    await new Promise(resolve => setTimeout(resolve, 800));
+    return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };
+  }
+  async update(id: string, dto: UpdateDiligenceDTO) {
+    console.log('Diligence updated')
     console.log(JSON.stringify(dto, null, 2))
     await new Promise(resolve => setTimeout(resolve, 800));
     return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };

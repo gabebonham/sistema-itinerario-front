@@ -19,7 +19,6 @@ export class DiligenceEntryComponent {
     @Input() finish!: Date;
     @Input() visitNumber!: number;
     @Input() diligenceOrdinal!: string;
-    @Input() installmentsNumber!: number;
     @Input() protocol!: string;
     cancelAttempt = output<string>()
     loadingCancel = input.required<string|undefined>()

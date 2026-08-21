@@ -31,7 +31,6 @@ export class AttemptEntryComponent implements OnInit {
     constructor(private dialog: MatDialog) {
     }
 
-
     openObservationsModal(diligence: Diligence) {
         const ref = this.dialog.open(ShowObservationsModal, {
             width: '1200px',
@@ -39,7 +38,8 @@ export class AttemptEntryComponent implements OnInit {
             data: {
                 generalObservations: diligence.generalObservations,
                 factsObservations: diligence.factsObservations,
-                propertyObservations: diligence.propertyObservations
+                propertyObservations: diligence.propertyObservations,
+                plannerObservations: diligence.plannerObservations
             }
         });
         ref.afterClosed().subscribe();
@@ -82,6 +82,10 @@ export class AttemptEntryComponent implements OnInit {
         })
 
     }
+
+    getFormattedDate(date: Date): string {
+        return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', hour:'numeric', minute:'numeric' });
+    }
     formatarDataHoraDiligencia(date: Date): string {
         const pad = (n: number) => n.toString().padStart(2, '0');
         return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(
@@ -95,7 +99,7 @@ export class AttemptEntryComponent implements OnInit {
             verticalPosition: 'top',
         });
     }
-    getInitials(name: string): string {
+    getInitials(name?: string): string {
         if (!name) return '';
         const parts = name.trim().split(/\s+/);
         const first = parts[0]?.[0] ?? '';

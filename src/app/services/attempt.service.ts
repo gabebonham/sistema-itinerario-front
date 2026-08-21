@@ -3,6 +3,7 @@ import { Diligence } from "../models/diligence";
 import { DILIGENCE_MOCKS } from "./diligences.service";
 import { Attempt } from "../models/attempt";
 import { CreateAttemptDTO } from "../DTOS/create-itinerary.dto";
+import { DEBTOR_MOCK } from "./debtor.service";
 export const MOCK_ATTEMPT: Attempt = {
   id: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
   status: 'Pendente',
@@ -29,6 +30,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     protocol: '123',
     updatedAt: new Date('2023-01-06T09:30:00.000Z'),
     diligences: getDiligencesFor('IT-01-CT-006'),
+    debtor:DEBTOR_MOCK
   },
   {
     id: 'IT-03-CT-018',
@@ -40,6 +42,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     protocol: '123',
     updatedAt: new Date('2023-01-18T08:50:00.000Z'),
     diligences: getDiligencesFor('IT-03-CT-018'),
+    debtor:DEBTOR_MOCK,
   },
   {
     id: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
@@ -47,6 +50,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e003',
     protocol: '123',
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d003',
+    debtor:DEBTOR_MOCK,
     concludedVisitNumber: 2,
     createdAt: new Date('2023-01-01T09:00:00.000Z'),
     updatedAt: new Date('2023-01-05T11:00:00.000Z'),
@@ -59,6 +63,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d002',
     concludedVisitNumber: 2,
     createdAt: new Date('2023-01-02T10:15:00.000Z'),
+    debtor:DEBTOR_MOCK,
     protocol: '123',
     updatedAt: new Date('2023-01-04T16:45:00.000Z'),
     diligences: getDiligencesFor('IT-03-CT-004'),
@@ -70,6 +75,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d005',
     concludedVisitNumber: 2,
     protocol: '123',
+    debtor:DEBTOR_MOCK,
     createdAt: new Date('2023-01-05T07:50:00.000Z'),
     updatedAt: new Date('2023-01-07T15:20:00.000Z'),
     diligences: getDiligencesFor('IT-01-CT-007'),
@@ -79,6 +85,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     status: 'Cancelada',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e006',
     concludedVisitNumber: 2,
+    debtor:DEBTOR_MOCK,
     protocol: '123',
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d006',
     createdAt: new Date('2023-01-06T12:00:00.000Z'),
@@ -91,6 +98,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     status: 'Pendente',
     concludedVisitNumber: 2,
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d007',
+    debtor:DEBTOR_MOCK,
     createdAt: new Date('2023-01-07T09:40:00.000Z'),
     protocol: '123',
     updatedAt: new Date('2023-01-09T10:05:00.000Z'),
@@ -104,6 +112,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     concludedVisitNumber: 2,
     protocol: '123',
     createdAt: new Date('2023-01-08T11:25:00.000Z'),
+    debtor:DEBTOR_MOCK,
     updatedAt: new Date('2023-01-10T13:50:00.000Z'),
     diligences: getDiligencesFor('IT-01-CT-010'),
   },
@@ -114,6 +123,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     concludedVisitNumber: 2,
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d009',
     createdAt: new Date('2023-01-09T08:15:00.000Z'),
+    debtor:DEBTOR_MOCK,
     updatedAt: new Date('2023-01-11T16:00:00.000Z'),
     diligences: getDiligencesFor('IT-02-CT-011'),
     protocol: '123'
@@ -122,6 +132,7 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
     id: 'IT-01-CT-012',
     debtorId: 'b2e1a10b-58cc-4372-a567-0e02b2c3e010',
     status: 'Pendente',
+    debtor:DEBTOR_MOCK,
     lastDiligenceId: 'f47ac10b-58cc-4372-a567-0e02b2c3d010',
     createdAt: new Date('2023-01-10T10:30:00.000Z'),
     concludedVisitNumber: 2,

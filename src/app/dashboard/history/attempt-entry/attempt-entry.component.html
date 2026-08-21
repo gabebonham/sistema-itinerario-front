@@ -10,16 +10,16 @@
             <div class="flex items-center gap-3 min-w-0">
               <div
                 class="flex items-center justify-center shrink-0 w-9 h-9 rounded-full bg-primary/10 text-primary text-xs font-semibold">
-                {{ getInitials(lastDiligence.debtorName) }}
+                {{ getInitials(attempt().debtor?.name) }}
               </div>
               <div class="flex flex-col min-w-0">
                 <p class="text-text-muted text-sm truncate">
-                  <span class="sora-font text-text-black">{{ lastDiligence.debtorName }}</span>
+                  <span class="sora-font text-text-black">{{ attempt().debtor?.name }}</span>
                   <span class="text-text-black/40"> · </span>
-                  Notificador <span class="sora-font text-text-black">{{ lastDiligence.notificatorName }}</span>
+                  Último Notificador <span class="sora-font text-text-black">{{ lastDiligence.notificatorName }}</span>
                 </p>
                 <p class="!text-text-muted !text-xs">
-                  Protocolo {{ lastDiligence.protocol }} · {{ lastDiligence.installmentsNumber }} faturas pendentes
+                  Protocolo {{ attempt().protocol }} · Última diligência concluída em {{ getFormattedDate(lastDiligence.start)}}
                 </p>
               </div>
             </div>

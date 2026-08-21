@@ -16,7 +16,7 @@ import { SupportObservationsSectionComponent } from './support-observations-sect
 
 @Component({
     selector: 'app-notifications',
-    imports: [MatSidenavModule, MatSnackBarModule, MapSectionComponent,ActionsSectionComponent, SupportObservationsSectionComponent],
+    imports: [MatSidenavModule, MatSnackBarModule, MapSectionComponent, ActionsSectionComponent, SupportObservationsSectionComponent],
     templateUrl: './notification.component.html',
 })
 export class NotificationComponent implements OnInit {
@@ -71,5 +71,14 @@ export class NotificationComponent implements OnInit {
             horizontalPosition: 'right',
             verticalPosition: 'top',
         });
+    }
+    getDateFormatted(date?: Date): string {
+        if (!date) return '';
+
+        const d = new Date(date);
+        const hours = d.getHours().toString().padStart(2, '0');
+        const minutes = d.getMinutes().toString().padStart(2, '0');
+
+        return `${hours}:${minutes}`;
     }
 }

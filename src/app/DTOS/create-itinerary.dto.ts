@@ -1,6 +1,5 @@
 export interface CreateAttemptDTO { 
-    notificatorName: string 
-    debtorName: string
+    notificatorId: string 
+    debtorId: string
     protocol: string 
-    installmentsNumber: number
 }

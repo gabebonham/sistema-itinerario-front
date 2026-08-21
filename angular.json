@@ -59,6 +59,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {"allowedHosts": ["shirlene-nondecayed-sortably.ngrok-free.dev"]},
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {

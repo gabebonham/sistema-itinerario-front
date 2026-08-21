@@ -982,7 +982,7 @@ export async function baixarRelatorio(
 
   a.href = url;
   a.download =
-    'relatorio-intimacao.pdf';
+    input.nomeIntimado + '.pdf';
 
   a.click();
 

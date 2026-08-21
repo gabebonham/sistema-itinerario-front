@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-4 bg-white rounded-xl border-1 border-border px-6 pt-6 shadow-lg">
+<div class="flex flex-col gap-4 bg-white rounded-xl border-1 border-border px-6 py-6 shadow-lg">
   <div class="flex items-center gap-4 ">
     <mat-icon class="!text-text-muted !text-lg !h-7">filter_alt</mat-icon>
     <h1 class="text-lg font-bold text-text-black">Pesquisa com Filtros</h1>
@@ -21,28 +21,7 @@
           class="w-full text-text-black placeholder-text-black focus:outline-none focus:ring-0 border-none" />
       </div>
     </div>
-    <div class="flex items-center gap-4 my-8">
-
-
-      <mat-form-field appearance="outline" class="!w-1/5">
-        <mat-label>Selecione uma Janela</mat-label>
-        <mat-select [(value)]="selectedWindow" (selectionChange)="onWindowChange()">
-          @for (option of windows; track option) {
-          <mat-option [value]="option">{{ option }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-
-      <mat-form-field appearance="outline" class="!w-1/5">
-        <mat-label>Selecione uma Diligência</mat-label>
-        <mat-select [(value)]="selectedDiligence" (selectionChange)="onDiligenceChange()">
-          @for (option of diligences; track option) {
-          <mat-option [value]="option">{{ option }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
+    <!-- <div class="flex items-center gap-4 my-8">
 
       <mat-form-field appearance="outline" class="!w-1/5" floatLabel="always">
         <mat-label>De</mat-label>
@@ -57,6 +36,6 @@
         <input matInput type="text" placeholder="dd/mm/aaaa" [value]="toDateValue" (input)="onToDateInput($event)"
           maxlength="10" class="!text-xs" />
       </mat-form-field>
-    </div>
+    </div> -->
   </div>
 </div>

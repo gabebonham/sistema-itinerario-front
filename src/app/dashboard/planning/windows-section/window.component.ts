@@ -41,6 +41,9 @@ export class WindowComponent {
             data: { windowsLeft: this.windowsLeft, diligenceOrdinal: this.getDiligenceOrdinal() }
         });
         ref.afterClosed().subscribe(result => {
+            if (!result) {
+                return;
+            }
             if (result.success) {
                 this.newWindowEntry.set({
                     finish: result.data.finish,

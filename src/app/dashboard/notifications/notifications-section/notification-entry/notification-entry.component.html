@@ -1,38 +1,39 @@
-<div class="cursor-pointer w-full border-1 border-border rounded-lg p-4 flex flex-col gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100"
+<div class="cursor-pointer !text-xs w-full border-1 border-border rounded-lg p-4 flex flex-col gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100 border-l-3 border-l-warning"
     (click)="goToNotification(id())">
-    <div class="flex items-center gap-6 w-full">
+    <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col gap-2 justify-between w-full">
+            <div class="flex items-center gap-2 w-full">
+                <div class="flex flex-col w-full gap-2">
+                    <div class="flex items-center justify-between w-full">
+                        <p class="!text-text-muted !text-xs">Protocolo: <span
+                                class="sora-font !text-text-black !text-xs ">{{
+                                protocol()
+                                }}</span></p>
+                        <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{
+                            diligenceOrdinal()}}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-text-muted">Devedor: <span class="sora-font text-text-black">{{ debtorName()
+                                }}</span></p>
+                        <p class="text-text-muted">Notificador: <span class="sora-font text-text-black">{{
+                                notificatorName() }}</span></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-2">
-                <div>
-                    <div class="rounded-full bg-quarternary p-2 flex items-center justify-center">
-                        <mat-icon class="!text-white">person</mat-icon>
-                    </div>
-                </div>
-                <div class="flex flex-col">
-                    <div class="flex items-center">
-                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ debtorName() }}</span> <span class="text-text-black !font-bold"> · </span> Notificador <span class="sora-font text-text-black">{{ notificatorName() }}</span></p>
-                    </div>
-                    <p class="!text-text-muted !text-xs">Protocolo {{ protocol() }}
-                    </p>
-                </div>
+                <p class="!text-text-muted !text-xs">{{ getDateFormatted(diligenceStart()) }}</p>
+                <mat-icon [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">arrow_forward</mat-icon>
+                <p class="!text-text-muted !text-xs">{{ getHourFormatted(diligenceFinish()) }}</p>
             </div>
-            <div class="flex items-center gap-6">
-                <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{ diligenceOrdinal()
-                    }}</span>
-                <div class="flex items-center gap-2">
-                    <mat-icon class="!text-text-muted "
-                        [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{ getWindowIcon(diligenceWindow())
-                        }}</mat-icon>
-                    <p class="!text-xs">{{ diligenceWindow() }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="h-8 w-px bg-text-muted"></div>
-        <div class="flex items-center justify-between w-4/6">
-            <div class="flex items-center gap-2">
-                <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">calendar_today
-                </mat-icon>
-                <p class="!text-text-muted !text-xs">{{ getDateFormatted(diligenceStart()) }}</p> · <p class="!text-text-muted !text-xs">{{ getDateFormatted(diligenceFinish()) }}</p>
+            <div class="flex items-center gap-1">
+                <mat-icon class="!text-text-muted "
+                    [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{
+                    getWindowIcon(diligenceWindow())
+                    }}</mat-icon>
+                <p class="!text-xs !text-text-muted">{{ diligenceWindow() }}</p>
             </div>
         </div>
     </div>

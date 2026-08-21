@@ -17,7 +17,7 @@ export class SendToFieldModal {
     diligencesService = inject(DiligencesService)
     private fb = inject(FormBuilder);
     form = this.fb.group({
-        observation: ['', Validators.required],
+        observation: [''],
     });
     constructor(
         public dialogRef: MatDialogRef<SendToFieldModal, boolean>,

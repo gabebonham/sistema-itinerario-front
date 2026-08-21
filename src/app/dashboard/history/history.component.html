@@ -1,4 +1,4 @@
-<div class="h-full px-8 py-8 w-full">
+<div class=" px-8 py-8 w-full">
   <div class="flex items-center justify-between w-full">
     <div class=" w-full">
       <h1 class="font-semibold text-text-muted">TENTATIVAS · HISTÓRICO</h1>
@@ -7,6 +7,9 @@
         diligências.</p>
     </div>
 
+  </div>
+  <div class="py-4">
+    <app-attempts-filtered-search></app-attempts-filtered-search>
   </div>
   <div class="px-6 py-8 flex flex-col gap-8 border-border border-1 shadow-lg rounded-xl bg-white">
 
@@ -31,11 +34,11 @@
     <div class="flex items-center justify-center w-full h-full p-4">
       <div class="spinner"></div>
     </div>
-    } @else if (!isLoading() && attemptList().length == 0) {
+    } @else if (!isLoading() && filteredAttempts().length == 0) {
     <div class="flex items-center justify-center">Sem Registros...</div>
     } @else {
 
-    @for (attempt of attemptList(); track attempt) {
+    @for (attempt of filteredAttempts(); track attempt) {
     <app-attempt-entry [attempt]="attempt"></app-attempt-entry>
     }
     }

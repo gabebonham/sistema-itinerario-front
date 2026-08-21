@@ -5,7 +5,7 @@ export const ADDRESS_MOCKS: Address[] = [
   // diligence d001 - 4 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e001',
-    'Apartamento Moinhos de Vento',
+    'Rua Fernandes Vieira, 445 — Moinhos de Vento',
     'Porto Alegre',
     'Moinhos de Vento',
     'Rua Fernandes Vieira',
@@ -22,7 +22,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e002',
-    'Residência Cidade Baixa',
+    'Rua João Alfredo, 820 — Cidade Baixa',
     'Porto Alegre',
     'Cidade Baixa',
     'Rua João Alfredo',
@@ -39,7 +39,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e003',
-    'Sala Comercial Canoas',
+    'Avenida Guilherme Schell, 1200 — Centro',
     'Canoas',
     'Centro',
     'Avenida Guilherme Schell',
@@ -56,7 +56,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e004',
-    'Casa dos Fundos - Gravataí',
+    'Rua das Palmeiras, 58 — Parque Estrela',
     'Gravataí',
     'Parque Estrela',
     'Rua das Palmeiras',
@@ -75,7 +75,7 @@ export const ADDRESS_MOCKS: Address[] = [
   // diligence d002 - 4 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e005',
-    'Casa 2 - Petrópolis',
+    'Rua Coronel Bordini, 900 — Petrópolis',
     'Porto Alegre',
     'Petrópolis',
     'Rua Coronel Bordini',
@@ -92,7 +92,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e006',
-    'Residência Águas Claras',
+    'Estrada dos Alpes, 77 — Águas Claras',
     'Viamão',
     'Águas Claras',
     'Estrada dos Alpes',
@@ -109,7 +109,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e007',
-    'Apartamento Bela Vista',
+    'Rua Padre Chagas, 312 — Bela Vista',
     'Porto Alegre',
     'Bela Vista',
     'Rua Padre Chagas',
@@ -126,7 +126,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e008',
-    'Residência Centro - Alvorada',
+    'Avenida Presidente Vargas, 210 — Centro',
     'Alvorada',
     'Centro',
     'Avenida Presidente Vargas',
@@ -145,7 +145,7 @@ export const ADDRESS_MOCKS: Address[] = [
   // diligence d003 - 4 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e009',
-    'Apartamento Menino Deus',
+    'Rua Luiz Afonso, 640 — Menino Deus',
     'Porto Alegre',
     'Menino Deus',
     'Rua Luiz Afonso',
@@ -162,7 +162,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e010',
-    'Residência Recreio',
+    'Rua Silva Jardim, 145 — Recreio',
     'Cachoeirinha',
     'Recreio',
     'Rua Silva Jardim',
@@ -179,7 +179,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e011',
-    'Casa 1 - Tristeza',
+    'Avenida Wenceslau Escobar, 3050 — Tristeza',
     'Porto Alegre',
     'Tristeza',
     'Avenida Wenceslau Escobar',
@@ -196,7 +196,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e012',
-    'Sala Comercial Novo Hamburgo',
+    'Rua Marechal Deodoro, 480 — Centro',
     'Novo Hamburgo',
     'Centro',
     'Rua Marechal Deodoro',
@@ -215,7 +215,7 @@ export const ADDRESS_MOCKS: Address[] = [
   // diligence d004 - 3 endereços
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e013',
-    'Apartamento Higienópolis',
+    'Rua Vieira de Castro, 199 — Higienópolis',
     'Porto Alegre',
     'Higienópolis',
     'Rua Vieira de Castro',
@@ -232,7 +232,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e014',
-    'Residência Centro - Esteio',
+    'Rua Getúlio Vargas, 333 — Centro',
     'Esteio',
     'Centro',
     'Rua Getúlio Vargas',
@@ -249,7 +249,7 @@ export const ADDRESS_MOCKS: Address[] = [
   ),
   new Address(
     'a1b2c3d4-58cc-4372-a567-0e02b2c3e015',
-    'Apartamento Auxiliadora',
+    'Rua Mostardeiro, 600 — Auxiliadora',
     'Porto Alegre',
     'Auxiliadora',
     'Rua Mostardeiro',

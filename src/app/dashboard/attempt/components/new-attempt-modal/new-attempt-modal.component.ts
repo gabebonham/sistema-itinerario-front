@@ -1,4 +1,4 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject, Inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,29 +7,57 @@ import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AttemptService } from '../../../../services/attempt.service';
 import { CreateAttemptDTO } from '../../../../DTOS/create-itinerary.dto';
-
+import { DebtorService } from '../../../../services/debtor.service';
+import { CreateDebtorDTO } from '../../../../DTOS/create-debtor.dto';
+import { UserService } from '../../../../services/user.service';
+import { User } from '../../../../models/user';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
     selector: 'app-new-attempt-modal',
-    imports: [MatDialogModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+    imports: [MatDialogModule, MatSelectModule, MatSnackBarModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
     templateUrl: './new-attempt-modal.component.html',
 })
-export class NewAttemptModal {
+export class NewAttemptModal implements OnInit {
+    private snackBar = inject(MatSnackBar);
     isLoading = false
     attemptService = inject(AttemptService)
+    debtorService = inject(DebtorService)
+    userService = inject(UserService)
+    notificators = signal<User[]>([])
+    notificatorId?: string
     private fb = inject(FormBuilder);
     form = this.fb.group({
-        notificatorName: ['', Validators.required],
         debtorName: ['', Validators.required],
+        debtorAddress: ['', Validators.required],
+        debtorRg: ['', Validators.required],
+        debtorCpfCnpj: ['', Validators.required],
         protocol: ['', Validators.required],
-        installmentsNumber: [0, [Validators.required, Validators.min(1)]],
     });
+    errors: string[] = []
     constructor(
         private router: Router,
         public dialogRef: MatDialogRef<NewAttemptModal, boolean>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
-    errors: string[] = []
+    ngOnInit(): void {
+        this.userService.getAllByRole('Notificador').then(result => {
+            if (result.success) {
+                this.notificators.set(result.data)
+            } else {
+                this.showToast("Erro ao carregar notificadores.")
+            }
+
+        })
+    }
+    showToast(text: string) {
+        this.snackBar.open(text, 'Fechar', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+        });
+    }
     confirm() {
         if (this.form.invalid) {
             this.form.markAllAsTouched();
@@ -39,13 +67,28 @@ export class NewAttemptModal {
         }
         this.isLoading = true;
         this.errors = [];
-        const createAttemptDto: CreateAttemptDTO = {
-            notificatorName: this.form.value.notificatorName!,
-            protocol: this.form.value.protocol!,
-            debtorName: this.form.value.debtorName!,
-            installmentsNumber: this.form.value.installmentsNumber!,
+
+        const createDebtorDto: CreateDebtorDTO = {
+            name: this.form.value.debtorName!,
+            cpfCnpj: this.form.value.debtorCpfCnpj!,
+            rg: this.form.value.debtorRg!,
+            address: this.form.value.debtorAddress!,
         }
-        this.attemptService.create(createAttemptDto).then((result) => {
+        this.debtorService.create(createDebtorDto).then(result => {
+            if (result.success) {
+                this.createAttempt(result.data.id)
+            } else {
+                this.errors = ['Não foi possível criar devedor.'];
+            }
+        })
+    }
+    private createAttempt(debtorId: string) {
+        const dto: CreateAttemptDTO = {
+            notificatorId: this.notificatorId!,
+            protocol: this.form.value.protocol!,
+            debtorId,
+        }
+        this.attemptService.create(dto).then((result) => {
             this.isLoading = false;
             if (result.success) {
                 this.dialogRef.close(true);
@@ -61,9 +104,11 @@ export class NewAttemptModal {
     private getFormErrors(): string[] {
         const labels: Record<string, string> = {
             notificatorName: 'Nome do Notificador',
-            debtor: 'Nome do Devedor',
+            debtorName: 'Nome do Devedor',
             protocol: 'Protocolo',
-            installmentsNumber: 'Parcelas em atraso',
+            debtorAddress: 'Endereço do Devedor',
+            debtorRg: 'RG do Devedor',
+            debtorCpfCnpj: 'CPF/CNPJ do Devedor',
         };
 
         const messages: string[] = [];

@@ -3,20 +3,18 @@ import { Injectable, signal } from '@angular/core';
 export interface DiligencesFilter {
     debtor: string;
     protocol: string;
-    window: string;
-    diligence: string;
+    status:string;
     fromDate: string;
     toDate: string;
 }
 
 @Injectable({ providedIn: 'root' })
-export class DiligencesFilterService {
+export class AttemptsFilterService {
 
     filter = signal<DiligencesFilter>({
         debtor: '',
         protocol: '',
-        window: '',
-        diligence: '',
+        status:'',
         fromDate: '',
         toDate: '',
     });

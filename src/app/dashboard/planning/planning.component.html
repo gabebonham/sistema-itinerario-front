@@ -14,7 +14,12 @@
       </div>
     </div>
     <div class="h-full flex flex-col gap-6 w-full">
-      <div class="w-full h-[500px] "><app-map-section [debtor]="debtor" [addresses]="addresses()"></app-map-section>
+      <div class="w-full h-[500px] ">@if (debtor()) {
+        <div class="w-full h-[500px]">
+          <app-map-section [debtor]="debtor()!" [addresses]="addresses()">
+          </app-map-section>
+        </div>
+        }
       </div>
       <div class="w-full h-full flex items-start gap-6">
         <app-addresses-section [isLoading]="isAddressesLoading()" class="w-3/5 h-full "

@@ -1,23 +1,113 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Address } from '../../../../models/address';
 import { Debtor } from '../../../../models/debtor';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { CommonModule, NgClass } from '@angular/common';
+import { UpdateDiligenceDTO } from '../../../../DTOS/update-diligence.dto';
+import { DiligencesService } from '../../../../services/diligences.service';
+import { Diligence } from '../../../../models/diligence';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-actions-section',
-    imports: [MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+    imports: [CommonModule, MatSnackBarModule, MatIconModule, NgClass, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
     templateUrl: './actions-section.component.html',
 })
 export class ActionsSectionComponent {
+    private snackBar = inject(MatSnackBar);
     debtor = input<Debtor>();
+    diligence = input.required<Diligence | undefined>()
+    diligenceService = inject(DiligencesService)
+    debtorFound = signal<boolean | undefined>(undefined)
     private fb = inject(FormBuilder);
+    isLoading = signal(false)
+    constructor(private router: Router) { }
     form = this.fb.group({
-        notificatorName: ['', Validators.required],
-        debtorName: ['', Validators.required],
-        protocol: ['', Validators.required],
-        installmentsNumber: [0, [Validators.required, Validators.min(1)]],
+        factsObservations: [''],
+        generalObservations: [''],
+        propertyObservations: [''],
     });
+    onFound(value: boolean) {
+        if (this.debtorFound() == value) {
+            this.debtorFound.set(undefined)
+        } else {
+            this.debtorFound.set(value)
+        }
+    }
+    previewUrl: string | null = null;
+    selectedFile: File | null = null;
+
+    photos = signal<{ file: File; preview: string }[]>([]);
+
+    onFileSelected(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        const file = input.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.photos.update(list => [...list, { file, preview: reader.result as string }]);
+        };
+        reader.readAsDataURL(file);
+
+        input.value = '';
+    }
+
+    removePhoto(index: number): void {
+        this.photos.update(list => list.filter((_, i) => i !== index));
+    }
+
+    finish() {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+
+        if (this.debtorFound() === undefined) {
+            this.showToast('Selecione se o devedor foi encontrado.');
+            return;
+        }
+
+        const diligenceId = this.diligence()?.id;
+        if (!diligenceId) {
+            this.showToast('Diligência inválida.');
+            return;
+        }
+
+        this.isLoading.set(true);
+
+        const concludeVisitDto: UpdateDiligenceDTO = {
+            factsObservations: this.form.value.factsObservations!,
+            generalObservations: this.form.value.generalObservations!,
+            propertyObservations: this.form.value.propertyObservations!,
+            wasDebtorFound: this.debtorFound()!
+        };
+
+        this.diligenceService.update(diligenceId, concludeVisitDto)
+            .then(result => {
+                if (result.success) {
+                    this.showToast('Visita concluida com sucesso!');
+                    this.router.navigate([`/dashboard/notificacoes`]);
+                } else {
+                    this.showToast('Não foi possível concluir visita.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                this.showToast('Erro ao concluir visita.');
+            })
+            .finally(() => {
+                this.isLoading.set(false);
+            });
+    }
+    showToast(text: string) {
+        this.snackBar.open(text, 'Fechar', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+        });
+    }
 }

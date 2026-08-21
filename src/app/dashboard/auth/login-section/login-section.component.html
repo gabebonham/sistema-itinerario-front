@@ -1,0 +1,27 @@
+<div class="px-4  flex flex-col gap-4 bg-background">
+
+    <div class="py-4">
+        <h1 class="text-xl text-quarternary">Bem vindo(a) de volta</h1>
+        <p class="text-text-muted">Entre com suas credenciais.</p>
+    </div>
+    <div>
+        <form [formGroup]="loginForm" class="flex flex-col gap-4">
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Email</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">mail</mat-icon>
+                <input formControlName="email" matInput type="text" placeholder="nome@gmail.com.br" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Senha</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">lock</mat-icon>
+                <input formControlName="password" matInput [type]="showPassword?'text':'password'"
+                    placeholder="Sua senha" class="!text-xs" />
+            </mat-form-field>
+        </form>
+    </div>
+    <div>
+        <button [disabled]="isLoading()"
+            class="cursor-pointer bg-primary !font-semibold text-white !text-md rounded-lg w-full h-10 disabled:opacity-50">
+            Entrar</button>
+    </div>
+</div>

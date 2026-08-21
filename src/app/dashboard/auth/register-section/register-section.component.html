@@ -1,0 +1,54 @@
+<div class="px-4 flex flex-col gap-4 bg-background">
+    <div class="py-4">
+        <h1 class="text-xl text-quarternary">Criar Conta</h1>
+        <p class="text-text-muted">Escolha o perfil de acesso conforme sua função na operação.</p>
+    </div>
+    <div class="flex w-full gap-4 h-24 items-center">
+        <div (click)="setRole('Notificador')" [ngClass]="role() == 'Notificador'
+            ? 'border-secondary bg-secondary/10 !text-secondary'
+            : 'border-border bg-text-muted/10 !text-text-muted'"
+            class="flex  flex-col w-1/2 h-full rounded-xl flex items-center justify-center border">
+            <mat-icon>map_search</mat-icon>
+            <span class="text-xs">Notificador (a)</span>
+        </div>
+
+        <div (click)="setRole('Planejador')" [ngClass]="role() == 'Planejador'
+            ? 'border-warning bg-warning/10 !text-warning'
+            : 'border-border bg-text-muted/10 !text-text-muted'"
+            class="flex flex-col w-1/2 h-full rounded-xl flex items-center justify-center border">
+            <mat-icon>person</mat-icon>
+            <span class="text-xs">Planejador (a)</span>
+        </div>
+    </div>
+    <div>
+        <form [formGroup]="loginForm" class="flex flex-col gap-4">
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Nome</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">person</mat-icon>
+                <input formControlName="name" matInput type="text" placeholder="Nome" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Email</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">mail</mat-icon>
+                <input formControlName="email" matInput type="text" placeholder="nome@gmail.com.br" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Senha</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">lock</mat-icon>
+                <input formControlName="password" matInput [type]="showPassword?'text':'password'"
+                    placeholder="Sua senha" class="!text-xs" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Confirmar Senha</mat-label>
+                <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">lock</mat-icon>
+                <input formControlName="passwordConfirm" matInput [type]="showPasswordConfirm?'text':'password'"
+                    placeholder="Sua senha" class="!text-xs" />
+            </mat-form-field>
+        </form>
+    </div>
+    <div>
+        <button [disabled]="isLoading()"
+            class="cursor-pointer bg-primary !font-semibold text-white !text-md rounded-lg w-full h-10 disabled:opacity-50">
+            Cadastrar</button>
+    </div>
+</div>

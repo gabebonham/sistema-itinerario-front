@@ -6,13 +6,14 @@ import { HistoryComponent } from './dashboard/history/history.component';
 import { AttemptComponent } from './dashboard/attempt/attempt.component';
 import { NotificatorsComponent } from './dashboard/notificators/notificators.component';
 import { NotificationsComponent } from './dashboard/notifications/notifications.component';
+import { AuthComponent } from './dashboard/auth/auth.component';
 
 export const routes: Routes = [
-    // {
-    //     path: 'auth',
-    //     component: AuthComponent,
-    //     canActivate: [guestGuard], // autenticado → vai pro dashboard
-    // },
+    {
+        path: 'auth',
+        component: AuthComponent,
+        // canActivate: [guestGuard], // autenticado → vai pro dashboard
+    },
     {
         path: 'dashboard',
         component: DashboardLayoutComponent,

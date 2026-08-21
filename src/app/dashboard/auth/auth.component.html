@@ -1,0 +1,26 @@
+<div class="h-full flex flex-col items-center justify-center">
+    <div class="px-4 py-16 flex flex-col  bg-background">
+        <div class="flex items-center gap-4">
+            <mat-icon class="box-content bg-primary !text-white rounded-lg p-3">route</mat-icon>
+            <div>
+                <h1 class="text-lg text-quarternary">Sistema de Intinerário</h1>
+                <p class="text-xs text-text-muted">Itinerários de parcelas atrasadas</p>
+            </div>
+        </div>
+        <div class="py-8">
+            @if (currentSection()=='forgotPassword') {
+                <app-forgot-password-section (changeSection)="changeSection('login')"></app-forgot-password-section>
+            } @else {
+
+            <mat-tab-group>
+                <mat-tab label="Login"><app-login-section></app-login-section> </mat-tab>
+                <mat-tab label="Cadastro"><app-register-section></app-register-section></mat-tab>
+            </mat-tab-group>
+                        <div class="flex items-center justify-center py-4">
+                <h1 class=" text-primary" (click)="changeSection('forgotPassword')">Esqueci minha senha</h1>
+            </div>
+            }
+
+        </div>
+    </div>
+</div>

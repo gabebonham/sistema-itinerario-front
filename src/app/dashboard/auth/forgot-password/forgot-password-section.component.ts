@@ -18,6 +18,7 @@ import { LoginDTO } from '../../../DTOS/login.dto';
 export class ForgotPasswordSectionComponent {
     showPassword = false
     isLoading = signal(false)
+    currentForgotPasswordSection = signal('emailSection')
 
     private authService= inject(AuthService);
 
@@ -56,5 +57,15 @@ export class ForgotPasswordSectionComponent {
             horizontalPosition: 'right',
             verticalPosition: 'top',
         });
+    }
+    onChangeSection(){
+        this.changeSection.emit()
+    }
+    nextSection(){
+        if (this.currentForgotPasswordSection()=='emailSection') {
+            this.currentForgotPasswordSection.set('codeSection')
+        } else if(this.currentForgotPasswordSection()=='codeSection') {
+            this.currentForgotPasswordSection.set('updateSection')
+        } 
     }
 }

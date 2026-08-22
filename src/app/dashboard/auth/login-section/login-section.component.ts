@@ -16,7 +16,7 @@ import { LoginDTO } from '../../../DTOS/login.dto';
     imports: [MatTabsModule, MatIconModule,MatSnackBarModule, ReactiveFormsModule,MatFormFieldModule, MatInputModule],
 })
 export class LoginSectionComponent {
-    showPassword = false
+    showPassword = signal(false)
     isLoading = signal(false)
 
     private authService= inject(AuthService);
@@ -55,5 +55,8 @@ export class LoginSectionComponent {
             horizontalPosition: 'right',
             verticalPosition: 'top',
         });
+    }
+    toggleShowPassword(){
+        this.showPassword.set(!this.showPassword())
     }
 }

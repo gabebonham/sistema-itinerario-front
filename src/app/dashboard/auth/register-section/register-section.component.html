@@ -1,4 +1,4 @@
-<div class="px-4 flex flex-col gap-4 bg-background">
+<div class="flex flex-col gap-4 bg-background">
     <div class="py-4">
         <h1 class="text-xl text-quarternary">Criar Conta</h1>
         <p class="text-text-muted">Escolha o perfil de acesso conforme sua função na operação.</p>
@@ -35,13 +35,30 @@
             <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Senha</mat-label>
                 <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">lock</mat-icon>
-                <input formControlName="password" matInput [type]="showPassword?'text':'password'"
+                @if (showPassword()) {
+
+                <mat-icon (click)="toggleShowPassword()" matSuffix
+                    class="text-gray-400 !text-lg ">visibility_off</mat-icon>
+                } @else {
+                <mat-icon (click)="toggleShowPassword()" matSuffix class="text-gray-400 !text-lg ">visibility</mat-icon>
+
+                }
+                <input formControlName="password" matInput [type]="showPassword()?'text':'password'"
                     placeholder="Sua senha" class="!text-xs" />
             </mat-form-field>
             <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Confirmar Senha</mat-label>
                 <mat-icon matPrefix class="text-gray-400 !text-lg mr-2">lock</mat-icon>
-                <input formControlName="passwordConfirm" matInput [type]="showPasswordConfirm?'text':'password'"
+                @if (showPasswordConfirm()) {
+
+                <mat-icon (click)="toggleShowPasswordConfirm()" matSuffix
+                    class="text-gray-400 !text-lg ">visibility_off</mat-icon>
+                } @else {
+                <mat-icon (click)="toggleShowPasswordConfirm()" matSuffix
+                    class="text-gray-400 !text-lg ">visibility</mat-icon>
+
+                }
+                <input formControlName="passwordConfirm" matInput [type]="showPasswordConfirm()?'text':'password'"
                     placeholder="Sua senha" class="!text-xs" />
             </mat-form-field>
         </form>

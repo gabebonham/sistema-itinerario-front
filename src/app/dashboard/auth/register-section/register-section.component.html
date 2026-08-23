@@ -7,7 +7,7 @@
         <div (click)="setRole('Notificador')" [ngClass]="role() == 'Notificador'
             ? 'border-secondary bg-secondary/10 !text-secondary'
             : 'border-border bg-text-muted/10 !text-text-muted'"
-            class="flex  flex-col w-1/2 h-full rounded-xl flex items-center justify-center border">
+            class="flex cursor-pointer flex-col w-1/2 h-full rounded-xl flex items-center justify-center border">
             <mat-icon>map_search</mat-icon>
             <span class="text-xs">Notificador (a)</span>
         </div>
@@ -15,7 +15,7 @@
         <div (click)="setRole('Planejador')" [ngClass]="role() == 'Planejador'
             ? 'border-warning bg-warning/10 !text-warning'
             : 'border-border bg-text-muted/10 !text-text-muted'"
-            class="flex flex-col w-1/2 h-full rounded-xl flex items-center justify-center border">
+            class="cursor-pointer flex flex-col w-1/2 h-full rounded-xl flex items-center justify-center border">
             <mat-icon>person</mat-icon>
             <span class="text-xs">Planejador (a)</span>
         </div>
@@ -38,9 +38,9 @@
                 @if (showPassword()) {
 
                 <mat-icon (click)="toggleShowPassword()" matSuffix
-                    class="text-gray-400 !text-lg ">visibility_off</mat-icon>
+                    class="text-gray-400 !text-lg cursor-pointer">visibility_off</mat-icon>
                 } @else {
-                <mat-icon (click)="toggleShowPassword()" matSuffix class="text-gray-400 !text-lg ">visibility</mat-icon>
+                <mat-icon (click)="toggleShowPassword()" matSuffix class="text-gray-400 !text-lg cursor-pointer">visibility</mat-icon>
 
                 }
                 <input formControlName="password" matInput [type]="showPassword()?'text':'password'"
@@ -52,10 +52,10 @@
                 @if (showPasswordConfirm()) {
 
                 <mat-icon (click)="toggleShowPasswordConfirm()" matSuffix
-                    class="text-gray-400 !text-lg ">visibility_off</mat-icon>
+                    class="text-gray-400 !text-lg cursor-pointer">visibility_off</mat-icon>
                 } @else {
                 <mat-icon (click)="toggleShowPasswordConfirm()" matSuffix
-                    class="text-gray-400 !text-lg ">visibility</mat-icon>
+                    class="text-gray-400 !text-lg cursor-pointer">visibility</mat-icon>
 
                 }
                 <input formControlName="passwordConfirm" matInput [type]="showPasswordConfirm()?'text':'password'"

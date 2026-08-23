@@ -7,17 +7,19 @@ import { AttemptComponent } from './dashboard/attempt/attempt.component';
 import { NotificatorsComponent } from './dashboard/notificators/notificators.component';
 import { NotificationsComponent } from './dashboard/notifications/notifications.component';
 import { AuthComponent } from './dashboard/auth/auth.component';
+import { guestGuard } from './guards/guest.guard';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {
         path: 'auth',
         component: AuthComponent,
-        // canActivate: [guestGuard], // autenticado → vai pro dashboard
+        canActivate: [guestGuard], // autenticado → vai pro dashboard
     },
     {
         path: 'dashboard',
         component: DashboardLayoutComponent,
-        // canActivate: [authGuard], // não autenticado → vai pro auth
+        canActivate: [authGuard], // não autenticado → vai pro auth
         children: [
             { path: 'tentativas', component: AttemptComponent },
             { path: 'tentativas/:id', component: PlanningComponent},

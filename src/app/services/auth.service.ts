@@ -1,7 +1,8 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { of, delay, tap } from 'rxjs';
 import { LoginDTO } from '../DTOS/login.dto';
 import { RegisterDTO } from '../DTOS/register.dto';
+import { Router } from '@angular/router';
 
 export interface User {
     id: string;
@@ -22,6 +23,7 @@ export class AuthService {
     private _currentUser = signal<User | null>(null);
     currentUser = this._currentUser.asReadonly();
     isLoggedIn = computed(() => !!this._currentUser());
+    private router = inject(Router);
 
     async login(loginDto: LoginDTO) {
         await new Promise(resolve => setTimeout(resolve, 800));
@@ -40,23 +42,22 @@ export class AuthService {
         const result = { success: true, data: { code: 123456 } }
         return result
     }
-    async sendCode(code: string, email:string) {
+    async sendCode(code: string, email: string) {
         console.log(email, code)
         await new Promise(resolve => setTimeout(resolve, 800));
         const result = { success: true }
         return result
     }
-    async updatePassword(password:string, passwordConfirm:string, email:string) {
-        console.log(email, password,passwordConfirm)
+    async updatePassword(password: string, passwordConfirm: string, email: string) {
+        console.log(email, password, passwordConfirm)
         await new Promise(resolve => setTimeout(resolve, 800));
         const result = { success: true }
         return result
     }
+
     logout() {
-        return of(void 0).pipe(
-            delay(200),
-            tap(() => this._currentUser.set(null))
-        );
+        this._currentUser.set(null)
+        return this.router.parseUrl('/auth');
     }
 
     checkSession() {

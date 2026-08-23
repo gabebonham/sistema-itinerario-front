@@ -16,9 +16,9 @@
                 <mat-icon matPrefix class="text-gray-400 !text-lg ">lock</mat-icon>
                 @if (showPassword()) {
 
-                <mat-icon (click)="toggleShowPassword()" matSuffix class="text-gray-400 !text-lg ">visibility_off</mat-icon>
+                <mat-icon (click)="toggleShowPassword()" matSuffix class="text-gray-400 !text-lg cursor-pointer">visibility_off</mat-icon>
                 } @else {
-                <mat-icon (click)="toggleShowPassword()" matSuffix class="text-gray-400 !text-lg ">visibility</mat-icon>
+                <mat-icon (click)="toggleShowPassword()" matSuffix class="text-gray-400 !text-lg cursor-pointer">visibility</mat-icon>
 
                 }
                 <input formControlName="password" matInput [type]="showPassword()?'text':'password'"

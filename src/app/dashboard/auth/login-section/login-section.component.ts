@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {  MatIconModule } from "@angular/material/icon";
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AuthService } from '../../../services/auth.service';
@@ -27,12 +27,13 @@ export class LoginSectionComponent {
         email: ['', Validators.required],
         password: ['', Validators.required],
     });
-    constructor(private router:Router) {}
+    constructor(private router:Router) {
+    }
 
     login() {
+        console.log('asdf')
         if (this.loginForm.invalid) {
             this.loginForm.markAllAsTouched();
-
             return;
         }
         this.isLoading.set(true);

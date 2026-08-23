@@ -34,6 +34,24 @@ export class AuthService {
         const result = { success: true, data: { user: MOCK_USER } }
         return result
     }
+    async sendEmail(email: string) {
+        console.log(email)
+        await new Promise(resolve => setTimeout(resolve, 800));
+        const result = { success: true, data: { code: 123456 } }
+        return result
+    }
+    async sendCode(code: string, email:string) {
+        console.log(email, code)
+        await new Promise(resolve => setTimeout(resolve, 800));
+        const result = { success: true }
+        return result
+    }
+    async updatePassword(password:string, passwordConfirm:string, email:string) {
+        console.log(email, password,passwordConfirm)
+        await new Promise(resolve => setTimeout(resolve, 800));
+        const result = { success: true }
+        return result
+    }
     logout() {
         return of(void 0).pipe(
             delay(200),

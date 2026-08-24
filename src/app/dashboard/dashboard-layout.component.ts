@@ -1,7 +1,7 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { environment } from '../../environtments/environment.dev';
 import { dashboardSections } from './constants/constants';
@@ -10,6 +10,7 @@ import { DashboardSection } from '../models/dashboard-section';
 import { DashboardStateService } from '../services/dashboard-state.service';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { User } from '../models/user';
 
 @Component({
     selector: 'app-dashboard-layout',
@@ -22,24 +23,29 @@ export class DashboardLayoutComponent implements OnInit {
     sidenavOpened = true;
     dashboardState = inject(DashboardStateService);
     authService = inject(AuthService);
-    currentUser = this.authService.currentUser;
+    currentUser = signal<User|undefined>(undefined);
     private breakpointObserver = inject(BreakpointObserver);
 
     isMobile = false;
     constructor(private router: Router) {
         effect(() => {
-            if (this.authService.currentUser()?.role == 'admin') {
+            this.authService.me().then(result=>{
+                if(result.success) {
+                    this.currentUser.set(result.data.user)
+                } else {
+                    this.authService.logout()
+                    this.router.navigate(['/auth'])
+                }
+            })
+            if (this.currentUser() && this.currentUser()?.role=='admin') {
                 this.sections = dashboardSections
-
             } else {
-
-                this.sections = dashboardSections.filter(section => section.role == (this.authService.currentUser()?.role!))
+                this.sections = dashboardSections.filter(section => section.role == (this.currentUser()?.role!))
             }
         })
     }
 
     ngOnInit(): void {
-        this.authService.checkSession().subscribe();
         this.breakpointObserver
             .observe([Breakpoints.Handset, Breakpoints.Tablet])
             .subscribe(result => {

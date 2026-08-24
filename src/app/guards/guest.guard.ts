@@ -2,13 +2,17 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-export const guestGuard: CanActivateFn = () => {
+export const guestGuard: CanActivateFn = async () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (!authService.isLoggedIn()) {
+  try {
+    const meResult = await authService.me();
+    if (meResult.success) {
+      return router.parseUrl('/dashboard');
+    }
+    return true;
+  } catch {
     return true;
   }
-
-  return router.parseUrl('/dashboard');
 };

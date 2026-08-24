@@ -12,6 +12,7 @@ import { DebtorService } from '../../../services/debtor.service';
 import { Debtor } from '../../../models/debtor';
 import { ActionsSectionComponent } from './actions-section/actions-section.component';
 import { SupportObservationsSectionComponent } from './support-observations-section/support-observations-section.component';
+import { AttemptService } from '../../../services/attempt.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class NotificationComponent implements OnInit {
     private notificationService = inject(NotificationService);
     private diligenceService = inject(DiligencesService);
     private debtorService = inject(DebtorService);
+    private attemptService = inject(AttemptService);
     diligence = signal<Diligence | undefined>(undefined)
     debtor = signal<Debtor | undefined>(undefined)
     isAddressesLoading = signal(true)
@@ -38,7 +40,7 @@ export class NotificationComponent implements OnInit {
             if (id) {
                 this.notificationService.getById(id).then(notificationResult => {
                     if (notificationResult.success) {
-                        this.getDiligence(notificationResult.data?.diligenceId!)
+                        this.getLastDiligenceByAttemptId(notificationResult.data?.attemptId!)
                         this.getDebtor(notificationResult.data?.debtorId!)
                     } else {
                         this.showToast("Erro ao buscar notificação.")
@@ -47,8 +49,8 @@ export class NotificationComponent implements OnInit {
             }
         })
     }
-    getDiligence(id: string) {
-        this.diligenceService.getDiligenceById(id).then(diligenceResult => {
+    getLastDiligenceByAttemptId(id: string) {
+        this.attemptService.getLastDiligenceByAttemptId(id).then(diligenceResult => {
             if (diligenceResult.success) {
                 this.diligence.set(diligenceResult.data)
             } else {

@@ -24,7 +24,9 @@ export class Diligence {
     attemptId: string;
     address?: Address;
     porHoraCerta: boolean;
-    plannerObservations?:string;
+    plannerObservations?: string;
+    imageUrls?: string[];
+    audioUrl?: string;
     createdAt: Date;
     updatedAt: Date;
     constructor(
@@ -44,7 +46,9 @@ export class Diligence {
         createdAt: Date,
         updatedAt: Date,
         porHoraCerta: boolean,
-    plannerObservations?:string,
+        imageUrls?: string[],
+        audioUrl?: string,
+        plannerObservations?: string,
         address?: Address,
     ) {
         this.id = id;
@@ -63,6 +67,8 @@ export class Diligence {
         this.address = address;
         this.porHoraCerta = porHoraCerta;
         this.plannerObservations = plannerObservations;
+        this.imageUrls = imageUrls;
+        this.audioUrl = audioUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

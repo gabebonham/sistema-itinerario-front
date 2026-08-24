@@ -6,16 +6,15 @@
         <div class="flex flex-col gap-6 !text-text-muted !text-xs ">
             <div>
                 <h1 class="!text-text-black !text-md">Observações Do Planejador</h1>
-                <div class="flex flex-col gap-2">
-                    <p>{{plannerObservations()}}</p>
-
+                <div class="flex flex-col gap-2 py-2">
+                    <p> - {{plannerObservations()}}</p>
                 </div>
             </div>
             <div class="w-11/12 border-b-border border-b-1 h-px"></div>
             <h1 class="!text-text-muted !text-md">ÚLTIMA DILIGÊNCIA</h1>
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col">
                 <h1 class="!text-text-black !text-md">Sinteze dos Fatos</h1>
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2 py-2">
                     @for (obs of factsObservations(); track $index) {
                     <p> - {{obs}}</p>
                     }
@@ -24,7 +23,7 @@
 
             <div>
                 <h1 class="!text-text-black !text-md">Observações do Imóvel</h1>
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2 py-2">
                     @for (obs of propertyObservations(); track $index) {
                     <p> - {{obs}}</p>
                     }
@@ -32,7 +31,7 @@
             </div>
             <div>
                 <h1 class="!text-text-black !text-md">Observações Gerais</h1>
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2 py-2">
                     @for (obs of generalObservations(); track $index) {
                     <p> - {{obs}}</p>
                     }

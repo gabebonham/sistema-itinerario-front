@@ -29,26 +29,26 @@ export class NotificationsComponent  {
     authService = inject(AuthService);
 
     notifications = signal<Notification[]>([]);
-    isLoading = signal(false);
+    isLoading = signal(true);
 
+    currentUser = signal<User|undefined>(undefined)
 
     constructor(private router: Router) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Notificações')!);
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
 
         effect(() => {
-            let user:User|undefined;
             this.authService.me().then(result=> {
                 if (result.success) {
-                    user = result.data.user
+                    this.currentUser.set(result.data.user)
                 } else {
                     this.authService.logout()
                     this.router.navigate(['/auth'])
                 }
             })
-            if (user) {
+            if (this.currentUser()) {
                 this.isLoading.set(true);
-                this.notificationService.getAllByNotificatorId(user.id)
+                this.notificationService.getAllByNotificatorId(this.currentUser()?.id!)
                     .then(result => {
                         if (result.success) this.notifications.set(result.data);
                         this.isLoading.set(false);

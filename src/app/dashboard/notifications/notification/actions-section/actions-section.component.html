@@ -41,7 +41,9 @@
     </div>
     <div class="flex flex-col gap-2">
 
-        <h1>Observações</h1>
+        <h1>Observações (Audio)</h1>
+        <app-audio-recorder (saveAudio)="onSaveAudio($event)"></app-audio-recorder>
+        <h1>Observações (Texto)</h1>
         <p class="!italic text-xs text-tertiary pb-2">Separe observações por ponto e virgula (;)</p>
         <form [formGroup]="form" class="w-full flex flex-col">
             <mat-form-field appearance="outline" class="!w-full !h-36" floatLabel="always">

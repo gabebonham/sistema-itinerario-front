@@ -1,56 +1,63 @@
-<div class="cursor-pointer w-full border-1 border-border rounded-lg p-4 flex flex-col gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100"
-    (click)="goToDiligence(attemptId)">
-    <div class="flex items-center gap-6 w-full">
-        <div class="flex items-center justify-between w-full">
-            <div class="flex items-center gap-2">
-                <div>
-                    <div class="rounded-full bg-quarternary p-2 flex items-center justify-center">
-                        <mat-icon class="!text-white">person</mat-icon>
+<div class="cursor-pointer gap-2 flex flex-col border-1 border-border rounded-lg p-4 shadow-md hover:shadow-primary/30 transition-all delay-100">
+    <h1 class="underline text-primary !italic !text-xs">Última diligência</h1>
+    <div class=" w-full flex flex-col gap-4 "
+        (click)="goToDiligence(attemptId)">
+
+        <div class="flex items-center gap-6 w-full">
+            <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-2">
+                    <div>
+                        <div class="rounded-full bg-quarternary p-2 flex items-center justify-center">
+                            <mat-icon class="!text-white">person</mat-icon>
+                        </div>
                     </div>
-                </div>
-                <div class="flex flex-col">
-                    <div class="flex items-center">
-                        <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ name }}</span>
-                            <span class="text-text-black !font-bold"> · </span> Notificador <span
-                                class="sora-font text-text-black">{{ notificatorName }}</span>
+                    <div class="flex flex-col">
+                        <div class="flex items-center">
+                            <p class="text-text-muted">Devedor <span class="sora-font text-text-black">{{ name }}</span>
+                                <span class="text-text-black !font-bold"> · </span> Notificador <span
+                                    class="sora-font text-text-black">{{ notificatorName }}</span>
+                            </p>
+                        </div>
+                        <p class="!text-text-muted !text-xs">Protocolo {{ protocol }}
                         </p>
                     </div>
-                    <p class="!text-text-muted !text-xs">Protocolo {{ protocol }} 
-                    </p>
                 </div>
-            </div>
-            <div class="flex items-center gap-6">
-                <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{ diligenceOrdinal
-                    }}</span>
-                <div class="flex items-center gap-2">
-                    <mat-icon class="!text-text-muted "
-                        [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{ getWindowIcon(window)
-                        }}</mat-icon>
-                    <p class="!text-xs">{{ window }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="h-8 w-px bg-text-muted"></div>
-        <div class="flex items-center justify-between w-4/6">
-            <div class="flex items-center gap-2">
-                <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">calendar_today
-                </mat-icon>
-                <p class="!text-text-muted !text-xs">{{ getDateFormatted(start) }}</p> · <p
-                    class="!text-text-muted !text-xs">{{ getDateFormatted(finish) }}</p>
-            </div>
-
-
-            <div class="flex items-center gap-2">
-                <button (click)="onCancelAttempt(attemptId); $event.stopPropagation()"
-                    class="cursor-pointer bg-error !font-semibold text-white text-sm rounded-lg w-42 h-8">
-                    @if(loadingCancel()==attemptId) {
-                    <div class="flex items-center justify-center w-full h-full p-4">
-                        <div class="spinner" style="width: 20px; height: 20px; border-width: 2px;"></div>
+                <div class="flex items-center gap-6">
+                    <span class="border-1 border-text-muted text-text-muted px-2 rounded-2xl text-xs">{{
+                        diligenceOrdinal
+                        }}</span>
+                    <div class="flex items-center gap-2">
+                        <mat-icon class="!text-text-muted "
+                            [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">{{
+                            getWindowIcon(window)
+                            }}</mat-icon>
+                        <p class="!text-xs">{{ window }}</p>
                     </div>
-                    } @else {
-                    <span>Cancelar Tentativa</span>
-                    }
-                </button>
+                </div>
+            </div>
+            <div class="h-8 w-px bg-text-muted"></div>
+            <div class="flex items-center justify-between w-4/6">
+                <div class="flex items-center gap-2">
+                    <mat-icon class="!text-text-muted"
+                        style="font-size: 16px; width: 16px; height: 16px;">calendar_today
+                    </mat-icon>
+                    <p class="!text-text-muted !text-xs">{{ getDateFormatted(start) }}</p> · <p
+                        class="!text-text-muted !text-xs">{{ getDateFormatted(finish) }}</p>
+                </div>
+
+
+                <div class="flex items-center gap-2">
+                    <button (click)="onCancelAttempt(attemptId); $event.stopPropagation()"
+                        class="cursor-pointer bg-error !font-semibold text-white text-sm rounded-lg w-42 h-8">
+                        @if(loadingCancel()==attemptId) {
+                        <div class="flex items-center justify-center w-full h-full p-4">
+                            <div class="spinner" style="width: 20px; height: 20px; border-width: 2px;"></div>
+                        </div>
+                        } @else {
+                        <span>Cancelar Tentativa</span>
+                        }
+                    </button>
+                </div>
             </div>
         </div>
     </div>

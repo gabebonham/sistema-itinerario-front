@@ -216,4 +216,9 @@ export class AttemptService {
     await new Promise(resolve => setTimeout(resolve, 800));
     return { success: true, data: {attemptId:id} }
   }
+  async getLastDiligenceByAttemptId(id:string) {
+    const lastDiligenceId = MOCK_ATTEMPT_LIST.find(attempt=>attempt.id==id)?.lastDiligenceId
+    const lastDiligence = DILIGENCE_MOCKS.find(diligence=>diligence.id==lastDiligenceId)    
+    return { success: true, data: lastDiligence }
+  }
 }

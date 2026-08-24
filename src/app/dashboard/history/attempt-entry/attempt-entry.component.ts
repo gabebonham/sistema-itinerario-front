@@ -33,13 +33,16 @@ export class AttemptEntryComponent implements OnInit {
 
     openObservationsModal(diligence: Diligence) {
         const ref = this.dialog.open(ShowObservationsModal, {
-            width: '1200px',
-            height: '500px',
+            width: '650px',
+            minWidth:'650px',
+            height: '700px',
             data: {
                 generalObservations: diligence.generalObservations,
                 factsObservations: diligence.factsObservations,
                 propertyObservations: diligence.propertyObservations,
-                plannerObservations: diligence.plannerObservations
+                plannerObservations: diligence.plannerObservations,
+                imageUrls:diligence.imageUrls,
+                audioUrl:diligence.audioUrl
             }
         });
         ref.afterClosed().subscribe();

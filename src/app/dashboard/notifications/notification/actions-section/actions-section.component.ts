@@ -10,10 +10,12 @@ import { DiligencesService } from '../../../../services/diligences.service';
 import { Diligence } from '../../../../models/diligence';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { AudioRecorderComponent } from './audio-recorder/audio-recorder.component';
+import { MediaService } from '../../../../services/media.service';
 
 @Component({
     selector: 'app-actions-section',
-    imports: [CommonModule, MatSnackBarModule, MatIconModule, NgClass, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+    imports: [CommonModule, AudioRecorderComponent, MatSnackBarModule, MatIconModule, NgClass, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
     templateUrl: './actions-section.component.html',
 })
 export class ActionsSectionComponent {
@@ -21,6 +23,7 @@ export class ActionsSectionComponent {
     debtor = input<Debtor>();
     diligence = input.required<Diligence | undefined>()
     diligenceService = inject(DiligencesService)
+    mediaService = inject(MediaService)
     debtorFound = signal<boolean | undefined>(undefined)
     private fb = inject(FormBuilder);
     isLoading = signal(false)
@@ -39,6 +42,7 @@ export class ActionsSectionComponent {
     }
     previewUrl: string | null = null;
     selectedFile: File | null = null;
+    audioFile?: File;
 
     photos = signal<{ file: File; preview: string }[]>([]);
 
@@ -60,7 +64,7 @@ export class ActionsSectionComponent {
         this.photos.update(list => list.filter((_, i) => i !== index));
     }
 
-    finish() {
+    async finish() {
         if (this.form.invalid) {
             this.form.markAllAsTouched();
             return;
@@ -79,13 +83,28 @@ export class ActionsSectionComponent {
 
         this.isLoading.set(true);
 
-        const concludeVisitDto: UpdateDiligenceDTO = {
-            factsObservations: this.form.value.factsObservations!,
-            generalObservations: this.form.value.generalObservations!,
-            propertyObservations: this.form.value.propertyObservations!,
-            wasDebtorFound: this.debtorFound()!
-        };
 
+        const audioResult = await this.sendAudio()
+        const imagesResult = await this.sendImages()
+        if (!audioResult.success) {
+            this.showToast("Erro ao salvar audio.")
+            return
+        }
+        if (!imagesResult.success) {
+            this.showToast("Erro ao salvar imagens.")
+            return
+        }
+        const audioUrl = audioResult.data.url
+        const imageUrls = imagesResult.data.urls
+
+        const concludeVisitDto: UpdateDiligenceDTO = {
+            factsObservations: this.form.value.factsObservations,
+            generalObservations: this.form.value.generalObservations,
+            propertyObservations: this.form.value.propertyObservations,
+            wasDebtorFound: this.debtorFound()!,
+            audioUrl,
+            imageUrls
+        };
         this.diligenceService.update(diligenceId, concludeVisitDto)
             .then(result => {
                 if (result.success) {
@@ -102,6 +121,23 @@ export class ActionsSectionComponent {
             .finally(() => {
                 this.isLoading.set(false);
             });
+    }
+    onSaveAudio(audioFile?: File) {
+        this.audioFile = audioFile
+    }
+    async sendAudio() {
+        if (this.audioFile) {
+            return await this.mediaService.uploadDiligenceAudio(this.diligence()?.id!, this.audioFile)
+        } else {
+            return { success: true, data: { url: null } }
+        }
+    }
+    async sendImages() {
+        if (this.photos().length>0) {
+            return await this.mediaService.uploadDiligenceImages(this.diligence()?.id!, this.photos().map(photo => photo.file))
+        } else {
+            return { success: true, data: { urls: null } }
+        }
     }
     showToast(text: string) {
         this.snackBar.open(text, 'Fechar', {

@@ -1,0 +1,69 @@
+<div class="w-full rounded-2xl border border-border bg-background p-4">
+
+    @if (isRecording()) {
+
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-3">
+            <div class="flex box-content p-3  items-center justify-center rounded-xl bg-error/10 text-error">
+                <mat-icon>mic</mat-icon>
+            </div>
+
+            <div class="flex-1">
+                <p class="font-semibold text-error">
+                    Gravando...
+                </p>
+
+                <p class="text-sm text-text-muted">
+                    O áudio está sendo gravado.
+                </p>
+            </div>
+        </div>
+        <button type="button" (click)="stopRecording()"
+            class="flex h-10 items-center gap-2 w-full justify-center rounded-lg bg-error px-4 text-white">
+            <mat-icon>stop</mat-icon>
+            Parar
+        </button>
+
+    </div>
+
+    } @else if (audioUrl) {
+
+    <div class="flex flex-col gap-4">
+
+        <div class="flex items-center justify-between">
+
+            <div class="flex items-center gap-3">
+
+                <mat-icon class="!text-success">
+                    check_circle
+                </mat-icon>
+
+                <span class="font-semibold">
+                    Áudio gravado
+                </span>
+
+            </div>
+
+            <button type="button" (click)="deleteAudio()" class="text-error">
+                <mat-icon>
+                    delete
+                </mat-icon>
+            </button>
+
+        </div>
+
+        <audio [src]="audioUrl" controls class="w-full"></audio>
+
+    </div>
+
+    } @else {
+
+    <button type="button" (click)="startRecording()"
+        class="flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 w-full text-white">
+        <mat-icon>mic</mat-icon>
+        Gravar
+    </button>
+
+    }
+
+</div>

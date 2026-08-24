@@ -6,7 +6,6 @@
         <mat-panel-title>
           <div class="flex items-center justify-between w-full gap-3">
 
-            <!-- Identidade: avatar de iniciais + devedor/notificador -->
             <div class="flex items-center gap-3 min-w-0">
               <div
                 class="flex items-center justify-center shrink-0 w-9 h-9 rounded-full bg-primary/10 text-primary text-xs font-semibold">
@@ -34,7 +33,6 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <!-- Ação secundária: Exportar PDF sai do nível do CTA principal -->
       <div class="flex justify-end pt-1 pb-2">
         <button (click)="exportPdf()"
           class="cursor-pointer flex items-center gap-1.5 text-sm text-text-black border border-text-muted/30 rounded-lg px-3 h-9 hover:bg-text-muted/5 transition-colors">
@@ -43,11 +41,9 @@
         </button>
       </div>
 
-      <!-- Timeline de tentativas -->
       <div class="flex flex-col pl-2">
         <div *ngFor="let a of attempt().diligences; let last = last" class="flex gap-3">
 
-          <!-- Coluna do indicador (bolinha + linha conectora contínua) -->
           <div class="flex flex-col items-center w-3 shrink-0">
             @if (last) {
             <span class="rounded-full shrink-0 z-10 w-3.5 h-3.5 ring-2" [ngClass]="attempt().status === 'Entregue'
@@ -60,7 +56,6 @@
             <div *ngIf="!last" class="w-px flex-1 bg-text-muted/40"></div>
           </div>
 
-          <!-- Conteúdo -->
           <div class="flex items-start justify-between w-full gap-3" [ngClass]="last ? 'pb-1' : 'pb-6'">
             <div class="flex flex-col gap-1">
               <div class="flex items-center gap-2">
@@ -83,7 +78,6 @@
               </p>
             </div>
 
-            <!-- CTA: destaque só na etapa ativa (last); anteriores ficam discretas -->
             <button (click)="openObservationsModal(a)" [ngClass]="
                'bg-white text-primary border border-primary/60 hover:bg-text-primary/5'"
               class="cursor-pointer !font-semibold text-sm rounded-lg w-42 h-10 shrink-0 transition-colors">

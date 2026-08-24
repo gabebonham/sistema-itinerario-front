@@ -55,7 +55,7 @@ export class AuthService {
 
     async me() {
         await new Promise(resolve => setTimeout(resolve, 800));
-        const result = { success: false, data: { user: MOCK_USER } }
+        const result = { success: true, data: { user: MOCK_USER } }
         return result
     }
 }

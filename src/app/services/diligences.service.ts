@@ -32,6 +32,8 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     porHoraCerta: false,
     createdAt: new Date('2023-01-04T13:10:00.000Z'),
     updatedAt: new Date('2023-01-06T09:30:00.000Z'),
+    audioUrl:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    imageUrls:['https://img.magnific.com/psd-gratuitas/modelo-de-bone_1332-60619.jpg?semt=ais_hybrid&w=740&q=80', 'https://d1br4h274rc9sc.cloudfront.net/blog/por_que_usar_mockup_3241b3edb7.jpg']
   },
   {
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3d016',

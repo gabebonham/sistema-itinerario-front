@@ -1,4 +1,4 @@
-<div class="w-full flex flex-col p-8 gap-4 justify-between h-full ">
+<div class=" flex flex-col p-8 gap-4 justify-between w-full ">
     <div class="w-full flex flex-col gap-4">
         <div>
             <h1 class="text-xl">Visualizar observações</h1>
@@ -15,7 +15,7 @@
                 <h1>Observações do Imóvel</h1>
                 @for (obs of propertyObservations(); track $index) {
                 <p> - {{obs}}</p>
-                } 
+                }
             </div>
             <div>
                 <h1>Observações Gerais</h1>
@@ -28,6 +28,20 @@
                 <p>{{plannerObservations()}}</p>
             </div>
         </div>
+        <div class="w-11/12 border-b-border border-b-1"></div>
+        <h1 class="text-lg">Fotos</h1>
+        <div class="flex items-center gap-4">
+            @for (item of imageUrls(); track item) {
+            <img [src]="item" class="w-24 h-24 object-cover rounded-lg cursor-pointer" (click)="openImage(item)" />
+            }
+        </div>
+        <h1 class="text-lg">Audio</h1>
+        @if (audioUrl()) {
+
+        <div>
+            <audio [src]="audioUrl()" controls></audio>
+        </div>
+        }
     </div>
 
 

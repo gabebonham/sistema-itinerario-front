@@ -94,15 +94,18 @@ export class ActionsSectionComponent {
             this.showToast("Erro ao salvar imagens.")
             return
         }
-        const audioUrl = audioResult.data.url
-        const imageUrls = imagesResult.data.urls
+        const audioUrls = audioResult.data.paths
+        const imageUrls = imagesResult.data.paths
 
         const concludeVisitDto: UpdateDiligenceDTO = {
-            factsObservations: this.form.value.factsObservations,
-            generalObservations: this.form.value.generalObservations,
-            propertyObservations: this.form.value.propertyObservations,
+            factsObservations: this.form.value.factsObservations ? 
+            this.form.value.factsObservations.split(';') : undefined,
+            generalObservations: this.form.value.generalObservations ? 
+            this.form.value.generalObservations.split(';') : undefined,
+            propertyObservations: this.form.value.propertyObservations ? 
+            this.form.value.propertyObservations.split(';') : undefined,
             wasDebtorFound: this.debtorFound()!,
-            audioUrl,
+            audioUrls,
             imageUrls
         };
         this.diligenceService.update(diligenceId, concludeVisitDto)
@@ -127,16 +130,16 @@ export class ActionsSectionComponent {
     }
     async sendAudio() {
         if (this.audioFile) {
-            return await this.mediaService.uploadDiligenceAudio(this.diligence()?.id!, this.audioFile)
+            return await this.mediaService.uploadAudio(this.audioFile)
         } else {
-            return { success: true, data: { url: null } }
+            return { success: true, data: { paths: undefined } }
         }
     }
     async sendImages() {
         if (this.photos().length>0) {
-            return await this.mediaService.uploadDiligenceImages(this.diligence()?.id!, this.photos().map(photo => photo.file))
+            return await this.mediaService.uploadImages(this.photos().map(photo => photo.file))
         } else {
-            return { success: true, data: { urls: null } }
+            return { success: true, data: { paths: undefined } }
         }
     }
     showToast(text: string) {

@@ -1,8 +1,19 @@
+import { DiligenceOrdinal } from "../models/diligence";
+
 export interface UpdateDiligenceDTO {
-    factsObservations?: string | null,
-    generalObservations?: string | null,
-    propertyObservations?: string | null,
-    audioUrl?: string |null,
-    imageUrls?: string[] |null,
-    wasDebtorFound: boolean
+    protocol?: string;
+    start?: Date;
+    finish?: Date;
+    notificatorName?: string;
+    debtorName?: string;
+    window?: string;
+    factsObservations?: string[]
+    propertyObservations?: string[]
+    generalObservations?: string[]
+    diligenceOrdinal?: DiligenceOrdinal;
+    porHoraCerta?: boolean;
+    plannerObservations?: string;
+    imageUrls?: string[];
+    audioUrls?: string[];
+    wasDebtorFound:boolean
 }

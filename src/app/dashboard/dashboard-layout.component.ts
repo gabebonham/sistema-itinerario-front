@@ -31,13 +31,13 @@ export class DashboardLayoutComponent implements OnInit {
         effect(() => {
             this.authService.me().then(result=>{
                 if(result.success) {
-                    this.currentUser.set(result.data.user)
+                    this.currentUser.set(result.data)
                 } else {
                     this.authService.logout()
                     this.router.navigate(['/auth'])
                 }
             })
-            if (this.currentUser() && this.currentUser()?.role=='admin') {
+            if (this.currentUser() && this.currentUser()?.role=='Admin') {
                 this.sections = dashboardSections
             } else {
                 this.sections = dashboardSections.filter(section => section.role == (this.currentUser()?.role!))

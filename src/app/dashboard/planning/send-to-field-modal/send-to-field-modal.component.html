@@ -6,19 +6,28 @@
         <div class="flex flex-col gap-6">
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
                 <mat-label>Observação (opcional)</mat-label>
-                <textarea matInput type="text" formControlName="observation" placeholder="Observação..." class="!text-xs"></textarea>
+                <textarea matInput type="text" formControlName="observation" placeholder="Observação..."
+                    class="!text-xs"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Selecione um Notificador</mat-label>
+                <mat-select [(value)]="notificatorId">
+                    @for (option of notificators(); track option) {
+                    <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                    }
+                </mat-select>
             </mat-form-field>
         </div>
     </form>
     <div>
         @if (errors.length > 0) {
-            @for (error of errors; track error) {
-                <p class="text-error">{{error}}</p>
-            }
+        @for (error of errors; track error) {
+        <p class="text-error">{{error}}</p>
+        }
         } @else if (isLoading) {
-            <div class="flex items-center justify-center w-full h-full p-4">
-                <div class="spinner"></div>
-            </div>
+        <div class="flex items-center justify-center w-full h-full p-4">
+            <div class="spinner"></div>
+        </div>
         }
     </div>
     <div class="flex items-center justify-end gap-8">

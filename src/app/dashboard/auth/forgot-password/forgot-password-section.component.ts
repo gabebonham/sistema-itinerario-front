@@ -19,6 +19,7 @@ export class ForgotPasswordSectionComponent {
     showPassword = false
     isLoading = signal(false)
     canNext = signal(true)
+    code = signal<number>(0)
     currentForgotPasswordSection = signal('emailSection')
 
     private authService = inject(AuthService);
@@ -96,8 +97,8 @@ export class ForgotPasswordSectionComponent {
             if (!result.success) {
                 this.showToast("Erro ao validar o código.")
             } else {
+                this.code.set(parseInt(this.codeForm.value.code!))
                 this.currentForgotPasswordSection.set('updateSection')
-
             }
         })
     }
@@ -142,7 +143,7 @@ export class ForgotPasswordSectionComponent {
         }
         this.isLoading.set(true);
 
-        this.authService.updatePassword(this.passwordForm.value.password!, this.passwordForm.value.passwordConfirm!, this.emailForm.value.email!).then(async result => {
+        this.authService.updatePassword(this.passwordForm.value.password!, this.code(), this.emailForm.value.email!).then(async result => {
             if (!result.success) {
                 this.showToast("Erro ao atualizar senha.")
             } else {

@@ -42,21 +42,28 @@ export class AttemptComponent implements OnInit {
         ref.afterClosed().subscribe();
     }
     ngOnInit(): void {
-        this.attemptService.getLastDiligences(this.currentEntriesPage, 5).then((result) => {
-            this.diligences.set(result.data);
-            this.hasMoreEntriesPages = result.hasNext;
-            this.hasPreviousEntriesPages = result.hasPrevious;
-            this.currentEntriesPage = result.page;
+        this.attemptService.getAllPaginated(this.currentEntriesPage, 5).then((result) => {
+            const diligences = result.data.data
+                .map(attempt => attempt.lastDiligence)
+                .filter((diligence): diligence is Diligence => diligence !== undefined);
+
+            this.diligences.set(diligences);
+            this.hasMoreEntriesPages = result.data.hasNext;
+            this.hasPreviousEntriesPages = result.data.hasPrevious;
+            this.currentEntriesPage = result.data.page;
             this.isDiligencesLoading.set(false)
         });
     }
     fetchDiligencesPage(page: number): void {
         this.isDiligencesLoading.set(true)
-        this.attemptService.getLastDiligences(page, 5).then((result) => {
-            this.diligences.set(result.data);
-            this.hasMoreEntriesPages = result.hasNext;
-            this.hasPreviousEntriesPages = result.hasPrevious;
-            this.currentEntriesPage = result.page;
+        this.attemptService.getAllPaginated(page, 5).then((result) => {
+            const diligences = result.data.data
+                .map(attempt => attempt.lastDiligence)
+                .filter((diligence): diligence is Diligence => diligence !== undefined);
+            this.diligences.set(diligences);
+            this.hasMoreEntriesPages = result.data.hasNext;
+            this.hasPreviousEntriesPages = result.data.hasPrevious;
+            this.currentEntriesPage = result.data.page;
             this.isDiligencesLoading.set(false)
         });
     }

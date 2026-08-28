@@ -7,11 +7,12 @@ export class Attempt {
     id: string;
     status: AttemptStatus;
     debtorId: string;
-    debtor?:Debtor;
+    debtor?: Debtor;
     protocol: string;
     lastDiligenceId: string;
     concludedVisitNumber: number;
     diligences?: Diligence[]
+    lastDiligence?: Diligence
     createdAt: Date;
     updatedAt: Date;
     constructor(
@@ -23,6 +24,7 @@ export class Attempt {
         lastDiligenceId: string,
         createdAt: Date,
         updatedAt: Date,
+        lastDiligence?: Diligence,
         diligences?: Diligence[],
         debtor?: Debtor,
     ) {
@@ -32,6 +34,7 @@ export class Attempt {
         this.diligences = diligences;
         this.concludedVisitNumber = concludedVisitNumber;
         this.debtorId = debtorId;
+        this.lastDiligence = lastDiligence;
         this.lastDiligenceId = lastDiligenceId;
         this.debtor = debtor;
         this.createdAt = createdAt;

@@ -39,7 +39,6 @@ export class NewAddressModal {
         const createAttemptDto: CreateAttemptDTO = {
             debtorId: '',
             protocol: '',
-            notificatorId: '',
         }
         this.attemptService.create(createAttemptDto).then((result) => {
             this.isLoading = false;

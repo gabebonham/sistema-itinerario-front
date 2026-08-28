@@ -9,24 +9,18 @@ import { AttemptService } from '../../../../services/attempt.service';
 import { CreateAttemptDTO } from '../../../../DTOS/create-itinerary.dto';
 import { DebtorService } from '../../../../services/debtor.service';
 import { CreateDebtorDTO } from '../../../../DTOS/create-debtor.dto';
-import { UserService } from '../../../../services/user.service';
-import { User } from '../../../../models/user';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
     selector: 'app-new-attempt-modal',
-    imports: [MatDialogModule, MatSelectModule, MatSnackBarModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+    imports: [MatDialogModule, MatSelectModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
     templateUrl: './new-attempt-modal.component.html',
 })
 export class NewAttemptModal implements OnInit {
-    private snackBar = inject(MatSnackBar);
     isLoading = false
     attemptService = inject(AttemptService)
     debtorService = inject(DebtorService)
-    userService = inject(UserService)
-    notificators = signal<User[]>([])
-    notificatorId?: string
+
     private fb = inject(FormBuilder);
     form = this.fb.group({
         debtorName: ['', Validators.required],
@@ -42,22 +36,9 @@ export class NewAttemptModal implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
     ngOnInit(): void {
-        this.userService.getAllByRole('Notificador').then(result => {
-            if (result.success) {
-                this.notificators.set(result.data)
-            } else {
-                this.showToast("Erro ao carregar notificadores.")
-            }
 
-        })
     }
-    showToast(text: string) {
-        this.snackBar.open(text, 'Fechar', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-        });
-    }
+
     confirm() {
         if (this.form.invalid) {
             this.form.markAllAsTouched();
@@ -72,7 +53,6 @@ export class NewAttemptModal implements OnInit {
             name: this.form.value.debtorName!,
             cpfCnpj: this.form.value.debtorCpfCnpj!,
             rg: this.form.value.debtorRg!,
-            address: this.form.value.debtorAddress!,
         }
         this.debtorService.create(createDebtorDto).then(result => {
             if (result.success) {
@@ -84,7 +64,6 @@ export class NewAttemptModal implements OnInit {
     }
     private createAttempt(debtorId: string) {
         const dto: CreateAttemptDTO = {
-            notificatorId: this.notificatorId!,
             protocol: this.form.value.protocol!,
             debtorId,
         }

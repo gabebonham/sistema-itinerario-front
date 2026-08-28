@@ -1,7 +1,6 @@
 import { Component, computed, inject, input, OnInit, output, Output, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-
 import { CommonModule } from '@angular/common';
 import { AttemptService } from '../../services/attempt.service';
 import { DashboardStateService } from '../../services/dashboard-state.service';
@@ -29,10 +28,10 @@ export class HistoryComponent implements OnInit {
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
         this.breadCrumbs = this.dashboardState.activeSection.name
         this.attemptService.getConcludedPaginated(this.currentPage, this.pageSize).then((result) => {
-            this.attemptList.set(result.data)
-            this.hasMorePages = result.hasNext;
-            this.hasPreviousPages = result.hasPrevious;
-            this.currentPage = result.page;
+            this.attemptList.set(result.data.data)
+            this.hasMorePages = result.data.hasNext;
+            this.hasPreviousPages = result.data.hasPrevious;
+            this.currentPage = result.data.page;
             this.isLoading.set(false)
         });
     }
@@ -67,10 +66,10 @@ export class HistoryComponent implements OnInit {
     fetchAttemptPage(): void {
         this.isLoading.set(true)
         this.attemptService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
-            this.attemptList.set(result.data)
-            this.hasMorePages = result.hasNext;
-            this.hasPreviousPages = result.hasPrevious;
-            this.currentPage = result.page;
+            this.attemptList.set(result.data.data)
+            this.hasMorePages = result.data.hasNext;
+            this.hasPreviousPages = result.data.hasPrevious;
+            this.currentPage = result.data.page;
             this.isLoading.set(false)
         });
     }
@@ -79,10 +78,10 @@ export class HistoryComponent implements OnInit {
         return this.attemptList().filter(attempt => {
 
             const matchesDebtor =
-                !filter.debtor ||
+                !filter.debtorName ||
                 attempt.debtor?.name
                     .toLowerCase()
-                    .includes(filter.debtor.toLowerCase());
+                    .includes(filter.debtorName.toLowerCase());
 
             const matchesProtocol =
                 !filter.protocol ||
@@ -93,15 +92,5 @@ export class HistoryComponent implements OnInit {
             return matchesDebtor && matchesProtocol;
         });
     });
-    private isWithinDateRange(date: Date, from: string, to: string): boolean {
-        if (!from && !to) return true;
-        const parseFilterDate = (d: string): number => {
-            const [dd, mm, yyyy] = d.split('/').map(Number);
-            return new Date(yyyy, mm - 1, dd).getTime();
-        };
-        const entryTime = date.getTime();
-        if (from && entryTime < parseFilterDate(from)) return false;
-        if (to && entryTime > parseFilterDate(to)) return false;
-        return true;
-    }
+
 }

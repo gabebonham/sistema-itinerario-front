@@ -1,13 +1,21 @@
-import { AttemptStatus } from "../models/attempt";
 import { DiligenceOrdinal } from "../models/diligence";
 
-export interface CreateDiligenceDTO { 
-    status: AttemptStatus;
+export interface CreateDiligenceDTO {
+    protocol: string;
     start: Date;
     finish: Date;
-    notificatorId: string;
+    notificatorName: string;
+    debtorName: string;
     window: string;
+    factsObservations?: string[]
+    propertyObservations?: string[]
+    generalObservations?: string[]
     diligenceOrdinal: DiligenceOrdinal;
     attemptId: string;
-    observation:string;
+    debtorId: string;
+    notificatorId: string;
+    porHoraCerta?: boolean;
+    plannerObservations?: string;
+    imageUrls?: string[];
+    audioUrl?: string;
 }

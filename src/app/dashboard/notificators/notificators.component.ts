@@ -24,8 +24,8 @@ export class NotificatorsComponent implements OnInit {
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
     }
     ngOnInit(): void {
-        this.userService.getAllByRole('Notificador').then(result => {
-            if (result.success) { this.notificators.set(result.data); this.isLoading.set(false) }
+        this.userService.getAllByRole(1, 100, 'Notificador').then(result => {
+            if (result.success) { this.notificators.set(result.data.data); this.isLoading.set(false) }
             else { this.showToast('Erro ao carregar notificadores.') }
         })
     }

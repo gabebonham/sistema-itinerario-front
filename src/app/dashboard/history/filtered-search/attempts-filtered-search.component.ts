@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { debounceTime, Subject } from 'rxjs';
 
 import { ATTEMPT_STATUS, DILIGENCE_WINDOW, DILIGENCES } from '../../attempt/constants/constants';
-import { DiligencesFilterService } from '../../../services/diligences-filter.service';
 import { AttemptsFilterService } from '../../../services/attempts-filter.service';
 
 @Component({
@@ -35,7 +34,7 @@ export class AttemptFilteredSearchComponent {
             .pipe(debounceTime(300))
             .subscribe(value => {
                 this.filterService.updateFilter({
-                    debtor: value
+                    debtorName: value
                 });
             });
 
@@ -69,7 +68,7 @@ export class AttemptFilteredSearchComponent {
         this.fromDateValue = value;
         input.value = value;
 
-        this.filterService.updateFilter({ fromDate: value });
+        this.filterService.updateFilter({ from: value });
     }
 
     onToDateInput(event: Event): void {
@@ -82,6 +81,6 @@ export class AttemptFilteredSearchComponent {
         this.toDateValue = value;
         input.value = value;
 
-        this.filterService.updateFilter({ toDate: value });
+        this.filterService.updateFilter({ to: value });
     }
 }

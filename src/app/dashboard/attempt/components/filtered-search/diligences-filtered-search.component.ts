@@ -4,9 +4,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, Subject } from 'rxjs';
-
 import { DILIGENCES, DILIGENCE_WINDOW } from '../../constants/constants';
-import { DiligencesFilterService } from '../../../../services/diligences-filter.service';
+import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
+import { Diligence, DiligenceOrdinal } from '../../../../models/diligence';
 
 @Component({
     selector: 'app-diligences-filtered-search',
@@ -15,7 +15,7 @@ import { DiligencesFilterService } from '../../../../services/diligences-filter.
     templateUrl: './diligences-filtered-search.component.html',
 })
 export class DiligencesFilteredSearchComponent {
-    private filterService = inject(DiligencesFilterService);
+    private filterService = inject(AttemptsFilterService);
 
     diligences = DILIGENCES.OPTIONS;
     windows = DILIGENCE_WINDOW.OPTIONS;
@@ -33,7 +33,7 @@ export class DiligencesFilteredSearchComponent {
             .pipe(debounceTime(300))
             .subscribe(value => {
                 this.filterService.updateFilter({
-                    debtor: value
+                    debtorName: value
                 });
             });
 
@@ -58,7 +58,17 @@ export class DiligencesFilteredSearchComponent {
     }
 
     onDiligenceChange(): void {
-        this.filterService.updateFilter({ diligence: this.selectedDiligence == 'Todas' ? '' : this.selectedDiligence });
+        let selectedOrdinal:DiligenceOrdinal|'';
+        if (this.selectedDiligence == '1ª Diligência') {
+            selectedOrdinal = '1ª Diligência'
+        } else if (this.selectedDiligence == '2ª Diligência') {
+            selectedOrdinal = '2ª Diligência'
+        }else if (this.selectedDiligence == '3ª Diligência') {
+            selectedOrdinal = '3ª Diligência'
+        } else {
+            selectedOrdinal = ''
+        }
+        this.filterService.updateFilter({ diligenceOrdinal:  selectedOrdinal});
     }
 
     onWindowChange(): void {
@@ -75,7 +85,7 @@ export class DiligencesFilteredSearchComponent {
         this.fromDateValue = value;
         input.value = value;
 
-        this.filterService.updateFilter({ fromDate: value });
+        this.filterService.updateFilter({ from: value });
     }
 
     onToDateInput(event: Event): void {
@@ -88,6 +98,6 @@ export class DiligencesFilteredSearchComponent {
         this.toDateValue = value;
         input.value = value;
 
-        this.filterService.updateFilter({ toDate: value });
+        this.filterService.updateFilter({ to: value });
     }
 }

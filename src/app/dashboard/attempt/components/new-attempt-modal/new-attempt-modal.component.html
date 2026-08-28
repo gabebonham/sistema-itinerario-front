@@ -4,14 +4,7 @@
             <h1 class="text-xl">Criar nova Tentativa</h1>
         </div>
         <div class="flex grid grid-cols-2 gap-6">
-            <mat-form-field appearance="outline" floatLabel="always">
-                <mat-label>Selecione um Notificador</mat-label>
-                <mat-select [(value)]="notificatorId">
-                    @for (option of notificators(); track option) {
-                    <mat-option [value]="option.id">{{ option.name }}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
+
             <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Nome do Devedor</mat-label>
                 <input matInput type="text" formControlName="debtorName" placeholder="Nome do devedor..." maxlength="10"
@@ -26,11 +19,6 @@
                 <mat-label>CPF/CNPJ do Devedor</mat-label>
                 <input matInput type="text" formControlName="debtorCpfCnpj" placeholder="CPF/CNPJ do devedor..."
                     maxlength="10" class="!text-xs" />
-            </mat-form-field>
-            <mat-form-field appearance="outline"  floatLabel="always">
-                <mat-label>Endereço do Devedor</mat-label>
-                <input matInput type="text" formControlName="debtorAddress" placeholder="Endereço do devedor..." maxlength="10"
-                    class="!text-xs" />
             </mat-form-field>
             <mat-form-field appearance="outline"  floatLabel="always">
                 <mat-label>Protocolo</mat-label>

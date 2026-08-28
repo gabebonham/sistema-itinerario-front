@@ -1,4 +1,5 @@
 import { Address } from "./address";
+import { Debtor } from "./debtor";
 
 export type DiligenceOrdinal = '1ª Diligência' | '2ª Diligência' | '3ª Diligência';
 export interface WindowEntry {
@@ -15,6 +16,7 @@ export class Diligence {
     finish: Date;
     notificatorName: string;
     debtorName: string;
+    debtor?: Debtor;
     window: string;
     factsObservations: string[];
     propertyObservations: string[];
@@ -49,6 +51,7 @@ export class Diligence {
         imageUrls?: string[],
         audioUrl?: string,
         plannerObservations?: string,
+        debtor?: Debtor,
         address?: Address,
     ) {
         this.id = id;
@@ -67,6 +70,7 @@ export class Diligence {
         this.address = address;
         this.porHoraCerta = porHoraCerta;
         this.plannerObservations = plannerObservations;
+        this.debtor = debtor;
         this.imageUrls = imageUrls;
         this.audioUrl = audioUrl;
         this.createdAt = createdAt;

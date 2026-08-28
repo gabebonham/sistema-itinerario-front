@@ -5,7 +5,6 @@ import { dashboardSections } from '../../constants/constants';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../services/notification.service';
 import { MapSectionComponent } from './map-section/map-section.component';
-import { DiligencesService } from '../../../services/diligences.service';
 import { Diligence } from '../../../models/diligence';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DebtorService } from '../../../services/debtor.service';
@@ -24,7 +23,6 @@ export class NotificationComponent implements OnInit {
     private snackBar = inject(MatSnackBar);
     dashboardState = inject(DashboardStateService);
     private notificationService = inject(NotificationService);
-    private diligenceService = inject(DiligencesService);
     private debtorService = inject(DebtorService);
     private attemptService = inject(AttemptService);
     diligence = signal<Diligence | undefined>(undefined)
@@ -50,9 +48,9 @@ export class NotificationComponent implements OnInit {
         })
     }
     getLastDiligenceByAttemptId(id: string) {
-        this.attemptService.getLastDiligenceByAttemptId(id).then(diligenceResult => {
-            if (diligenceResult.success) {
-                this.diligence.set(diligenceResult.data)
+        this.attemptService.getById(id).then(result => {
+            if (result.success) {
+                this.diligence.set(result.data.lastDiligence)
             } else {
                 this.showToast("Erro ao buscar diligência.")
             }

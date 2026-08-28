@@ -1,25 +1,31 @@
 import { Injectable, signal } from '@angular/core';
+import { DiligenceOrdinal } from '../models/diligence';
+import { AttemptStatus } from '../models/attempt';
 
-export interface DiligencesFilter {
-    debtor: string;
+export interface AttemptsFilter {
     protocol: string;
-    status:string;
-    fromDate: string;
-    toDate: string;
+    debtorName: string;
+    window:string;
+    diligenceOrdinal:DiligenceOrdinal|'';
+    status:AttemptStatus|'';
+    from: string;
+    to: string;
 }
 
 @Injectable({ providedIn: 'root' })
-export class DiligencesFilterService {
+export class AttemptsFilterService {
 
-    filter = signal<DiligencesFilter>({
-        debtor: '',
+    filter = signal<AttemptsFilter>({
         protocol: '',
+        debtorName: '',
+        window:'',
+        diligenceOrdinal:'',
         status:'',
-        fromDate: '',
-        toDate: '',
+        from: '',
+        to: '',
     });
 
-    updateFilter(partial: Partial<DiligencesFilter>): void {
+    updateFilter(partial: Partial<AttemptsFilter>): void {
         this.filter.update(f => ({
             ...f,
             ...partial

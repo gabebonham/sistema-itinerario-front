@@ -272,7 +272,13 @@ export const ADDRESS_MOCKS: Address[] = [
 export class AddressesService {
   private readonly api = inject(ApiService);
 
-  async create(dto: CreateAddressDTO): Promise<ApiResponse<null>>{
+  async create(dto: CreateAddressDTO): Promise<ApiResponse<null>> {
     return await this.api.post<null>('api/addresses', dto)
+  }
+  async getAddressSugestion(input: string): Promise<ApiResponse<null>> {
+    return await this.api.get<null>('api/addresses/autocomplete', { params: { input } })
+  }
+  async getAddressPlace(id: string): Promise<ApiResponse<null>> {
+    return await this.api.get<null>('api/addresses/place/'+id)
   }
 }

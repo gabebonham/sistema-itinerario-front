@@ -8,6 +8,8 @@ import { ApiResponse } from "../DTOS/api-response";
 import { MOCK_ATTEMPT_LIST } from "./attempt.service";
 import { Debtor } from "../models/debtor";
 import { ApiService } from "./api";
+import { Attempt } from "../models/attempt";
+import { resourceLimits } from "worker_threads";
 function getaddressFor(diligenceId: string) {
   return ADDRESS_MOCKS.find((a: any) => a.diligenceId === diligenceId);
 }
@@ -632,39 +634,16 @@ export const DILIGENCE_MOCKS: Diligence[] = [
 @Injectable({ providedIn: 'root' })
 export class DiligencesService {
   private api = inject(ApiService);
-  async getDiligenceById(id: string) {
-    // Simula uma busca no banco de dados
-    return { success: true, data: DILIGENCE_MOCKS.find(diligence => diligence.id === id) };
+  async getDiligenceById(id: string): Promise<ApiResponse<Diligence>> {
+    return await this.api.get<Diligence>('api/diligences/' + id)
   }
-  async create(dto: CreateDiligenceDTO) {
-    console.log('Diligence created')
-    console.log(JSON.stringify(dto, null, 2))
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };
+  async create(dto: CreateDiligenceDTO): Promise<ApiResponse<Diligence>> {
+    return await this.api.post<Diligence>('api/diligences', dto)
   }
-  async update(id: string, dto: UpdateDiligenceDTO) {
-    console.log('Diligence updated')
-    console.log(JSON.stringify(dto, null, 2))
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };
+  async update(id: string, dto: UpdateDiligenceDTO): Promise<ApiResponse<null>> {
+    return await this.api.patch<null>('api/diligences/' + id, dto)
   }
-  async getLastDiligences(page: number = 1, pageSize: number = 8): Promise<ApiResponse<PaginatedResponse<Diligence[]>>> {
-    // FILTRO APLICARIA AQ
-    const params: any = {
-      page, pageSize
-    }
-    return await this.api.get<PaginatedResponse<Diligence[]>>('api/diligences/last', { params })
-  }
-  async getDiligencesByAttemptId(id: string) {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: DILIGENCE_MOCKS.filter(att => att.attemptId == id) };
-  }
-  async getLastDiligenceByAttemptId(id: string) {
-    const lastDiligenceId = MOCK_ATTEMPT_LIST.find(attempt => attempt.id == id)?.lastDiligenceId
-    const lastDiligence = DILIGENCE_MOCKS.find(diligence => diligence.id == lastDiligenceId)
-    return { success: true, data: lastDiligence }
-  }
-  async getDebtorByDiligenceId(id: string): Promise<ApiResponse<Debtor>> {
-    return await this.api.get<Debtor>('api/debtors/diligence/' + id)
+  async getDiligencesByAttemptId(id: string): Promise<ApiResponse<Diligence[]>> {
+    return await this.api.get<Diligence[]>('api/diligence/attempt/' + id)
   }
 }

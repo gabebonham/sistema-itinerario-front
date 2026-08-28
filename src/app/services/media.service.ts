@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ApiService } from './api';
+import { ApiResponse } from '../DTOS/api-response';
 
 @Injectable({ providedIn: 'root' })
 export class MediaService {
@@ -10,7 +11,10 @@ export class MediaService {
     async uploadImages(files: File[]) {
         return await this.api.uploadFile<{ urls?: string[], paths?: string[] }>('api/storage/images', { files })
     }
-    async getAudio(file: File) {
-        return await this.api.uploadFile<{ urls?: string[], paths?: string[] }>('api/storage/image/63545e7b-d9bc-4847-8311-87fa741f60d5/url', { file })
+    async getAudioByDiligenceId(id: string): Promise<ApiResponse<{ urls?: string[], paths?: string[] }>> {
+        return await this.api.get<{ urls?: string[], paths?: string[] }>('api/storage/audio/diligeces/' + id + '/url')
+    }
+    async getImagesByDiligenceId(id: string): Promise<ApiResponse<{ urls?: string[], paths?: string[] }>> {
+        return await this.api.get<{ urls?: string[], paths?: string[] }>('api/storage/images/diligeces/' + id + '/urls')
     }
 }

@@ -19,7 +19,7 @@ import { Attempt } from '../../models/attempt';
 import { Diligence, WindowEntry } from '../../models/diligence';
 import { CreateDiligenceDTO } from '../../DTOS/create-attempt.dto';
 import { DiligencesService } from '../../services/diligences.service';
-
+import { CreateAddressDTO } from '../../DTOS/create-address.dto';
 
 @Component({
     selector: 'app-planning',
@@ -45,6 +45,7 @@ export class PlanningComponent implements OnInit {
     debtor = signal<Debtor | undefined>(undefined);
     addresses = signal<Address[]>([]);
     diligences = signal<Diligence[]>([]);
+    addressName = signal<string|undefined>(undefined);
 
     addressEntry?: AddressEntry;
     windowEntry?: WindowEntry;
@@ -87,11 +88,12 @@ export class PlanningComponent implements OnInit {
             number: address.number,
             lat: address.lat,
             lng: address.lng,
+            name:this.addressName(),
             neighborhood: address.neighborhood
-        }
+        } as CreateAddressDTO
     }
 
-    buildNewDiligence(observation: string, notificatorId: string): CreateDiligenceDTO | null {
+    buildNewDiligence(observation: string, notificatorId: string, notificatorName: string): CreateDiligenceDTO | null {
         if (!this.attempt()) return null;
         let newDiligence = null;
         if (this.windowEntry && this.attempt) {
@@ -103,7 +105,11 @@ export class PlanningComponent implements OnInit {
                 notificatorId,
                 diligenceOrdinal: this.windowEntry.diligenceOrdinal,
                 attemptId: this.attempt()?.id,
-                status: 'Pendente'
+                status: 'Pendente',
+                debtorId: this.attempt()?.debtorId,
+                debtorName: this.attempt()?.debtor?.name,
+                protocol: this.attempt()?.protocol,
+                notificatorName
             } as CreateDiligenceDTO
         }
         return newDiligence;
@@ -118,8 +124,8 @@ export class PlanningComponent implements OnInit {
     }
 
     getAndBuildAttempt(id: string): void {
-        this.attemptService.getDiligencesByAttemptId(id).then(result => {
-            this.diligences.set(result.data);
+        this.attemptService.getById(id).then(result => {
+            this.diligences.set(result.data.diligences ?? []);
             this.getAndBuildAddresses();
             this.isAttemptLoading.set(false)
         });
@@ -135,8 +141,12 @@ export class PlanningComponent implements OnInit {
     }
 
     getAndBuildDebtor(diligenceId: string): void {
-        this.debtorService.getDebtorByDiligenceId(diligenceId).then(debtor => {
-            this.debtor.set(debtor);
+        this.diligencesService.getDiligenceById(diligenceId).then(result => {
+            if (result.success) {
+                this.debtor.set(result.data.debtor);
+            } else {
+                this.showToast("Erro ao buscar devedor.")
+            }
         });
     }
 
@@ -151,12 +161,15 @@ export class PlanningComponent implements OnInit {
                 return;
             }
             if (result.success) {
-                this.createDiligenceAndAddress(result.data.observation, result.data.notificatorId)
+                this.createDiligenceAndAddress(result.data.observation, result.data.notificatorId, result.data.notificatorName)
             }
         });
     }
-    createDiligenceAndAddress(observation: string, notificatorId: string) {
-        const newDiligence = this.buildNewDiligence(observation, notificatorId)
+    onUpdateaddressName(name:string) {
+        this.addressName.set(name)
+    }
+    createDiligenceAndAddress(observation: string, notificatorId: string, notificatorName: string) {
+        const newDiligence = this.buildNewDiligence(observation, notificatorId, notificatorName)
         if (newDiligence) {
             this.diligencesService.create(newDiligence).then(diligenceResult => {
                 if (diligenceResult.success) {

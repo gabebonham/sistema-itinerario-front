@@ -7,6 +7,7 @@ import { DEBTOR_MOCK } from "./debtor.service";
 import { ApiService } from "./api";
 import { ApiResponse } from "../DTOS/api-response";
 import { PaginatedResponse } from "../DTOS/paginated-response";
+import { AttemptsFilter } from "./attempts-filter.service";
 export const MOCK_ATTEMPT: Attempt = {
   id: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
   status: 'Pendente',
@@ -149,17 +150,17 @@ export class AttemptService {
 
   private readonly api = inject(ApiService);
 
-
   async create(dto: CreateAttemptDTO):Promise<ApiResponse<Attempt>> {
     return await this.api.post<Attempt>('api/attempts', dto)
   }
   async getById(id: string): Promise<ApiResponse<Attempt>> {
     return await this.api.get<Attempt>('api/attempts/'+ id)
   }
-
-  async getAllPaginated(page: number, pageSize: number): Promise<ApiResponse<PaginatedResponse<Attempt[]>>> {
+  async getAllPaginated(page: number = 1, pageSize: number = 8, filter?:AttemptsFilter): Promise<ApiResponse<PaginatedResponse<Attempt[]>>> {
     const params: any = {
-      page, pageSize
+      page, 
+      pageSize,
+      filter
     }
     return await this.api.get<PaginatedResponse<Attempt[]>>('api/attempts', { params })
   }
@@ -171,7 +172,6 @@ export class AttemptService {
     }
     return await this.api.get<PaginatedResponse<Attempt[]>>('api/attempts', { params })
   }
-  
   async cancelAttempt(id: string):Promise<ApiResponse<null>> {
     return await this.api.patch<null>('api/attempts/'+id+'/cancel')
   }

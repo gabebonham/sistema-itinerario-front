@@ -1,7 +1,7 @@
 import { Component, computed, effect, EventEmitter, inject, Input, input, OnInit, Output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { DiligenceEntryComponent } from './diligence-entry/diligence-entry.component';
-import { DiligencesFilterService } from '../../../../services/diligences-filter.service';
+import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
 import { Diligence } from '../../../../models/diligence';
 import { AttemptService } from '../../../../services/attempt.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -18,7 +18,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 })
 export class DiligencesEntriesComponent implements OnInit {
     private snackBar = inject(MatSnackBar);
-    private filterService = inject(DiligencesFilterService);
+    private filterService = inject(AttemptsFilterService);
     private attemptService = inject(AttemptService);
     // private router = inject(Router);
     // private route = inject(ActivatedRoute);
@@ -50,10 +50,10 @@ export class DiligencesEntriesComponent implements OnInit {
         return this.diligences().filter(diligence => {
 
             const matchesDebtor =
-                !filter.debtor ||
+                !filter.debtorName ||
                 diligence.debtorName
                     .toLowerCase()
-                    .includes(filter.debtor.toLowerCase());
+                    .includes(filter.debtorName.toLowerCase());
 
             const matchesProtocol =
                 !filter.protocol ||
@@ -62,8 +62,8 @@ export class DiligencesEntriesComponent implements OnInit {
                     .includes(filter.protocol.toLowerCase());
             const matchesDate = this.isWithinDateRange(
                 diligence.createdAt,
-                filter.fromDate,
-                filter.toDate
+                filter.from,
+                filter.to
             );
 
             return matchesDebtor && matchesProtocol && matchesDate;

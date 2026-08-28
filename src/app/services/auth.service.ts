@@ -3,13 +3,17 @@ import { LoginDTO } from '../DTOS/login.dto';
 import { RegisterDTO } from '../DTOS/register.dto';
 import { Router } from '@angular/router';
 import { User } from '../models/user';
+import { ApiService } from './api';
+import { ApiResponse } from '../DTOS/api-response';
+import { LoginResponse } from '../DTOS/login-response.dto';
+import { UserResponse } from '../DTOS/user-response.dto';
 
 
 const MOCK_USER: User = {
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3n001',
     name: 'Gabriel Grote',
     email: 'gabriel@teste.com',
-    role: 'admin',
+    role: 'Admin',
     createdAt: new Date(),
     updatedAt: new Date(),
     password: '123'
@@ -18,44 +22,30 @@ const MOCK_USER: User = {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     private router = inject(Router);
+    private api = inject(ApiService);
 
-    async login(loginDto: LoginDTO) {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const result = { success: true, data: { user: MOCK_USER } }
-
-        return result
+    async login(dto: LoginDTO):Promise<ApiResponse<LoginResponse>> {
+        return await this.api.post<LoginResponse>('login',dto)
     }
-    async register(registerDto: RegisterDTO) {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const result = { success: true, data: { user: MOCK_USER } }
-        return result
+    async register(dto: RegisterDTO):Promise<ApiResponse<null>> {
+        return await this.api.post<null>('register',dto)
     }
-    async sendEmail(email: string) {
-        console.log(email)
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const result = { success: true, data: { code: 123456 } }
-        return result
+    async sendEmail(email: string):Promise<ApiResponse<null>> {
+        return await this.api.post<null>('forgot-password/send-email',{email})
     }
-    async sendCode(code: string, email: string) {
-        console.log(email, code)
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const result = { success: true }
-        return result
+    
+    async sendCode(code: string, email: string):Promise<ApiResponse<null>> {
+        return await this.api.post<null>('forgot-password/validate-code',{email, code})
     }
-    async updatePassword(password: string, passwordConfirm: string, email: string) {
-        console.log(email, password, passwordConfirm)
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const result = { success: true }
-        return result
+    async updatePassword(password: string, code: number, email: string) {
+        return await this.api.patch<null>('forgot-password/update-password',{email, code, password})
     }
 
     logout() {
         return this.router.parseUrl('/auth');
     }
 
-    async me() {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const result = { success: true, data: { user: MOCK_USER } }
-        return result
+    async me(): Promise<ApiResponse<UserResponse>> {
+        return await this.api.get<UserResponse>('me')
     }
 }

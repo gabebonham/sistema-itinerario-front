@@ -1,7 +1,11 @@
+import { ApiResponse } from "../DTOS/api-response";
+import { CreateNotificationDto } from "../DTOS/create-notification.dto";
+import { PaginatedResponse } from "../DTOS/paginated-response";
 import { Notification } from "../models/notification";
+import { ApiService } from "./api";
 import { MOCK_ATTEMPT_LIST } from "./attempt.service";
 import { DILIGENCE_MOCKS } from "./diligences.service";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 
 const NOTIFICATOR_1 = 'f47ac10b-58cc-4372-a567-0e02b2c3n001'; // Gabriel Grote
 const NOTIFICATOR_2 = 'f47ac10b-58cc-4372-a567-0e02b2c3n002'; // Marcelo Lopes
@@ -117,12 +121,17 @@ export const NOTIFICATION_MOCKS: Notification[] = [
 ];
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-    async getAllByNotificatorId(id: string) {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        return { success: true, data: NOTIFICATION_MOCKS.filter(notification => notification.notificatorId == id) }
-    }
-    async getById(id: string) {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        return { success: true, data: NOTIFICATION_MOCKS.find(notification => notification.id == id) }
-    }
+  private api = inject(ApiService);
+  async getAllByNotificatorId(id: string): Promise<ApiResponse<PaginatedResponse<Notification[]>>> {
+    return await this.api.get<PaginatedResponse<Notification[]>>('api/notifications/notificator/' + id)
+  }
+  async getById(id: string): Promise<ApiResponse<Notification>> {
+    return await this.api.get<Notification>('api/notifications/' + id)
+  }
+  async delete(id: string): Promise<ApiResponse<null>> {
+    return await this.api.delete<null>('api/notifications/' + id)
+  }
+  async create(dto: CreateNotificationDto): Promise<ApiResponse<Notification>> {
+    return await this.api.post<Notification>('api/notifications', dto)
+  }
 }

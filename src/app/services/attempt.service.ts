@@ -1,9 +1,12 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Diligence } from "../models/diligence";
 import { DILIGENCE_MOCKS } from "./diligences.service";
 import { Attempt } from "../models/attempt";
 import { CreateAttemptDTO } from "../DTOS/create-itinerary.dto";
 import { DEBTOR_MOCK } from "./debtor.service";
+import { ApiService } from "./api";
+import { ApiResponse } from "../DTOS/api-response";
+import { PaginatedResponse } from "../DTOS/paginated-response";
 export const MOCK_ATTEMPT: Attempt = {
   id: 'f47ac10b-58cc-0003-a567-0e02b2c3d003',
   status: 'Pendente',
@@ -144,81 +147,33 @@ export const MOCK_ATTEMPT_LIST: Attempt[] = [
 @Injectable({ providedIn: 'root' })
 export class AttemptService {
 
-  async getLastDiligences(page: number, pageSize: number): Promise<{ data: Diligence[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    const total = DILIGENCE_MOCKS.length;
+  private readonly api = inject(ApiService);
 
-    // fatia o mock pra simular paginação de verdade
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const data = DILIGENCE_MOCKS.slice(start, end);
 
-    return {
-      data,
-      total,
-      page,
+  async create(dto: CreateAttemptDTO):Promise<ApiResponse<Attempt>> {
+    return await this.api.post<Attempt>('api/attempts', dto)
+  }
+  async getById(id: string): Promise<ApiResponse<Attempt>> {
+    return await this.api.get<Attempt>('api/attempts/'+ id)
+  }
+
+  async getAllPaginated(page: number, pageSize: number): Promise<ApiResponse<PaginatedResponse<Attempt[]>>> {
+    const params: any = {
+      page, pageSize
+    }
+    return await this.api.get<PaginatedResponse<Attempt[]>>('api/attempts', { params })
+  }
+  async getConcludedPaginated(page: number, pageSize: number): Promise<ApiResponse<PaginatedResponse<Attempt[]>>> {
+    const params: any = {
+      page, 
       pageSize,
-      hasNext: page * pageSize < total,
-      hasPrevious: page > 1
-    };
+      status: ['Entregue','Cancelada']
+    }
+    return await this.api.get<PaginatedResponse<Attempt[]>>('api/attempts', { params })
   }
-  async create(dto: CreateAttemptDTO) {
-    console.log('Attempt created')
-    console.log(JSON.stringify(dto, null, 2))
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };
+  
+  async cancelAttempt(id: string):Promise<ApiResponse<null>> {
+    return await this.api.patch<null>('api/attempts/'+id+'/cancel')
   }
-  async getById(id: string) {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: MOCK_ATTEMPT };
-  }
-  async getDiligencesByAttemptId(id: string) {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: DILIGENCE_MOCKS.filter(att => att.attemptId == id) };
-  }
-  async getAllPaginated(page: number, pageSize: number): Promise<{ data: Attempt[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    const total = MOCK_ATTEMPT_LIST.length;
-
-    // fatia o mock pra simular paginação de verdade
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const data = MOCK_ATTEMPT_LIST.slice(start, end);
-
-    return {
-      data,
-      total,
-      page,
-      pageSize,
-      hasNext: page * pageSize < total,
-      hasPrevious: page > 1
-    };
-  }
-  async getConcludedPaginated(page: number, pageSize: number): Promise<{ data: Attempt[], total: number, page: number, pageSize: number, hasNext: boolean, hasPrevious: boolean }> {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    const total = MOCK_ATTEMPT_LIST.length;
-
-    // fatia o mock pra simular paginação de verdade
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const data = MOCK_ATTEMPT_LIST.slice(start, end);
-
-    return {
-      data,
-      total,
-      page,
-      pageSize,
-      hasNext: page * pageSize < total,
-      hasPrevious: page > 1
-    };
-  }
-  async cancelAttempt(id: string) {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: {attemptId:id} }
-  }
-  async getLastDiligenceByAttemptId(id:string) {
-    const lastDiligenceId = MOCK_ATTEMPT_LIST.find(attempt=>attempt.id==id)?.lastDiligenceId
-    const lastDiligence = DILIGENCE_MOCKS.find(diligence=>diligence.id==lastDiligenceId)    
-    return { success: true, data: lastDiligence }
-  }
+  
 }

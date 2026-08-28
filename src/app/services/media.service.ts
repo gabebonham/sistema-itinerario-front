@@ -1,19 +1,16 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
+import { ApiService } from './api';
 
 @Injectable({ providedIn: 'root' })
 export class MediaService {
-    async uploadDiligenceAudio(diligenceId: string, file: File) {
-        console.log('Audio uploaded')
-        console.log(JSON.stringify(diligenceId, null, 2))
-        await new Promise(resolve => setTimeout(resolve, 800));
-        return { success: true, data: { url: '/audios/asdf' } };
-
+    private api = inject(ApiService);
+    async uploadAudio(file: File) {
+        return await this.api.uploadFile<{ urls?: string[], paths?: string[] }>('api/storage/audio', { file })
     }
-    async uploadDiligenceImages(diligenceId: string, files: File[]) {
-        console.log('Images uploaded')
-        console.log(JSON.stringify(diligenceId, null, 2))
-        await new Promise(resolve => setTimeout(resolve, 800));
-        return { success: true, data: { urls: ['/images/asdf','/images/aaaa'] } };
+    async uploadImages(files: File[]) {
+        return await this.api.uploadFile<{ urls?: string[], paths?: string[] }>('api/storage/images', { files })
     }
-
+    async getAudio(file: File) {
+        return await this.api.uploadFile<{ urls?: string[], paths?: string[] }>('api/storage/image/63545e7b-d9bc-4847-8311-87fa741f60d5/url', { file })
+    }
 }

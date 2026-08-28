@@ -1,5 +1,9 @@
-import { Injectable } from "@angular/core";
-import { User } from "../models/user";
+import { inject, Injectable } from "@angular/core";
+import { User, UserRole } from "../models/user";
+import { ApiService } from "./api";
+import { PaginatedResponse } from "../DTOS/paginated-response";
+import { UserResponse } from "../DTOS/user-response.dto";
+import { ApiResponse } from "../DTOS/api-response";
 
 export const USERS_MOCK: User[] = [{
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3n001',
@@ -39,12 +43,19 @@ export const USERS_MOCK: User[] = [{
 }]
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    async getAllByRole(role: string) {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        return { success: true, data: USERS_MOCK.filter(user => user.role == role) }
+    private api = inject(ApiService);
+    async getAllByRole(page: number = 1, pageSize: number = 8, role: UserRole): Promise<ApiResponse<PaginatedResponse<UserResponse[]>>> {
+        const params: any = {
+            page,
+            pageSize,
+            role
+        }
+        return await this.api.get<PaginatedResponse<UserResponse[]>>('api/users', { params })
     }
-    async getById(id: string) {
-        await new Promise(resolve => setTimeout(resolve, 800));
-        return { success: true, data: USERS_MOCK.find(user => user.id == id) }
+    async getById(id: string): Promise<ApiResponse<UserResponse>> {
+        return await this.api.get<UserResponse>('api/users/' + id)
+    }
+    async delete(id: string): Promise<ApiResponse<null>> {
+        return await this.api.delete<null>('api/users/' + id)
     }
 }

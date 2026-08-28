@@ -1,6 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Debtor } from '../models/debtor';
 import { CreateDebtorDTO } from '../DTOS/create-debtor.dto';
+import { ApiService } from './api';
+import { ApiResponse } from '../DTOS/api-response';
 
 export const DEBTOR_MOCK: Debtor =
   new Debtor(
@@ -15,16 +17,12 @@ export const DEBTOR_MOCK: Debtor =
 
 @Injectable({ providedIn: 'root' })
 export class DebtorService {
-  async getDebtorByDiligenceId(id: string): Promise<Debtor> {
-    return DEBTOR_MOCK;
+  private api = inject(ApiService);
+
+  async getById(id: string):Promise<ApiResponse<Debtor>> {
+    return await this.api.get<Debtor>('api/debtors/'+id)
   }
-  async getById(id: string) {
-    return {success:true,data:DEBTOR_MOCK};
-  }
-  async create(dto: CreateDebtorDTO) {
-    console.log('Debtor created')
-    console.log(JSON.stringify(dto, null, 2))
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };
+  async create(dto: CreateDebtorDTO):Promise<ApiResponse<Debtor>> {
+    return await this.api.post<Debtor>('api/debtors', dto)
   }
 }

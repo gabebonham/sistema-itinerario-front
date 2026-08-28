@@ -1,6 +1,9 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Inject, Injectable, signal } from '@angular/core';
 import { Address } from '../models/address';
 import { CreateAddressDTO } from '../DTOS/create-address.dto';
+import { ApiService } from './api';
+import { ApiResponse } from '../DTOS/api-response';
+import { Diligence } from '../models/diligence';
 export const ADDRESS_MOCKS: Address[] = [
   // diligence d001 - 4 endereços
   new Address(
@@ -267,13 +270,9 @@ export const ADDRESS_MOCKS: Address[] = [
 ];
 @Injectable({ providedIn: 'root' })
 export class AddressesService {
-  async getAddressByDiligenceId(id: string): Promise<Address[]> {
-    return ADDRESS_MOCKS.filter(address => address.diligenceId === id);
-  }
-  async create(dto: CreateAddressDTO) {
-    console.log('Address created')
-    console.log(JSON.stringify(dto, null, 2))
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };
+  private readonly api = inject(ApiService);
+
+  async create(dto: CreateAddressDTO): Promise<ApiResponse<null>>{
+    return await this.api.post<null>('api/addresses', dto)
   }
 }

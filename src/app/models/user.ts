@@ -1,9 +1,10 @@
+export type UserRole = 'Admin' | 'Planejador' | 'Notificador'
 export class User {
     id: string
     name: string
     email: string
     password: string
-    role: string
+    role: UserRole
     createdAt: Date
     updatedAt: Date
     constructor(
@@ -11,7 +12,7 @@ export class User {
         name: string,
         email: string,
         password: string,
-        role: string,
+        role: UserRole,
         createdAt: Date,
         updatedAt: Date,
     ) {

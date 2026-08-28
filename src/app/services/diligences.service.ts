@@ -1,8 +1,13 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { ADDRESS_MOCKS } from "./addresses.service";
 import { Diligence } from "../models/diligence";
 import { CreateDiligenceDTO } from "../DTOS/create-attempt.dto";
 import { UpdateDiligenceDTO } from "../DTOS/update-diligence.dto";
+import { PaginatedResponse } from "../DTOS/paginated-response";
+import { ApiResponse } from "../DTOS/api-response";
+import { MOCK_ATTEMPT_LIST } from "./attempt.service";
+import { Debtor } from "../models/debtor";
+import { ApiService } from "./api";
 function getaddressFor(diligenceId: string) {
   return ADDRESS_MOCKS.find((a: any) => a.diligenceId === diligenceId);
 }
@@ -17,7 +22,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     attemptId: 'IT-01-CT-006',
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d004'),
@@ -32,8 +37,8 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     porHoraCerta: false,
     createdAt: new Date('2023-01-04T13:10:00.000Z'),
     updatedAt: new Date('2023-01-06T09:30:00.000Z'),
-    audioUrl:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    imageUrls:['https://img.magnific.com/psd-gratuitas/modelo-de-bone_1332-60619.jpg?semt=ais_hybrid&w=740&q=80', 'https://d1br4h274rc9sc.cloudfront.net/blog/por_que_usar_mockup_3241b3edb7.jpg']
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    imageUrls: ['https://img.magnific.com/psd-gratuitas/modelo-de-bone_1332-60619.jpg?semt=ais_hybrid&w=740&q=80', 'https://d1br4h274rc9sc.cloudfront.net/blog/por_que_usar_mockup_3241b3edb7.jpg']
   },
   {
     id: 'f47ac10b-58cc-4372-a567-0e02b2c3d016',
@@ -117,7 +122,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     start: new Date('2023-01-04T00:00:00.000Z'),
     finish: new Date('2023-01-04T02:00:00.000Z'),
     notificatorName: 'Gabriel Grote',
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     debtorName: 'Carlos Souza',
     window: 'Tarde',
     concludedVisitNumber: 3,
@@ -222,7 +227,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
     concludedVisitNumber: 1,
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     diligenceOrdinal: '1ª Diligência',
     attemptId: 'IT-01-CT-010',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d008'),
@@ -286,7 +291,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     ],
     porHoraCerta: false,
     createdAt: new Date('2023-01-10T10:30:00.000Z'),
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     updatedAt: new Date('2023-01-12T09:15:00.000Z')
   },
   {
@@ -374,7 +379,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Sábado',
     concludedVisitNumber: 2,
     diligenceOrdinal: '2ª Diligência',
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     attemptId: 'IT-02-CT-016',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d014'),
     factsObservations: [
@@ -400,7 +405,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     window: 'Tarde',
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     attemptId: 'IT-01-CT-017',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d015'),
     factsObservations: [
@@ -452,7 +457,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     concludedVisitNumber: 1,
     diligenceOrdinal: '1ª Diligência',
     attemptId: 'IT-01-CT-020',
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d018'),
     factsObservations: [
       "Não houve atendimento no endereço.",
@@ -504,7 +509,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     diligenceOrdinal: '1ª Diligência',
     attemptId: 'IT-01-CT-022',
     address: getaddressFor('f47ac10b-58cc-4372-a567-0e02b2c3d020'),
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     factsObservations: [
       "Morador informou que o devedor não se encontrava no local.",
       "Foi orientado a repassar o contato da administradora."
@@ -565,7 +570,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
     ],
     porHoraCerta: true,
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     createdAt: new Date('2023-01-22T07:40:00.000Z'),
     updatedAt: new Date('2023-01-24T08:10:00.000Z')
   },
@@ -590,7 +595,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Numeração temporária afixada próxima à entrada."
     ],
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     porHoraCerta: false,
     createdAt: new Date('2023-01-23T13:00:00.000Z'),
     updatedAt: new Date('2023-01-25T14:45:00.000Z')
@@ -616,7 +621,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
       "Acesso principal livre e endereço devidamente identificado."
     ],
     generalObservations: ["Casa residencial com portão de correr.", "Acesso principal livre e endereço devidamente identificado."],
-    plannerObservations:"Casa residencial com portão de correr.",
+    plannerObservations: "Casa residencial com portão de correr.",
     porHoraCerta: true,
     createdAt: new Date('2023-01-24T10:10:00.000Z'),
     updatedAt: new Date('2023-01-26T16:30:00.000Z')
@@ -626,6 +631,7 @@ export const DILIGENCE_MOCKS: Diligence[] = [
 
 @Injectable({ providedIn: 'root' })
 export class DiligencesService {
+  private api = inject(ApiService);
   async getDiligenceById(id: string) {
     // Simula uma busca no banco de dados
     return { success: true, data: DILIGENCE_MOCKS.find(diligence => diligence.id === id) };
@@ -641,5 +647,24 @@ export class DiligencesService {
     console.log(JSON.stringify(dto, null, 2))
     await new Promise(resolve => setTimeout(resolve, 800));
     return { success: true, data: { id: 'f47ac10b-58cc-4372-a567-0e02b2c3d001' } };
+  }
+  async getLastDiligences(page: number = 1, pageSize: number = 8): Promise<ApiResponse<PaginatedResponse<Diligence[]>>> {
+    // FILTRO APLICARIA AQ
+    const params: any = {
+      page, pageSize
+    }
+    return await this.api.get<PaginatedResponse<Diligence[]>>('api/diligences/last', { params })
+  }
+  async getDiligencesByAttemptId(id: string) {
+    await new Promise(resolve => setTimeout(resolve, 800));
+    return { success: true, data: DILIGENCE_MOCKS.filter(att => att.attemptId == id) };
+  }
+  async getLastDiligenceByAttemptId(id: string) {
+    const lastDiligenceId = MOCK_ATTEMPT_LIST.find(attempt => attempt.id == id)?.lastDiligenceId
+    const lastDiligence = DILIGENCE_MOCKS.find(diligence => diligence.id == lastDiligenceId)
+    return { success: true, data: lastDiligence }
+  }
+  async getDebtorByDiligenceId(id: string): Promise<ApiResponse<Debtor>> {
+    return await this.api.get<Debtor>('api/debtors/diligence/' + id)
   }
 }

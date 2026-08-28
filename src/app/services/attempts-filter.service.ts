@@ -9,7 +9,7 @@ export interface DiligencesFilter {
 }
 
 @Injectable({ providedIn: 'root' })
-export class AttemptsFilterService {
+export class DiligencesFilterService {
 
     filter = signal<DiligencesFilter>({
         debtor: '',

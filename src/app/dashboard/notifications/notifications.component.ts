@@ -20,9 +20,11 @@ import { Router } from '@angular/router';
     ],
     templateUrl: './notifications.component.html',
 })
-export class NotificationsComponent {
+export class NotificationsComponent implements OnInit {
     private snackBar = inject(MatSnackBar);
-    activeSection: DashboardSection = dashboardSections.find(section => section.name == 'Notificações')!;
+
+    activeSection: DashboardSection =
+        dashboardSections.find(section => section.name === 'Notificações')!;
 
     dashboardState = inject(DashboardStateService);
     notificationService = inject(NotificationService);
@@ -31,49 +33,57 @@ export class NotificationsComponent {
     notifications = signal<Notification[]>([]);
     isLoading = signal(true);
 
-    currentUser = signal<User | undefined>(undefined)
+    currentUser = this.authService.currentUser;
 
     constructor(private router: Router) {
-        this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Notificações')!);
-        this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
+        this.dashboardState.setActiveSection(
+            dashboardSections.find(section => section.name === 'Notificações')!
+        );
 
-        effect(() => {
-            this.authService.me().then(result => {
-                if (result.success) {
-                    const user: User = {
-                        createdAt: result.data.createdAt,
-                        email: result.data.email,
-                        id: result.data.id,
-                        name: result.data.name,
-                        role: result.data.role,
-                        updatedAt: result.data.updatedAt,
-                    }
-                    this.currentUser.set(user)
-                } else {
-                    this.authService.logout()
-                    this.router.navigate(['/auth'])
-                }
-            })
-            if (this.currentUser()) {
-                this.isLoading.set(true);
-                this.notificationService.getAllByNotificatorId(this.currentUser()?.id!)
-                    .then(result => {
-                        if (result.success) this.notifications.set(result.data.data.map(notification => ({
-                            attemptId:notification.attemptId,
-                            createdAt:notification.createdAt,
-                            debtorId:notification.debtorId,
-                            diligenceId:notification.diligenceId,
-                            id:notification.id,
-                            notificatorId:notification.notificatorId,
-                            updatedAt:notification.updatedAt,
-                            attempt:notification.attempt,
-                            diligence:notification.diligence,
-                        } as Notification)));
-                        this.isLoading.set(false);
-                    });
-            }
-        });
+        this.dashboardState.setBreadCrumbs(
+            this.dashboardState.activeSection().name
+        );
     }
+
+    async ngOnInit(): Promise<void> {
+        const user = this.currentUser();
+
+        if (!user) {
+            await this.authService.logout();
+            await this.router.navigate(['/auth']);
+            return;
+        }
+
+        await this.loadNotifications(user.id);
+    }
+
+    private async loadNotifications(userId: string): Promise<void> {
+        this.isLoading.set(true);
+
+        const result =
+            await this.notificationService.getAllByNotificatorId(userId);
+
+        if (result.success) {
+            this.notifications.set(
+                result.data.data.map(notification => ({
+                    attemptId: notification.attemptId,
+                    createdAt: notification.createdAt,
+                    debtorId: notification.debtorId,
+                    diligenceId: notification.diligenceId,
+                    id: notification.id,
+                    notificatorId: notification.notificatorId,
+                    updatedAt: notification.updatedAt,
+                    attempt: notification.attempt,
+                    diligence: notification.diligence,
+                }))
+            );
+        } else {
+            this.showToast('Erro ao buscar notificações.');
+        }
+
+        this.isLoading.set(false);
+    }
+
     showToast(text: string) {
         this.snackBar.open(text, 'Fechar', {
             duration: 3000,

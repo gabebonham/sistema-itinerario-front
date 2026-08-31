@@ -92,12 +92,16 @@ export class LoginSectionComponent {
         this.authService.login(loginDto)
             .then(result => {
                 if (result.success) {
-                    this.router.navigate(['/dashboard']);
+                    if (result.data.user.role == 'Notificador')
+                        this.router.navigate(['/dashboard/notificacoes']);
+                    else
+                        this.router.navigate(['/dashboard/tentativas']);
                 } else {
-                    this.showToast('Email ou senha inválidos.');
+                    this.showToast(result.error);
                 }
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err)
                 this.showToast('Erro ao fazer login.');
             })
             .finally(() => {

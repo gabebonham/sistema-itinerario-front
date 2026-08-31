@@ -4,6 +4,8 @@ import { CreateAddressDTO } from '../DTOS/create-address.dto';
 import { ApiService } from './api';
 import { ApiResponse } from '../DTOS/api-response';
 import { Diligence } from '../models/diligence';
+import { PlaceSuggestion } from '../DTOS/place-sugestion';
+import { PlaceResponse } from '../DTOS/place-response.dto';
 export const ADDRESS_MOCKS: Address[] = [
   // diligence d001 - 4 endereços
   new Address(
@@ -273,12 +275,13 @@ export class AddressesService {
   private readonly api = inject(ApiService);
 
   async create(dto: CreateAddressDTO): Promise<ApiResponse<null>> {
+    console.log('ADD')
     return await this.api.post<null>('api/addresses', dto)
   }
-  async getAddressSugestion(input: string): Promise<ApiResponse<null>> {
-    return await this.api.get<null>('api/addresses/autocomplete', { params: { input } })
+  async getAddressSugestion(input: string): Promise<ApiResponse<PlaceSuggestion[]>> {
+    return await this.api.get<PlaceSuggestion[]>('api/addresses/autocomplete', { params: { input } })
   }
-  async getAddressPlace(id: string): Promise<ApiResponse<null>> {
-    return await this.api.get<null>('api/addresses/place/'+id)
+  async getAddressPlace(id: string): Promise<ApiResponse<PlaceResponse>> {
+    return await this.api.get<PlaceResponse>('api/addresses/place/'+id)
   }
 }

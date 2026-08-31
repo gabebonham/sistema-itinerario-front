@@ -1,3 +1,4 @@
+import { AttemptStatus } from "../models/attempt";
 import { DiligenceOrdinal } from "../models/diligence";
 
 export interface CreateDiligenceDTO {
@@ -14,6 +15,7 @@ export interface CreateDiligenceDTO {
     attemptId: string;
     debtorId: string;
     notificatorId: string;
+    status:AttemptStatus;
     porHoraCerta?: boolean;
     plannerObservations?: string;
     imageUrls?: string[];

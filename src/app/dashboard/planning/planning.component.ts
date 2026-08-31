@@ -20,6 +20,10 @@ import { Diligence, WindowEntry } from '../../models/diligence';
 import { CreateDiligenceDTO } from '../../DTOS/create-attempt.dto';
 import { DiligencesService } from '../../services/diligences.service';
 import { CreateAddressDTO } from '../../DTOS/create-address.dto';
+import { PlaceSuggestion } from '../../DTOS/place-sugestion';
+import { NotificationService } from '../../services/notification.service';
+import { CreateNotificationDto } from '../../DTOS/create-notification.dto';
+import { runInThisContext } from 'vm';
 
 @Component({
     selector: 'app-planning',
@@ -40,20 +44,23 @@ export class PlanningComponent implements OnInit {
 
     isAddressesLoading = signal(true)
     isAttemptLoading = signal(true)
+    isAddressReady = signal(false)
+    isWindowReady = signal(false)
 
     attempt = signal<Attempt | undefined>(undefined);
     debtor = signal<Debtor | undefined>(undefined);
-    addresses = signal<Address[]>([]);
     diligences = signal<Diligence[]>([]);
-    addressName = signal<string|undefined>(undefined);
+    place = signal<PlaceSuggestion | undefined>(undefined);
+    addresses = signal<Address[]>([])
 
-    addressEntry?: AddressEntry;
-    windowEntry?: WindowEntry;
+    newAddress = signal<CreateAddressDTO | undefined>(undefined);
+    windowEntry = signal<WindowEntry | undefined>(undefined);
 
     attemptService: AttemptService = inject(AttemptService);
     diligencesService: DiligencesService = inject(DiligencesService);
     addressesService: AddressesService = inject(AddressesService);
     debtorService: DebtorService = inject(DebtorService);
+    notificationService: NotificationService = inject(NotificationService);
 
     constructor(
         private route: ActivatedRoute,
@@ -62,7 +69,18 @@ export class PlanningComponent implements OnInit {
     ) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Tentativas')!);
     }
-
+    onUpdatePlace(place?: PlaceSuggestion) {
+        this.place.set(place)
+    }
+    onWindowReady() {
+        this.isWindowReady.set(true)
+    }
+    onAddressReady() {
+        this.isAddressReady.set(true)
+    }
+    canSendToField() {
+        return this.isAddressReady() && this.isWindowReady()
+    }
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             const id = params.get('id') ?? '';
@@ -71,46 +89,32 @@ export class PlanningComponent implements OnInit {
                 this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
                 this.breadCrumbs = this.activeSection.getPathWithId(id)
                 this.getAndBuildAttempt(id);
-                this.getAndBuildDebtor(id);
+                this.getAndBuildAddresses()
             }
         });
     }
 
-    buildNewAddress(address: AddressEntry, diligenceId: string) {
-        return {
-            diligenceId,
-            city: address.city,
-            complement: address.complement,
-            country: address.country,
-            zipCode: address.zipCode,
-            street: address.street,
-            state: address.state,
-            number: address.number,
-            lat: address.lat,
-            lng: address.lng,
-            name:this.addressName(),
-            neighborhood: address.neighborhood
-        } as CreateAddressDTO
+    onBuildAddress(dto: CreateAddressDTO) {
+        this.newAddress.set(dto)
     }
-
-    buildNewDiligence(observation: string, notificatorId: string, notificatorName: string): CreateDiligenceDTO | null {
+    onBuildWindow(entry: WindowEntry) {
+        this.windowEntry.set(entry)
+    }
+    buildNewDiligence(): Partial<CreateDiligenceDTO> | null {
         if (!this.attempt()) return null;
         let newDiligence = null;
-        if (this.windowEntry && this.attempt) {
+        if (this.windowEntry() && this.attempt()) {
             newDiligence = {
-                finish: this.windowEntry.finish,
-                start: this.windowEntry.start,
-                window: this.windowEntry.window,
-                observation,
-                notificatorId,
-                diligenceOrdinal: this.windowEntry.diligenceOrdinal,
+                finish: this.windowEntry()?.finish,
+                start: this.windowEntry()?.start,
+                window: this.windowEntry()?.window,
+                diligenceOrdinal: this.windowEntry()?.diligenceOrdinal,
                 attemptId: this.attempt()?.id,
-                status: 'Pendente',
+                status: 'Pending',
                 debtorId: this.attempt()?.debtorId,
                 debtorName: this.attempt()?.debtor?.name,
                 protocol: this.attempt()?.protocol,
-                notificatorName
-            } as CreateDiligenceDTO
+            } as Partial<CreateDiligenceDTO>
         }
         return newDiligence;
     }
@@ -125,9 +129,15 @@ export class PlanningComponent implements OnInit {
 
     getAndBuildAttempt(id: string): void {
         this.attemptService.getById(id).then(result => {
-            this.diligences.set(result.data.diligences ?? []);
-            this.getAndBuildAddresses();
-            this.isAttemptLoading.set(false)
+            if (result.success) {
+
+                this.diligences.set(result.data.diligences ?? []);
+                this.getAndBuildAddresses();
+                this.isAttemptLoading.set(false)
+                this.attempt.set(result.data)
+            } else {
+                this.showToast("Erro ao buscar tentativa.")
+            }
         });
     }
 
@@ -135,60 +145,56 @@ export class PlanningComponent implements OnInit {
         const addresses = this.diligences()
             .map(diligence => diligence.address)
             .filter((address): address is Address => address !== undefined);
-
-        this.addresses.set(addresses);
+        this.addresses.set(addresses)
         this.isAddressesLoading.set(false);
     }
 
-    getAndBuildDebtor(diligenceId: string): void {
-        this.diligencesService.getDiligenceById(diligenceId).then(result => {
-            if (result.success) {
-                this.debtor.set(result.data.debtor);
-            } else {
-                this.showToast("Erro ao buscar devedor.")
-            }
-        });
-    }
+
 
     openModal() {
+        const diligence = this.buildNewDiligence()
         const ref = this.dialog.open(SendToFieldModal, {
             width: '1200px',
             height: '500px',
-            data: {}
+            data: { diligence }
         });
-        ref.afterClosed().subscribe(result => {
+        ref.afterClosed().subscribe((result:Diligence) => {
             if (!result) {
                 return;
             }
-            if (result.success) {
-                this.createDiligenceAndAddress(result.data.observation, result.data.notificatorId, result.data.notificatorName)
-            }
+                this.handleCreateAddress(result.id)
+                this.handleCreateNotification(result.notificatorId,result.debtorId,result.id)
+
         });
     }
-    onUpdateaddressName(name:string) {
-        this.addressName.set(name)
+    buildNewAddress(diligenceId: string) {
+        return { ...this.newAddress(), diligenceId, debtorId:this.attempt()?.debtorId } as CreateAddressDTO
     }
-    createDiligenceAndAddress(observation: string, notificatorId: string, notificatorName: string) {
-        const newDiligence = this.buildNewDiligence(observation, notificatorId, notificatorName)
-        if (newDiligence) {
-            this.diligencesService.create(newDiligence).then(diligenceResult => {
-                if (diligenceResult.success) {
-                    this.handleCreateAddress(diligenceResult.data.id)
+
+    handleCreateAddress(diligenceId: string) {
+        if (this.newAddress()) {
+            const newAddress = this.buildNewAddress(diligenceId)
+            this.addressesService.create(newAddress).then(addressResult => {
+                if (addressResult.success) {
+                    this.router.navigate(['/dashboard/tentativas'])
+                } else {
+                    this.showToast("Erro ao registrar endereço.")
                 }
             })
-        } else {
-            this.showToast('Erro ao criar diligência. Janela não foi criada ou sem vínculo com tentativa.');
-        }
+        } 
     }
-    handleCreateAddress(diligenceId: string) {
-        if (this.addressEntry) {
-            const newAddress = this.buildNewAddress(this.addressEntry, diligenceId)
-            this.addressesService.create(newAddress).then(addressResult => {
-                if (addressResult.success)
-                    this.router.navigate(['/dashboard/tentativas'])
-            })
-        } else {
-            this.showToast('Erro ao criar diligência. Endereço não foi criado.');
-        }
+    handleCreateNotification(notificatorId:string, debtorId:string,diligenceId:string){
+        const dto:CreateNotificationDto = {
+            debtorId,
+            notificatorId,
+            diligenceId
+        } 
+        this.notificationService.create(dto).then(result=>{
+            if(result.success){
+
+            } else {
+                this.showToast('Erro ao disparar notificação.')
+            }
+        })
     }
 }

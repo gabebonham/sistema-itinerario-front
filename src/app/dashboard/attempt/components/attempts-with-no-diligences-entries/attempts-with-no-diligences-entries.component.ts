@@ -1,32 +1,27 @@
 import { Component, computed, effect, EventEmitter, inject, Input, input, OnInit, Output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { DiligenceEntryComponent } from './diligence-entry/diligence-entry.component';
-import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
-import { Diligence } from '../../../../models/diligence';
 import { AttemptService } from '../../../../services/attempt.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Attempt } from '../../../../models/attempt';
+import { AttemptsWithNoDiligencesEntry } from './attempts-with-no-diligences-entry/attempts-with-no-diligences-entry.component';
 
 @Component({
-    selector: 'app-diligences-entries',
+    selector: 'app-attempts-with-no-diligences-entries',
     standalone: true,
     imports: [
         MatIconModule,
         MatSnackBarModule,
-        DiligenceEntryComponent
+        AttemptsWithNoDiligencesEntry
     ],
-    templateUrl: './diligences-entries.component.html',
+    templateUrl: './attempts-with-no-diligences-entries.component.html',
 })
-export class DiligencesEntriesComponent implements OnInit {
+export class AttemptsWithNoDiligencesEntries implements OnInit {
     private snackBar = inject(MatSnackBar);
-    private filterService = inject(AttemptsFilterService);
     private attemptService = inject(AttemptService);
-    // private router = inject(Router);
-    // private route = inject(ActivatedRoute);
     isLoading = input.required<boolean>();
     loadingCancel = signal<string | undefined>(undefined)
-    diligences = input.required<Diligence[]>();
-    localDiligences = signal<Diligence[]>([])
+    attempts = input.required<Attempt[]>();
+    localAttempts = signal<Attempt[]>([])
 
     pageSize = 5;
     currentPage = 1;
@@ -41,43 +36,18 @@ export class DiligencesEntriesComponent implements OnInit {
     }
     constructor() {
         effect(() => {
-
-            this.localDiligences.set(this.diligences())
+            this.localAttempts.set(this.attempts())
         }
         )
     }
-    filteredDiligences = computed(() => {
-        const filter = this.filterService.filter();
 
-        return this.diligences().filter(diligence => {
-
-            const matchesDebtor =
-                !filter.debtorName ||
-                diligence.debtorName
-                    .toLowerCase()
-                    .includes(filter.debtorName.toLowerCase());
-
-            const matchesProtocol =
-                !filter.protocol ||
-                diligence.protocol
-                    .toLowerCase()
-                    .includes(filter.protocol.toLowerCase());
-            const matchesDate = this.isWithinDateRange(
-                diligence.createdAt,
-                filter.from,
-                filter.to
-            );
-
-            return matchesDebtor && matchesProtocol && matchesDate;
-        });
-    });
     totalPages = computed(() =>
-        Math.max(1, Math.ceil(this.filteredDiligences().length / this.pageSize))
+        Math.max(1, Math.ceil(this.localAttempts().length / this.pageSize))
     );
 
     paginatedDiligences = computed(() => {
         const start = (this.currentPage - 1) * this.pageSize;
-        return this.filteredDiligences().slice(start, start + this.pageSize);
+        return this.localAttempts().slice(start, start + this.pageSize);
     });
 
     @Input() hasMorePages!: boolean;
@@ -119,7 +89,7 @@ export class DiligencesEntriesComponent implements OnInit {
         this.loadingCancel.set(id)
         this.attemptService.cancelAttempt(id).then(result => {
             if (result.success) {
-                this.localDiligences.set(this.localDiligences().filter(diligence => diligence.attemptId != id))
+                this.localAttempts.set(this.localAttempts().filter(attempt => attempt.id != id))
                 this.loadingCancel.set(undefined)
             } else {
                 this.showToast("Erro ao cancelar tentativa.")

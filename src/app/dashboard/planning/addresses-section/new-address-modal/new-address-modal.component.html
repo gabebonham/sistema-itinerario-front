@@ -6,19 +6,29 @@
         <div class="flex flex-col gap-6">
             <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
                 <mat-label>Endereço do devedor</mat-label>
-                <input matInput type="text" formControlName="address" placeholder="Pesquisar endereço..." maxlength="10" class="!text-xs" />
+
+                <input matInput type="text" formControlName="address" placeholder="Pesquisar endereço..."
+                    class="!text-xs" [matAutocomplete]="addressAuto" />
+
+                <mat-autocomplete [displayWith]="displaySuggestion" #addressAuto="matAutocomplete" (optionSelected)="onAddressSelected($event)">
+                    @for (suggestion of suggestions(); track suggestion.placeId) {
+                    <mat-option [value]="suggestion">
+                        {{ suggestion.description }}
+                    </mat-option>
+                    }
+                </mat-autocomplete>
             </mat-form-field>
         </div>
     </form>
     <div>
-        @if (errors.length > 0) {
-            @for (error of errors; track error) {
-                <p class="text-error">{{error}}</p>
-            }
+        @if (errors().length > 0) {
+        @for (error of errors(); track error) {
+        <p class="text-error">{{error}}</p>
+        }
         } @else if (isLoading) {
-            <div class="flex items-center justify-center w-full h-full p-4">
-                <div class="spinner"></div>
-            </div>
+        <div class="flex items-center justify-center w-full h-full p-4">
+            <div class="spinner"></div>
+        </div>
         }
     </div>
     <div class="flex items-center justify-end gap-8">

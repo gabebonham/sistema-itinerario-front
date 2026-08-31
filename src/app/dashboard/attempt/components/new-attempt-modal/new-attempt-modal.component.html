@@ -33,7 +33,7 @@
         @for (error of errors; track error) {
         <p class="text-error">{{error}}</p>
         }
-        } @else if (isLoading) {
+        } @else if (isLoading()) {
         <div class="flex items-center justify-center w-full h-full p-4">
             <div class="spinner"></div>
         </div>
@@ -44,7 +44,7 @@
         <button (click)="cancel()"
             class="cursor-pointer bg-white border-1 border-error !font-semibold text-error !text-md rounded-lg w-42 h-10">
             Cancelar</button>
-        <button (click)="confirm()" [disabled]="isLoading"
+        <button (click)="confirm()" [disabled]="isLoading()"
             class="cursor-pointer bg-primary !font-semibold text-white !text-md rounded-lg w-42 h-10 disabled:opacity-50">
             Criar</button>
     </div>

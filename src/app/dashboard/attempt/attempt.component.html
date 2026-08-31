@@ -20,6 +20,7 @@
       <app-diligences-entries [isLoading]="isDiligencesLoading()" [diligences]="diligences()" [hasMorePages]="hasMoreEntriesPages"
         [hasPreviousPages]="hasPreviousEntriesPages" (nextPage)="fetchDiligencesPage($event)"
         (previousPage)="fetchDiligencesPage($event)"></app-diligences-entries>
+        <app-attempts-with-no-diligences-entries [isLoading]="isDiligencesLoading()" [attempts]="attemptsWithoutDiligences()"></app-attempts-with-no-diligences-entries>
     </div>
   </div>
 </div>

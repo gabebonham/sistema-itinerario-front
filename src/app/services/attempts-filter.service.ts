@@ -1,13 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 import { DiligenceOrdinal } from '../models/diligence';
-import { AttemptStatus } from '../models/attempt';
+import { AttemptStatus, DisplayAttemptStatus } from '../models/attempt';
 
 export interface AttemptsFilter {
     protocol: string;
     debtorName: string;
     window:string;
     diligenceOrdinal:DiligenceOrdinal|'';
-    status:AttemptStatus|'';
+    status:DisplayAttemptStatus|'';
     from: string;
     to: string;
 }

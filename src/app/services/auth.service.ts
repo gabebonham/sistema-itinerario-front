@@ -21,31 +21,112 @@ const MOCK_USER: User = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    private router = inject(Router);
+
     private api = inject(ApiService);
 
-    async login(dto: LoginDTO):Promise<ApiResponse<LoginResponse>> {
-        return await this.api.post<LoginResponse>('login',dto)
-    }
-    async register(dto: RegisterDTO):Promise<ApiResponse<null>> {
-        return await this.api.post<null>('register',dto)
-    }
-    async sendEmail(email: string):Promise<ApiResponse<null>> {
-        return await this.api.post<null>('forgot-password/send-email',{email})
-    }
-    
-    async sendCode(code: string, email: string):Promise<ApiResponse<null>> {
-        return await this.api.post<null>('forgot-password/validate-code',{email, code})
-    }
-    async updatePassword(password: string, code: number, email: string) {
-        return await this.api.patch<null>('forgot-password/update-password',{email, code, password})
-    }
+    private _checkingAuth = signal(true);
+    readonly checkingAuth = this._checkingAuth.asReadonly();
 
-    logout() {
-        return this.router.parseUrl('/auth');
+    private _currentUser = signal<UserResponse | null>(null);
+    readonly currentUser = this._currentUser.asReadonly();
+
+    async checkAuth(): Promise<boolean> {
+        try {
+            const result = await this.me();
+
+            if (result.success && result.data) {
+                this._currentUser.set(result.data);
+                return true;
+            }
+
+            this._currentUser.set(null);
+            return false;
+
+        } catch {
+            this._currentUser.set(null);
+            return false;
+
+        } finally {
+            this._checkingAuth.set(false);
+        }
     }
 
     async me(): Promise<ApiResponse<UserResponse>> {
-        return await this.api.get<UserResponse>('me')
+        this._checkingAuth.set(true);
+
+        try {
+            return await this.api.get<UserResponse>('me');
+        } finally {
+            this._checkingAuth.set(false);
+        }
+    }
+
+    async login(
+        dto: LoginDTO
+    ): Promise<ApiResponse<LoginResponse>> {
+
+        const result = await this.api.post<LoginResponse>(
+            'login',
+            dto
+        );
+
+        if (result.success) {
+            await this.checkAuth();
+        }
+
+        return result;
+    }
+
+    async register(
+        dto: RegisterDTO
+    ): Promise<ApiResponse<null>> {
+
+        return this.api.post<null>('register', dto);
+    }
+
+    async sendEmail(
+        email: string
+    ): Promise<ApiResponse<null>> {
+
+        return this.api.post<null>(
+            'forgot-password/send-email',
+            { email }
+        );
+    }
+
+    async sendCode(
+        code: string,
+        email: string
+    ): Promise<ApiResponse<null>> {
+
+        return this.api.post<null>(
+            'forgot-password/validate-code',
+            { email, code }
+        );
+    }
+
+    async updatePassword(
+        password: string,
+        code: number,
+        email: string
+    ) {
+
+        return this.api.patch<null>(
+            'forgot-password/update-password',
+            {
+                email,
+                code,
+                password
+            }
+        );
+    }
+
+    async logout() {
+
+        const result = await this.api.post<null>('logout');
+
+        this._currentUser.set(null);
+
+        return result;
     }
 }

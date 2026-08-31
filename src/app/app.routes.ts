@@ -11,6 +11,7 @@ import { guestGuard } from './guards/guest.guard';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
         path: 'auth',
         component: AuthComponent,
@@ -22,7 +23,7 @@ export const routes: Routes = [
         canActivate: [authGuard], // não autenticado → vai pro auth
         children: [
             { path: 'tentativas', component: AttemptComponent },
-            { path: 'tentativas/:id', component: PlanningComponent},
+            { path: 'tentativas/:id', component: PlanningComponent },
             { path: 'notificacoes', component: NotificationsComponent },
             { path: 'notificacoes/:id', component: NotificationComponent },
             { path: 'historico', component: HistoryComponent },

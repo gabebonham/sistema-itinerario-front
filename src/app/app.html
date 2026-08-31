@@ -1,4 +1,4 @@
-<!-- @if (authService.isLoading()) {
+@if (authService.checkingAuth()) {
   <div class="loading-screen">
     <div class="spinner"></div>
   </div>
@@ -6,7 +6,4 @@
   <main>
     <router-outlet />
   </main>
-} -->
-<main>
-  <router-outlet />
-</main>
+}

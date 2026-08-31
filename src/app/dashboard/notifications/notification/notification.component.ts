@@ -33,7 +33,7 @@ export class NotificationComponent implements OnInit {
     }
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
-            const id = params.get('id') ?? 'f47ac10b-58cc-4372-a567-0e02b2c3d004';
+            const id = params.get('id') ?? '';
             this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
             if (id) {
                 this.notificationService.getById(id).then(notificationResult => {

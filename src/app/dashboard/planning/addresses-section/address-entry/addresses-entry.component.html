@@ -1,20 +1,30 @@
 <div [class]="'w-full rounded-xl border-1 py-2 shadow-md ' +
-        (isNew
+        (isNew()
             ? 'border-[#EE9B2D] bg-[#FEF5EA]'
             : 'border-text-muted/50 bg-card-background/30')">
     <div class="flex items-center justify-between w-full px-4">
         <div class="flex items-center gap-4">
             <div class="rounded-full bg-quarternary text-surface py-2 px-4 flex items-center justify-center">
-                {{ order }}ª</div>
+                {{ order() }}ª</div>
             <div class="flex flex-col items-start gap-1">
-                <p class="text-text-black !font-[600]">{{street}}, {{number}} - {{complement}}</p>
+                <p class="text-text-black !font-[600]">
+                    @if (street()){
+                    {{street()}}
+                    }
+                    @if (number()){
+                        , {{number()}}
+                    }
+                    @if (complement()){
+                     - {{complement()}}
+                    }
+                    </p>
                 <p class="text-text-black/50 !text-xs flex items-center"> <mat-icon
-                        [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">location_on</mat-icon>{{neighborhood}}
-                    · {{zipCode}}</p>
+                        [style]="{ 'font-size': '16px', 'width': '16px', 'height': '16px' }">location_on</mat-icon>{{neighborhood()}}
+                    · {{zipCode()}}</p>
             </div>
         </div>
         <div class="flex items-center gap-4">
-            @if (isNew) {
+            @if (isNew()) {
             <div>
                 <mat-icon (click)="onDelete()"
                     class="cursor-pointer !text-red-400 hover:!text-red-600 transition-color duration-100">delete</mat-icon>

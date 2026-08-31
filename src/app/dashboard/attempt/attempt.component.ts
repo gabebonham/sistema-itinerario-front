@@ -9,6 +9,8 @@ import { DiligencesFilteredSearchComponent } from './components/filtered-search/
 import { DiligencesEntriesComponent } from './components/diligences-entries/diligences-entries.component';
 import { Diligence } from '../../models/diligence';
 import { NewAttemptModal } from './components/new-attempt-modal/new-attempt-modal.component';
+import { Attempt } from '../../models/attempt';
+import { AttemptsWithNoDiligencesEntries } from './components/attempts-with-no-diligences-entries/attempts-with-no-diligences-entries.component';
 
 
 @Component({
@@ -17,12 +19,15 @@ import { NewAttemptModal } from './components/new-attempt-modal/new-attempt-moda
         MatSidenavModule,
         DiligencesFilteredSearchComponent,
         DiligencesEntriesComponent,
+        AttemptsWithNoDiligencesEntries
     ],
     templateUrl: './attempt.component.html',
 })
 export class AttemptComponent implements OnInit {
     private attemptService = inject(AttemptService);
     diligences = signal<Diligence[]>([]);
+    attemptsWithoutDiligences = signal<Attempt[]>([]);
+    
     activeSection: DashboardSection = dashboardSections.find(section => section.name == 'Tentativas')!;
     hasMoreEntriesPages = false;
     hasPreviousEntriesPages = false;
@@ -42,12 +47,15 @@ export class AttemptComponent implements OnInit {
         ref.afterClosed().subscribe();
     }
     ngOnInit(): void {
-        this.attemptService.getAllPaginated(this.currentEntriesPage, 5).then((result) => {
+        this.attemptService.getPendingPaginated(this.currentEntriesPage, 5).then((result) => {
             const diligences = result.data.data
+                .filter((attempt:Attempt) => !!attempt.lastDiligence)
                 .map(attempt => attempt.lastDiligence)
-                .filter((diligence): diligence is Diligence => diligence !== undefined);
-
+                .filter((diligence): diligence is Diligence => !!diligence);
+            const attemptsWithoutDiligences = result.data.data
+                .filter((attempt:Attempt) => !attempt.lastDiligence)
             this.diligences.set(diligences);
+            this.attemptsWithoutDiligences.set(attemptsWithoutDiligences);
             this.hasMoreEntriesPages = result.data.hasNext;
             this.hasPreviousEntriesPages = result.data.hasPrevious;
             this.currentEntriesPage = result.data.page;

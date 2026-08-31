@@ -17,14 +17,13 @@ import { MatSelectModule } from '@angular/material/select';
     templateUrl: './new-attempt-modal.component.html',
 })
 export class NewAttemptModal implements OnInit {
-    isLoading = false
+    isLoading = signal(false)
     attemptService = inject(AttemptService)
     debtorService = inject(DebtorService)
 
     private fb = inject(FormBuilder);
     form = this.fb.group({
         debtorName: ['', Validators.required],
-        debtorAddress: ['', Validators.required],
         debtorRg: ['', Validators.required],
         debtorCpfCnpj: ['', Validators.required],
         protocol: ['', Validators.required],
@@ -46,7 +45,7 @@ export class NewAttemptModal implements OnInit {
 
             return;
         }
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.errors = [];
 
         const createDebtorDto: CreateDebtorDTO = {
@@ -68,7 +67,8 @@ export class NewAttemptModal implements OnInit {
             debtorId,
         }
         this.attemptService.create(dto).then((result) => {
-            this.isLoading = false;
+        this.isLoading.set(false);
+
             if (result.success) {
                 this.dialogRef.close(true);
                 this.router.navigate(['/dashboard/tentativas/' + result.data.id]);
@@ -76,7 +76,8 @@ export class NewAttemptModal implements OnInit {
                 this.errors = ['Não foi possível criar a tentativa.'];
             }
         }).catch((err) => {
-            this.isLoading = false;
+        this.isLoading.set(false);
+
             this.errors = ['Erro ao criar tentativa. Tente novamente.'];
         });
     }

@@ -1,11 +1,12 @@
 import { Debtor } from "./debtor";
 import { Diligence } from "./diligence";
 
-export type AttemptStatus = 'Entregue' | 'Pendente' | 'Cancelada'
+export type AttemptStatus = 'Delivered' | 'Pending' | 'Cancelled'
+export type DisplayAttemptStatus = 'Entregue' | 'Pendente' | 'Cancelada'
 
 export class Attempt {
     id: string;
-    status: AttemptStatus;
+    status: DisplayAttemptStatus;
     debtorId: string;
     debtor?: Debtor;
     protocol: string;
@@ -17,7 +18,7 @@ export class Attempt {
     updatedAt: Date;
     constructor(
         id: string,
-        status: AttemptStatus,
+        status: DisplayAttemptStatus,
         debtorId: string,
         protocol: string,
         concludedVisitNumber: number,

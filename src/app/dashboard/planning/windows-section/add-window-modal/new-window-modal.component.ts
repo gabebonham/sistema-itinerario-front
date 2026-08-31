@@ -34,7 +34,7 @@ export class NewWindowModal {
             NewWindowModal,
             { success: boolean; data: WindowEntry | null }
         >,
-        @Inject(MAT_DIALOG_DATA) public data: { windowsLeft: string[], diligenceOrdinal:DiligenceOrdinal }
+        @Inject(MAT_DIALOG_DATA) public data: { windowsLeft: string[], diligenceOrdinal: DiligenceOrdinal }
     ) {
         this.windowsLeft = data.windowsLeft;
     }
@@ -49,41 +49,38 @@ export class NewWindowModal {
         this.isLoading = true;
         this.errors = [];
 
-        const createWindowDto: any = {
-            fromTime: this.form.value.fromTime!,
-            toTime: this.form.value.toTime!,
-            dateValue: this.form.value.dateValue!,
-        };
+        const dateValue = this.form.value.dateValue!;
+        const fromTime = this.form.value.fromTime!;
+        const toTime = this.form.value.toTime!;
 
-        this.diligencesService.create(createWindowDto)
-            .then(result => {
-                this.isLoading = false;
+        const start = this.createDate(dateValue, fromTime);
+        const finish = this.createDate(dateValue, toTime);
 
-                if (result.success) {
-                    this.dialogRef.close({
-                        success: true,
-                        data: {
-                            finish: new Date(),
-                            start: new Date(),
-                            new: true,
-                            window: this.form.value.window!,
-                            diligenceOrdinal:this.data.diligenceOrdinal
-                        }
-                    });
-                } else {
-                    this.errors = [
-                        'Não foi possível criar a tentativa.'
-                    ];
-                }
-            })
-            .catch(() => {
-                this.isLoading = false;
-                this.errors = [
-                    'Erro ao criar tentativa. Tente novamente.'
-                ];
-            });
+        this.dialogRef.close({
+            success: true,
+            data: {
+                start,
+                finish,
+                new: true,
+                window: this.form.value.window!,
+                diligenceOrdinal: this.data.diligenceOrdinal
+            }
+        });
     }
+    private createDate(date: string, time: string): Date {
+        const [day, month, year] = date.split('/').map(Number);
+        const [hours, minutes] = time.split(':').map(Number);
 
+        return new Date(
+            year,
+            month - 1,
+            day,
+            hours,
+            minutes,
+            0,
+            0
+        );
+    }
     private getFormErrors(): string[] {
         const labels: Record<string, string> = {
             fromTime: 'De (Hora)',

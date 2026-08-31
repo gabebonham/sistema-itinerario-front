@@ -9,6 +9,7 @@ import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
+import { Diligence } from '../../../models/diligence';
 
 
 @Component({
@@ -18,30 +19,26 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class SendToFieldModal implements OnInit {
     private snackBar = inject(MatSnackBar);
-    isLoading = false
+    isLoading = signal(false)
     diligencesService = inject(DiligencesService)
     userService = inject(UserService)
-    notificators = signal<User[]>([])
-    notificatorId?:string
+    notificators = signal<{id:string, name:string}[]>([])
+    notificator = signal<{id:string, name:string}|undefined>(undefined)
     private fb = inject(FormBuilder);
     form = this.fb.group({
         observation: [''],
     });
     constructor(
-        public dialogRef: MatDialogRef<SendToFieldModal, boolean>,
+        public dialogRef: MatDialogRef<SendToFieldModal, Diligence|null>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
     ngOnInit(): void {
         this.userService.getAllByRole(1, 100, 'Notificador').then(result => {
             if (result.success) {
                 const notificators = result.data.data.map(userResponse => ({
-                    createdAt: userResponse.createdAt,
-                    email: userResponse.email,
                     id: userResponse.id,
                     name: userResponse.name,
-                    role: userResponse.role,
-                    updatedAt: userResponse.updatedAt,
-                }) as User)
+                }) )
                 this.notificators.set(notificators)
             } else {
                 this.showToast("Erro ao carregar notificadores.")
@@ -64,22 +61,25 @@ export class SendToFieldModal implements OnInit {
 
             return;
         }
-        this.isLoading = true;
+        this.isLoading.set(true);
         this.errors = [];
         const diligenceToCreate = {
             ...this.data.diligence,
-            observation: this.form.value.observation!
+            plannerObservations: this.form.value.observation!,
+            notificatorId:this.notificator()?.id,
+            notificatorName:this.notificator()?.name
         }
         this.diligencesService.create(diligenceToCreate).then((result) => {
-            this.isLoading = false;
+        this.isLoading.set(false);
             if (result.success) {
-                this.dialogRef.close(true);
+                this.dialogRef.close(result.data);
             } else {
-                this.errors = ['Não foi possível criar diligência.'];
+                this.errors = [result.error];
             }
         }).catch((err) => {
-            this.isLoading = false;
-            this.errors = ['Erro ao criar diligência. Tente novamente.'];
+        this.isLoading.set(false);
+
+            this.errors = [err];
         });
     }
     private getFormErrors(): string[] {
@@ -106,7 +106,7 @@ export class SendToFieldModal implements OnInit {
         return messages;
     }
     cancel() {
-        this.dialogRef.close(false);
+        this.dialogRef.close(null);
     }
 
 }

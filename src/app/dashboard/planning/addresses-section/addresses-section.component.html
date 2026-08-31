@@ -17,16 +17,22 @@
         <div class="flex items-center justify-center w-full h-full p-4">
             <div class="spinner"></div>
         </div>
-        } @else if (!isLoading() && addresses().length == 0) {
+        } @else if (!isLoading() && localAddresses().length == 0) {
         <div class="flex justify-center items-center pb-4">
             <h1>Sem registros...</h1>
         </div>
-        } @else if (!isLoading() && addresses().length != 0) {
-        @for (address of localAddresses(); track address) {
-        <app-addresses-entry class="w-full" (delete)="deleteNewAddress()" [isNew]="address.new" [country]="address.country" [state]="address.state"
-            [zipCode]="address.zipCode" [complement]="address.complement" [number]="address.number"
-            [street]="address.street" [neighborhood]="address.neighborhood" [city]="address.city"
-            ></app-addresses-entry>
+        } @else if (!isLoading() && localAddresses().length != 0) {
+        @for (address of localAddresses(); track address; let i = $index) {
+        @for (address of localAddresses(); track address; let i = $index) {
+
+        <app-addresses-entry class="w-full" (delete)="deleteNewAddress()" [order]="i + 1" [isNew]="address.new"
+            [name]="address.name" [street]="address.street" [number]="address.number"
+            [neighborhood]="address.neighborhood" [city]="address.city" [state]="address.state"
+            [zipCode]="address.zipCode" [complement]="address.complement" [country]="address.country">
+
+        </app-addresses-entry>
+
+        }
         }
         }
     </div>

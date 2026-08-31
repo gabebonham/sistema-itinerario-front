@@ -1,4 +1,4 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject, Inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,66 +6,125 @@ import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AttemptService } from '../../../../services/attempt.service';
 import { AddressEntry } from '../../../../models/address';
-import { CreateAttemptDTO } from '../../../../DTOS/create-itinerary.dto';
-
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { AddressesService } from '../../../../services/addresses.service';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { PlaceSuggestion } from '../../../../DTOS/place-sugestion';
+import { CreateAddressDTO } from '../../../../DTOS/create-address.dto';
 
 @Component({
     selector: 'app-new-address-modal',
-    imports: [MatDialogModule, MatIconModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+    imports: [
+        MatDialogModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+    ],
     templateUrl: './new-address-modal.component.html',
 })
-export class NewAddressModal {
+export class NewAddressModal implements OnInit {
     isLoading = false
+    suggestions = signal<PlaceSuggestion[]>([]);
+    suggestion = signal<PlaceSuggestion | undefined>(undefined);
+    addressesService = inject(AddressesService)
     attemptService = inject(AttemptService)
     private fb = inject(FormBuilder);
     form = this.fb.group({
         address: ['', Validators.required],
     });
     constructor(
-        public dialogRef: MatDialogRef<NewAddressModal, { success: boolean, data: AddressEntry | null }>,
+        public dialogRef: MatDialogRef<NewAddressModal, { success: boolean, data: CreateAddressDTO | null }>,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
-    errors: string[] = []
-    confirm() {
-        // só pra ter referencia de como vai ser, nao vai ser esse fluxo com essas models
-        if (this.form.invalid) {
-            this.form.markAllAsTouched();
-            this.errors = this.getFormErrors();
+    errors = signal<string[]>([])
+    ngOnInit(): void {
+        this.form.controls.address.valueChanges
+            .pipe(
+                debounceTime(300),
+                distinctUntilChanged()
+            )
+            .subscribe(value => {
 
+                if (typeof value !== 'string') {
+                    return;
+                }
+
+                this.suggestion.set(undefined);
+                this.search(value);
+            });
+    }
+    async search(value?: string | null): Promise<void> {
+        if (!value || value.length < 3) {
+            this.suggestions.set([]);
             return;
         }
-        this.isLoading = true;
-        this.errors = [];
-        const createAttemptDto: CreateAttemptDTO = {
-            debtorId: '',
-            protocol: '',
+
+        const result = await this.addressesService.getAddressSugestion(value);
+
+        if (result.success) {
+            this.suggestions.set(result.data);
+        } else {
+            this.suggestions.set([]);
         }
-        this.attemptService.create(createAttemptDto).then((result) => {
-            this.isLoading = false;
+    }
+    onAddressSelected(event: MatAutocompleteSelectedEvent): void {
+        const suggestion = event.option.value as PlaceSuggestion;
+
+        this.suggestion.set(suggestion)
+    }
+    displaySuggestion(suggestion: PlaceSuggestion | null): string {
+        return suggestion?.description ?? '';
+    }
+    async confirm(): Promise<void> {
+        this.errors.set([]);
+
+        const suggestion = this.suggestion();
+
+        if (!suggestion) {
+            this.errors.set(['Endereço deve ser selecionado.']);
+            return;
+        }
+
+        this.isLoading = true;
+
+        try {
+            const result = await this.addressesService.getAddressPlace(
+                suggestion.placeId
+            );
+
             if (result.success) {
+                console.log(result.data);
+
+                const addressToCreate = {
+                    city:result.data.city,
+                    country:result.data.country,
+                    lat:result.data.latitude,
+                    lng:result.data.longitude,
+                    name:result.data.name,
+                    neighborhood:result.data.neighborhood,
+                    number:result.data.number,
+                    state:result.data.state,
+                    street:result.data.street,
+                    zipCode:result.data.zipCode
+                } as CreateAddressDTO
                 this.dialogRef.close({
-                    success: true, data: {
-                        new: true,
-                        name: 'Rua Getúlio Vargas, 333',
-                        city: 'Esteio',
-                        neighborhood: 'Centro',
-                        street: 'Rua Getúlio Vargas',
-                        number: '333',
-                        complement: '',
-                        zipCode: '93260-020',
-                        state: 'RS',
-                        country: 'Brasil',
-                        lat: -29.8608,
-                        lng: -51.1794,
-                    }
+                    success: true,
+                    data: addressToCreate
                 });
             } else {
-                this.errors = ['Não foi possível adicionar endereço.'];
+                this.errors.set([
+                    result.error ?? 'Não foi possível buscar o endereço.'
+                ]);
             }
-        }).catch((err) => {
+        } catch {
+            this.errors.set([
+                'Erro ao buscar o endereço. Tente novamente.'
+            ]);
+        } finally {
             this.isLoading = false;
-            this.errors = ['Erro ao adicionar endereço. Tente novamente.'];
-        });
+        }
     }
     private getFormErrors(): string[] {
         const labels: Record<string, string> = {

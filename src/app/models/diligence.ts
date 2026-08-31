@@ -15,6 +15,8 @@ export class Diligence {
     start: Date;
     finish: Date;
     notificatorName: string;
+    notificatorId: string;
+    debtorId: string;
     debtorName: string;
     debtor?: Debtor;
     window: string;
@@ -47,6 +49,8 @@ export class Diligence {
         attemptId: string,
         createdAt: Date,
         updatedAt: Date,
+        notificatorId: string,
+        debtorId: string,
         porHoraCerta: boolean,
         imageUrls?: string[],
         audioUrl?: string,
@@ -56,6 +60,8 @@ export class Diligence {
     ) {
         this.id = id;
         this.debtorName = debtorName;
+        this.notificatorId = notificatorId;
+        this.debtorId = debtorId;
         this.window = window;
         this.notificatorName = notificatorName;
         this.protocol = protocol;

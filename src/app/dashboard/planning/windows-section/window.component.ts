@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
@@ -32,7 +32,8 @@ export class WindowComponent {
     }
 
     newWindowEntry = signal<WindowEntry | undefined>(undefined);
-
+    buildWindow = output<WindowEntry>()
+    ready = output()
 
     openModal() {
         const ref = this.dialog.open(NewWindowModal, {
@@ -52,6 +53,8 @@ export class WindowComponent {
                     window: result.data.window,
                     diligenceOrdinal: result.data.diligenceOrdinal
                 })
+                this.buildWindow.emit(this.newWindowEntry()!)
+                this.ready.emit()
             }
         });
     }

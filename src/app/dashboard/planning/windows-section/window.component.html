@@ -11,7 +11,7 @@
     </div>
     } @else {
 
-    @for (diligence of takenWindows; track diligence; let i = $index) {
+    @for (diligence of takenWindows(); track diligence; let i = $index) {
     <div
       class="px-4 flex justify-between items-center w-full rounded-xl border-1 border-success bg-card-background/30 py-2 shadow-md">
       <div class="flex items-center gap-4">
@@ -29,7 +29,7 @@
       </div>
     </div>
     }
-    @for (window of windowsLeft; track window; let i = $index) {
+    @for (window of windowsLeft(); track window; let i = $index) {
     @if (i==0) {
     @if (newWindowEntry()) {
     <div

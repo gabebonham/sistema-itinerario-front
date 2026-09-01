@@ -12,28 +12,30 @@ import { Diligence, DiligenceOrdinal, WindowEntry } from '../../../models/dilige
 })
 export class WindowComponent {
     possibleWindows: string[] = ['Manhã', 'Tarde', 'Sábado'];
-    windowsLeft: string[] = [];
+    windowsLeft = signal<string[]>([]);
     isLoading = input.required<boolean>()
-    takenWindows: WindowEntry[] = [];
+    takenWindows = signal<WindowEntry[]>([]);
     diligences = input<Diligence[]>([]);
-    constructor(private dialog: MatDialog) {
-        effect(() => {
-            const diligences = this.diligences();
-            if (diligences.length > 0) {
-                this.takenWindows = this.getDiligencesInAscOrder(diligences)
-                    .map(diligence => this.mapToWindowEntry(diligence));
-                this.windowsLeft = this.possibleWindows.filter(window =>
-                    !this.takenWindows.map(a => a.window).includes(window));
-            } else {
-                this.takenWindows = [];
-                this.windowsLeft = this.possibleWindows;
-            }
-        });
-    }
 
     newWindowEntry = signal<WindowEntry | undefined>(undefined);
     buildWindow = output<WindowEntry>()
     ready = output()
+    constructor(private dialog: MatDialog) {
+        effect(() => {
+            const diligences = this.diligences();
+            if (diligences.length > 0) {
+                const taken = this.getDiligencesInAscOrder(diligences)
+                    .map(diligence => this.mapToWindowEntry(diligence))
+                this.windowsLeft.set(this.possibleWindows.filter(window =>
+                    !taken.map(a => a.window).includes(window)));
+                this.takenWindows.set(taken);
+            } else {
+                this.takenWindows.set([]);
+                this.windowsLeft.set(this.possibleWindows);
+            }
+        });
+    }
+
 
     openModal() {
         const ref = this.dialog.open(NewWindowModal, {
@@ -69,9 +71,12 @@ export class WindowComponent {
     }
 
     getDiligencesInAscOrder(diligences: Diligence[]) {
-        return [...diligences].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+        return [...diligences].sort(
+            (a, b) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+        );
     }
-
     mapToWindowEntry(diligence: Diligence): WindowEntry {
         return {
             finish: diligence.finish,
@@ -81,16 +86,21 @@ export class WindowComponent {
             diligenceOrdinal: diligence.diligenceOrdinal
         }
     }
+getTime(date: Date | string): string {
+    const parsedDate = new Date(date);
 
-    getTime(date: Date): string {
-        return date.getHours() + ':' + date.getMinutes();
-    }
+    return parsedDate.getHours() + ':' +
+           String(parsedDate.getMinutes()).padStart(2, '0');
+}
 
-    getFormattedDate(date: Date): string {
-        return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
-    }
+getFormattedDate(date: Date | string): string {
+    return new Date(date).toLocaleDateString('pt-BR', {
+        day: 'numeric',
+        month: 'long'
+    });
+}
     onDeleteNewWindow() {
-        this.takenWindows = this.takenWindows.filter(window => !window.new)
+        this.takenWindows.set(this.takenWindows().filter(window => !window.new))
         this.newWindowEntry.set(undefined)
     }
 }

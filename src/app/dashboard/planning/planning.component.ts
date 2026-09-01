@@ -89,7 +89,6 @@ export class PlanningComponent implements OnInit {
                 this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
                 this.breadCrumbs = this.activeSection.getPathWithId(id)
                 this.getAndBuildAttempt(id);
-                this.getAndBuildAddresses()
             }
         });
     }
@@ -130,26 +129,24 @@ export class PlanningComponent implements OnInit {
     getAndBuildAttempt(id: string): void {
         this.attemptService.getById(id).then(result => {
             if (result.success) {
+                const attempt = result.data
+                const diligences = result.data.diligences ?? []
+                const addresses = diligences
+                    .map(diligence => diligence.address)
+                    .filter((address): address is Address => address !== undefined);
 
-                this.diligences.set(result.data.diligences ?? []);
-                this.getAndBuildAddresses();
+
+                this.attempt.set(attempt)
+                this.diligences.set(diligences);
+                this.addresses.set(addresses)
+
+                this.isAddressesLoading.set(false);
                 this.isAttemptLoading.set(false)
-                this.attempt.set(result.data)
             } else {
                 this.showToast("Erro ao buscar tentativa.")
             }
         });
     }
-
-    getAndBuildAddresses(): void {
-        const addresses = this.diligences()
-            .map(diligence => diligence.address)
-            .filter((address): address is Address => address !== undefined);
-        this.addresses.set(addresses)
-        this.isAddressesLoading.set(false);
-    }
-
-
 
     openModal() {
         const diligence = this.buildNewDiligence()
@@ -158,17 +155,17 @@ export class PlanningComponent implements OnInit {
             height: '500px',
             data: { diligence }
         });
-        ref.afterClosed().subscribe((result:Diligence) => {
+        ref.afterClosed().subscribe((result: Diligence) => {
             if (!result) {
                 return;
             }
-                this.handleCreateAddress(result.id)
-                this.handleCreateNotification(result.notificatorId,result.debtorId,result.id)
+            this.handleCreateAddress(result.id)
+            this.handleCreateNotification(result.notificatorId, result.debtorId, result.id)
 
         });
     }
     buildNewAddress(diligenceId: string) {
-        return { ...this.newAddress(), diligenceId, debtorId:this.attempt()?.debtorId } as CreateAddressDTO
+        return { ...this.newAddress(), diligenceId, debtorId: this.attempt()?.debtorId } as CreateAddressDTO
     }
 
     handleCreateAddress(diligenceId: string) {
@@ -181,16 +178,16 @@ export class PlanningComponent implements OnInit {
                     this.showToast("Erro ao registrar endereço.")
                 }
             })
-        } 
+        }
     }
-    handleCreateNotification(notificatorId:string, debtorId:string,diligenceId:string){
-        const dto:CreateNotificationDto = {
+    handleCreateNotification(notificatorId: string, debtorId: string, diligenceId: string) {
+        const dto: CreateNotificationDto = {
             debtorId,
             notificatorId,
             diligenceId
-        } 
-        this.notificationService.create(dto).then(result=>{
-            if(result.success){
+        }
+        this.notificationService.create(dto).then(result => {
+            if (result.success) {
 
             } else {
                 this.showToast('Erro ao disparar notificação.')

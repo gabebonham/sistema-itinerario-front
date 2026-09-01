@@ -5,7 +5,6 @@ import { AttemptsFilterService } from '../../../../services/attempts-filter.serv
 import { Diligence } from '../../../../models/diligence';
 import { AttemptService } from '../../../../services/attempt.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Attempt } from '../../../../models/attempt';
 
 @Component({
     selector: 'app-diligences-entries',

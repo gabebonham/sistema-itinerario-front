@@ -9,7 +9,8 @@
       </div>
       <div>
         <button (click)="openModal()" [disabled]="!canSendToField()"
-          class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-xl w-52 h-12 disabled:bg-primary/20 disabled:cursor-not-allowed">Mandar para
+          class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-xl w-52 h-12 disabled:bg-primary/20 disabled:cursor-not-allowed">Mandar
+          para
           Campo</button>
       </div>
     </div>
@@ -22,9 +23,10 @@
         }
       </div>
       <div class="w-full h-full flex items-start gap-6">
-        <app-addresses-section (buildAddress)="onBuildAddress($event)" (ready)="onAddressReady()" [isLoading]="isAddressesLoading()" class="w-3/5 h-full "
-          [addresses]="addresses()"></app-addresses-section>
-        <app-window (buildWindow)="onBuildWindow($event)" (ready)="onWindowReady()" [isLoading]="isAttemptLoading()" [diligences]="diligences()"></app-window>
+        <app-addresses-section (buildAddress)="onBuildAddress($event)" (ready)="onAddressReady()"
+          [isLoading]="isAddressesLoading()" class="w-3/5 h-full " [addresses]="addresses()"></app-addresses-section>
+        <app-window (buildWindow)="onBuildWindow($event)" (ready)="onWindowReady()" [isLoading]="isAttemptLoading()"
+          [diligences]="diligences()"></app-window>
       </div>
     </div>
   </div>

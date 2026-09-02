@@ -1,8 +1,8 @@
 import { Debtor } from "./debtor";
 import { Diligence } from "./diligence";
 
-export type AttemptStatus = 'Delivered' | 'Pending' | 'Cancelled'
-export type DisplayAttemptStatus = 'Entregue' | 'Pendente' | 'Cancelada'
+export type AttemptStatus = 'Delivered' | 'Pending' | 'Cancelled' | 'Finished'
+export type DisplayAttemptStatus = 'Entregue' | 'Pendente' | 'Cancelada' | 'Finalizada'
 
 export class Attempt {
     id: string;

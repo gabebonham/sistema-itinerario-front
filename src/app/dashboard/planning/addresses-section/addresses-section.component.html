@@ -23,7 +23,6 @@
         </div>
         } @else if (!isLoading() && localAddresses().length != 0) {
         @for (address of localAddresses(); track address; let i = $index) {
-        @for (address of localAddresses(); track address; let i = $index) {
 
         <app-addresses-entry class="w-full" (delete)="deleteNewAddress()" [order]="i + 1" [isNew]="address.new"
             [name]="address.name" [street]="address.street" [number]="address.number"
@@ -32,7 +31,6 @@
 
         </app-addresses-entry>
 
-        }
         }
         }
     </div>

@@ -10,14 +10,16 @@
         class="flex items-center gap-4 w-2/5 border border-border rounded-lg py-1 px-2 focus-within:border-primary/50 transition-all">
         <mat-icon class="!text-text-muted !text-lg !h-7">search</mat-icon>
 
-        <input type="text" placeholder="Buscar por protocolo..." [value]="searchProtocolValue" (input)="onSearchProtocolInput($event)"
+        <input type="text" placeholder="Buscar por protocolo..." [value]="searchProtocolValue"
+          (input)="onSearchProtocolInput($event)"
           class="w-full text-text-black placeholder-text-black focus:outline-none focus:ring-0 border-none" />
       </div>
       <div
         class="flex items-center gap-4 w-2/5 border border-border rounded-lg py-1 px-2 focus-within:border-primary/50 transition-all">
         <mat-icon class="!text-text-muted !text-lg !h-7">search</mat-icon>
 
-        <input type="text" placeholder="Buscar por devedor..." [value]="searchDebtorValue" (input)="onSearchDebtorInput($event)"
+        <input type="text" placeholder="Buscar por devedor..." [value]="searchDebtorValue"
+          (input)="onSearchDebtorInput($event)"
           class="w-full text-text-black placeholder-text-black focus:outline-none focus:ring-0 border-none" />
       </div>
     </div>
@@ -57,6 +59,14 @@
         <input matInput type="text" placeholder="dd/mm/aaaa" [value]="toDateValue" (input)="onToDateInput($event)"
           maxlength="10" class="!text-xs" />
       </mat-form-field>
+
+
+      <div class="flex items-center w-1/5 h-14">
+        <mat-checkbox [(ngModel)]="diligenceVisited" (change)="onDiligenceVisitedChange()">
+          Diligência Visitada
+        </mat-checkbox>
+      </div>
+
     </div>
   </div>
 </div>

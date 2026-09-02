@@ -44,7 +44,9 @@ export class NotificationsComponent implements OnInit {
             this.dashboardState.activeSection().name
         );
     }
-
+    planGeneralRoute() {
+        this.router.navigate(['/dashboard/rota-geral', this.currentUser()?.id]);
+    }
     async ngOnInit(): Promise<void> {
         const user = this.currentUser();
 

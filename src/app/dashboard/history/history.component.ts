@@ -57,12 +57,14 @@ export class HistoryComponent implements OnInit {
             this.fetchAttemptPage()
         }
     }
+    
     onPreviousPage(): void {
         if (this.hasPreviousPages) {
             this.currentPage = this.currentPage - 1
             this.fetchAttemptPage()
         }
     }
+
     fetchAttemptPage(): void {
         this.isLoading.set(true)
         this.attemptService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
@@ -73,6 +75,7 @@ export class HistoryComponent implements OnInit {
             this.isLoading.set(false)
         });
     }
+
     filteredAttempts = computed(() => {
         const filter = this.filterService.filter();
         return this.attemptList().filter(attempt => {

@@ -31,6 +31,7 @@ export class Diligence {
     plannerObservations?: string;
     imageUrls?: string[];
     audioUrl?: string;
+    visited: boolean;
     createdAt: Date;
     updatedAt: Date;
     constructor(
@@ -51,6 +52,7 @@ export class Diligence {
         updatedAt: Date,
         notificatorId: string,
         debtorId: string,
+        visited: boolean,
         porHoraCerta: boolean,
         imageUrls?: string[],
         audioUrl?: string,
@@ -81,5 +83,6 @@ export class Diligence {
         this.audioUrl = audioUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.visited = visited;
     }
 }

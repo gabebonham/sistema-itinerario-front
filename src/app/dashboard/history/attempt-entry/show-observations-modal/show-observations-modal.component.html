@@ -36,10 +36,9 @@
             }
         </div>
         <h1 class="text-lg">Audio</h1>
-        @if (audioUrl()) {
-
+        @for (item of audioUrls(); track $index) {
         <div>
-            <audio [src]="audioUrl()" controls></audio>
+            <audio [src]="item" controls></audio>
         </div>
         }
     </div>

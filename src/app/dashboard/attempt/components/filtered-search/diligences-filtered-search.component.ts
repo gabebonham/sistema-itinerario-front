@@ -1,17 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, Subject } from 'rxjs';
 import { DILIGENCES, DILIGENCE_WINDOW } from '../../constants/constants';
 import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
-import { Diligence, DiligenceOrdinal } from '../../../../models/diligence';
+import {  DiligenceOrdinal } from '../../../../models/diligence';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-diligences-filtered-search',
     standalone: true,
-    imports: [MatIconModule, MatSelectModule, MatFormFieldModule, MatInputModule],
+    imports: [MatIconModule, MatSelectModule, MatFormFieldModule, MatInputModule, MatCheckboxModule,FormsModule],
     templateUrl: './diligences-filtered-search.component.html',
 })
 export class DiligencesFilteredSearchComponent {
@@ -19,7 +21,7 @@ export class DiligencesFilteredSearchComponent {
 
     diligences = DILIGENCES.OPTIONS;
     windows = DILIGENCE_WINDOW.OPTIONS;
-
+    diligenceVisited: boolean = true;
     selectedDiligence: string = this.diligences[0];
     selectedWindow: string = this.windows[0];
     searchDebtorValue: string = '';
@@ -45,7 +47,9 @@ export class DiligencesFilteredSearchComponent {
                 });
             });
     }
-
+    onDiligenceVisitedChange(): void {
+        this.filterService.updateFilter({ diligenceVisited: this.diligenceVisited });
+    }
     onSearchDebtorInput(event: Event): void {
         const value = (event.target as HTMLInputElement).value;
         this.searchDebtorValue = value;
@@ -58,17 +62,17 @@ export class DiligencesFilteredSearchComponent {
     }
 
     onDiligenceChange(): void {
-        let selectedOrdinal:DiligenceOrdinal|'';
+        let selectedOrdinal: DiligenceOrdinal | '';
         if (this.selectedDiligence == '1ª Diligência') {
             selectedOrdinal = '1ª Diligência'
         } else if (this.selectedDiligence == '2ª Diligência') {
             selectedOrdinal = '2ª Diligência'
-        }else if (this.selectedDiligence == '3ª Diligência') {
+        } else if (this.selectedDiligence == '3ª Diligência') {
             selectedOrdinal = '3ª Diligência'
         } else {
             selectedOrdinal = ''
         }
-        this.filterService.updateFilter({ diligenceOrdinal:  selectedOrdinal});
+        this.filterService.updateFilter({ diligenceOrdinal: selectedOrdinal });
     }
 
     onWindowChange(): void {

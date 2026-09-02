@@ -1,7 +1,6 @@
-import { Component, computed, effect, EventEmitter, inject, Input, input, OnInit, Output, signal } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, Input, input, OnInit, output, Output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { DiligenceEntryComponent } from './diligence-entry/diligence-entry.component';
-import { AttemptsFilterService } from '../../../../services/attempts-filter.service';
 import { Diligence } from '../../../../models/diligence';
 import { AttemptService } from '../../../../services/attempt.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -16,28 +15,21 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     ],
     templateUrl: './diligences-entries.component.html',
 })
-export class DiligencesEntriesComponent implements OnInit {
+export class DiligencesEntriesComponent  {
     private snackBar = inject(MatSnackBar);
-    private filterService = inject(AttemptsFilterService);
     private attemptService = inject(AttemptService);
-    // private router = inject(Router);
-    // private route = inject(ActivatedRoute);
     isLoading = input.required<boolean>();
     loadingCancel = signal<string | undefined>(undefined)
     diligences = input.required<Diligence[]>();
     localDiligences = signal<Diligence[]>([])
 
-    pageSize = 5;
-    currentPage = 1;
-
+    pageSize = input(5);
+    currentPage = input(1);
+    totalPages = input.required();
+    updateCurrentPage = output<number>();
     @Output() nextPage = new EventEmitter<number>();
     @Output() previousPage = new EventEmitter<number>();
-    ngOnInit(): void {
-        // const page = Number(this.route.snapshot.queryParamMap.get('page')) || 1;
-        // this.currentPage = page;
-        // this.onPageChange()
 
-    }
     constructor() {
         effect(() => {
 
@@ -45,80 +37,60 @@ export class DiligencesEntriesComponent implements OnInit {
         }
         )
     }
-    filteredDiligences = computed(() => {
-        const filter = this.filterService.filter();
+    handleUpdateCurrentPage(page: number) {
+        this.updateCurrentPage.emit(page);
+    }
 
-        return this.diligences().filter(diligence => {
-
-            const matchesDebtor =
-                !filter.debtorName ||
-                diligence.debtorName
-                    .toLowerCase()
-                    .includes(filter.debtorName.toLowerCase());
-
-            const matchesProtocol =
-                !filter.protocol ||
-                diligence.protocol
-                    .toLowerCase()
-                    .includes(filter.protocol.toLowerCase());
-            const matchesDate = this.isWithinDateRange(
-                diligence.createdAt,
-                filter.from,
-                filter.to
-            );
-
-            return matchesDebtor && matchesProtocol && matchesDate;
-        });
-    });
-    totalPages = computed(() =>
-        Math.max(1, Math.ceil(this.filteredDiligences().length / this.pageSize))
-    );
-
-    paginatedDiligences = computed(() => {
-        const start = (this.currentPage - 1) * this.pageSize;
-        return this.filteredDiligences().slice(start, start + this.pageSize);
-    });
 
     @Input() hasMorePages!: boolean;
     @Input() hasPreviousPages!: boolean;
-    onPageChange() {
-        // this.router.navigate([], {
-        //     relativeTo: this.route,
-        //     queryParams: { page: this.currentPage },
-        //     queryParamsHandling: 'merge',
-        // });
-    }
+
     onNextPage(): void {
         if (this.hasMorePages) {
-            this.nextPage.emit(this.currentPage + 1);
-            this.currentPage = this.currentPage + 1
-            this.onPageChange()
+            this.nextPage.emit(this.currentPage()+ 1);
         }
     }
     onPreviousPage(): void {
         if (this.hasPreviousPages) {
-            this.previousPage.emit(this.currentPage - 1);
-            this.currentPage = this.currentPage - 1
-            this.onPageChange()
+            this.previousPage.emit(this.currentPage() - 1);
         }
     }
 
-    private isWithinDateRange(date: Date, from: string, to: string): boolean {
+    private isWithinDateRange(
+        date: Date | string,
+        from: string,
+        to: string
+    ): boolean {
+
         if (!from && !to) return true;
+
+        const entryTime = new Date(date).getTime();
+
         const parseFilterDate = (d: string): number => {
             const [dd, mm, yyyy] = d.split('/').map(Number);
-            return new Date(yyyy, mm - 1, dd).getTime();
+
+            return new Date(
+                yyyy,
+                mm - 1,
+                dd
+            ).getTime();
         };
-        const entryTime = date.getTime();
-        if (from && entryTime < parseFilterDate(from)) return false;
-        if (to && entryTime > parseFilterDate(to)) return false;
+
+        if (from && entryTime < parseFilterDate(from)) {
+            return false;
+        }
+
+        if (to && entryTime > parseFilterDate(to)) {
+            return false;
+        }
+
         return true;
     }
     handleCancelAttempt(id: string) {
         this.loadingCancel.set(id)
         this.attemptService.cancelAttempt(id).then(result => {
             if (result.success) {
-                this.localDiligences.set(this.localDiligences().filter(diligence => diligence.attemptId != id))
+                this.localDiligences.update(diligences => diligences.filter(diligence => diligence.attemptId != id))
                 this.loadingCancel.set(undefined)
             } else {
                 this.showToast("Erro ao cancelar tentativa.")

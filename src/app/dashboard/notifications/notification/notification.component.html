@@ -9,7 +9,7 @@
     </div>
     <div class="flex flex-col gap-8">
       <app-map-section [address]="diligence()?.address" [debtor]="debtor()"></app-map-section>
-      <app-actions-section [diligence]="diligence()" [debtor]="debtor()"></app-actions-section>
+      <app-actions-section [notificationId]="notificationId()" [diligence]="diligence()" [debtor]="debtor()"></app-actions-section>
       <app-support-observations-section 
       [factsObservations]="diligence()?.factsObservations ?? []"
       [generalObservations]="diligence()?.generalObservations ?? []"

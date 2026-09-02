@@ -14,13 +14,13 @@
     <div class="flex items-center justify-center w-full h-full p-4">
       <div class="spinner"></div>
     </div>
-    } @else if (!isLoading() && filteredDiligences().length == 0) {
+    } @else if (!isLoading() && localDiligences().length == 0) {
     <div class="flex justify-center items-center pb-4">
       <h1>Sem registros...</h1>
     </div>
-    } @else if (!isLoading() && filteredDiligences().length != 0) {
-    @for (item of filteredDiligences(); track item.protocol) {
-    <app-diligence-entry [loadingCancel]="loadingCancel()" (cancelAttempt)="handleCancelAttempt($event)"
+    } @else if (!isLoading() && localDiligences().length != 0) {
+    @for (item of localDiligences(); track item.protocol) {
+    <app-diligence-entry [visited]="item.visited" [loadingCancel]="loadingCancel()" (cancelAttempt)="handleCancelAttempt($event)"
       [attemptId]="item.attemptId" [name]="item.debtorName" [window]="item.window"
       [notificatorName]="item.notificatorName" [start]="item.start" [finish]="item.finish"
       [visitNumber]="item.concludedVisitNumber" [diligenceOrdinal]="item.diligenceOrdinal" [protocol]="item.protocol"
@@ -33,7 +33,7 @@
       <mat-icon
         class="{{ hasPreviousPages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
         (click)="onPreviousPage()">arrow_back</mat-icon>
-      {{ currentPage }}
+      {{ currentPage() }} / {{ totalPages() }}
       <mat-icon class="{{ hasMorePages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
         (click)="onNextPage()">arrow_forward</mat-icon>
     </div>

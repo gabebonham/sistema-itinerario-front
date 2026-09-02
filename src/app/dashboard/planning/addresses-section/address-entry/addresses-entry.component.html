@@ -8,8 +8,10 @@
                 {{ order() }}ª</div>
             <div class="flex flex-col items-start gap-1">
                 <p class="text-text-black !font-[600]">
-                    @if (street()){
+                    @if (street() ){
                     {{street()}}
+                    } @else if (name()) {
+                    {{name()}}
                     }
                     @if (number()){
                         , {{number()}}

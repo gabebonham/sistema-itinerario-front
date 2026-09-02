@@ -134,8 +134,9 @@ export class PlanningComponent implements OnInit {
                 const addresses = diligences
                     .map(diligence => diligence.address)
                     .filter((address): address is Address => address !== undefined);
+                const debtor = attempt.debtor;
 
-
+                this.debtor.set(debtor)
                 this.attempt.set(attempt)
                 this.diligences.set(diligences);
                 this.addresses.set(addresses)

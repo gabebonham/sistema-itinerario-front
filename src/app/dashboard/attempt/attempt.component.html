@@ -10,17 +10,25 @@
           tentativa e período.</p>
       </div>
       <div>
-        <button (click)="openModal()" class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-xl w-48 h-12">
+        <button (click)="openModal()"
+          class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-xl w-48 h-12">
           Nova Tentativa
         </button>
       </div>
     </div>
     <div class="flex flex-col gap-6">
       <app-diligences-filtered-search></app-diligences-filtered-search>
-      <app-diligences-entries [isLoading]="isDiligencesLoading()" [diligences]="diligences()" [hasMorePages]="hasMoreEntriesPages"
-        [hasPreviousPages]="hasPreviousEntriesPages" (nextPage)="fetchDiligencesPage($event)"
-        (previousPage)="fetchDiligencesPage($event)"></app-diligences-entries>
-        <app-attempts-with-no-diligences-entries [isLoading]="isDiligencesLoading()" [attempts]="attemptsWithoutDiligences()"></app-attempts-with-no-diligences-entries>
+      <app-diligences-entries [currentPage]="diligencesCurrentPage()" [pageSize]="diligencesPageSize()"
+        [totalPages]="diligencesTotalPages()" (updateCurrentPage)="onUpdateDiligencesCurrentPage($event)"
+        [isLoading]="isDiligencesLoading()" [diligences]="diligences()" [hasMorePages]="diligencesHasNext()"
+        [hasPreviousPages]="diligencesHasPrevious()" (nextPage)="onUpdateDiligencesCurrentPage($event)"
+        (previousPage)="onUpdateDiligencesCurrentPage($event)"></app-diligences-entries>
+      <app-attempts-with-no-diligences-entries [currentPage]="pendingAttemptsCurrentPage()"
+        [pageSize]="pendingAttemptsPageSize()" [totalPages]="pendingAttemptsTotalPages()"
+        (updateCurrentPage)="onUpdatePendingAttemptsCurrentPage($event)" [hasMorePages]="pendingAttemptsHasNext()"
+        [hasPreviousPages]="pendingAttemptsHasPrevious()" (nextPage)="onUpdatePendingAttemptsCurrentPage($event)"
+        (previousPage)="onUpdatePendingAttemptsCurrentPage($event)" [isLoading]="isPendingAttemptsLoading()"
+        [attempts]="pendingAttempts()"></app-attempts-with-no-diligences-entries>
     </div>
   </div>
 </div>

@@ -1,0 +1,29 @@
+<div>
+  <div class="px-4 py-8 flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <h1 class="font-semibold text-text-muted">NOTIFICAÇÕES · CAMPO</h1>
+        <h1 class="text-xl font-bold">Campo</h1>
+        <p class="text-text-muted !text-xs w-full">Diego Nunes · {{currentDiligence()?.diligenceOrdinal}} ·
+          {{currentDiligence()?.window}} {{getDateFormatted(currentDiligence()?.start)}}</p>
+      </div>
+    </div>
+    @if (loadingNextDiligence()) {
+    <div class="flex items-center justify-center w-full h-full p-4">
+      <div class="spinner" style="width: 20px; height: 20px; border-width: 2px;">
+      </div>
+    </div>
+    } @else {
+
+    <div class="flex flex-col gap-8">
+      <app-map-section [addresses]="addresses()" [debtor]="currentDebtor()"></app-map-section>
+      <app-actions-section [notificationId]="currentNotificationId()" [diligence]="currentDiligence()"
+        [debtor]="currentDebtor()" (nextDiligence)="getNextDiligence()"></app-actions-section>
+      <app-support-observations-section [factsObservations]="currentDiligence()?.factsObservations ?? []"
+        [generalObservations]="currentDiligence()?.generalObservations ?? []"
+        [propertyObservations]="currentDiligence()?.propertyObservations ?? []"
+        [plannerObservations]="currentDiligence()?.plannerObservations"></app-support-observations-section>
+    </div>
+    }
+  </div>
+</div>

@@ -41,7 +41,7 @@ export class WindowComponent {
         const ref = this.dialog.open(NewWindowModal, {
             width: '1200px',
             height: '380px',
-            data: { windowsLeft: this.windowsLeft, diligenceOrdinal: this.getDiligenceOrdinal() }
+            data: { windowsLeft: this.windowsLeft(), diligenceOrdinal: this.getDiligenceOrdinal() }
         });
         ref.afterClosed().subscribe(result => {
             if (!result) {
@@ -61,9 +61,9 @@ export class WindowComponent {
         });
     }
     getDiligenceOrdinal(): DiligenceOrdinal {
-        if (this.takenWindows.length == 0) {
+        if (this.takenWindows().length == 0) {
             return '1ª Diligência'
-        } else if (this.takenWindows.length == 1) {
+        } else if (this.takenWindows().length == 1) {
             return '2ª Diligência'
         } else {
             return '3ª Diligência'
@@ -86,19 +86,37 @@ export class WindowComponent {
             diligenceOrdinal: diligence.diligenceOrdinal
         }
     }
-getTime(date: Date | string): string {
-    const parsedDate = new Date(date);
+    getTime(date: Date | string | undefined): string {
+        if (!date) {
+            return '';
+        }
 
-    return parsedDate.getHours() + ':' +
-           String(parsedDate.getMinutes()).padStart(2, '0');
-}
+        const parsedDate = new Date(date);
 
-getFormattedDate(date: Date | string): string {
-    return new Date(date).toLocaleDateString('pt-BR', {
-        day: 'numeric',
-        month: 'long'
-    });
-}
+        if (isNaN(parsedDate.getTime())) {
+            return '';
+        }
+
+        return `${String(parsedDate.getHours()).padStart(2, '0')}:${String(
+            parsedDate.getMinutes()
+        ).padStart(2, '0')}`;
+    }
+    getFormattedDate(date: Date | string | undefined): string {
+        if (!date) {
+            return '';
+        }
+
+        const parsedDate = new Date(date);
+
+        if (isNaN(parsedDate.getTime())) {
+            return '';
+        }
+
+        return parsedDate.toLocaleDateString('pt-BR', {
+            day: 'numeric',
+            month: 'long'
+        });
+    }
     onDeleteNewWindow() {
         this.takenWindows.set(this.takenWindows().filter(window => !window.new))
         this.newWindowEntry.set(undefined)

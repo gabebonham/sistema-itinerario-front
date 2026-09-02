@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, ViewChild } from '@angular/core';
+import { Component, inject, input, output, signal, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Debtor } from '../../../../models/debtor';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -34,6 +34,7 @@ export class ActionsSectionComponent {
     debtorFound = signal<boolean | undefined>(undefined)
     private fb = inject(FormBuilder);
     isLoading = signal(false)
+    nextDiligence = output()
     constructor(private router: Router) { }
     form = this.fb.group({
         factsObservations: [''],
@@ -127,23 +128,23 @@ export class ActionsSectionComponent {
                     this.notificationService.delete(this.notificationId()!)
                         .then(deleteResult => {
                             if (deleteResult.success) {
+
                                 if (this.debtorFound()!) {
-                                    this.attemptService.deliverAttempt(this.diligence()?.attemptId!).then(updateResult => {
-                                        if (updateResult.success) {
-                                            this.showToast('Visita concluida com sucesso!');
-                                            this.router.navigate([`/dashboard/notificacoes`]);
-                                        } else {
-                                            console.log(updateResult.error)
-                                            this.showToast(updateResult.error);
-                                        }
-                                    })
+                                    this.attemptService
+                                        .deliverAttempt(this.diligence()?.attemptId!)
+                                        .then(updateResult => {
+
+                                            if (!updateResult.success) {
+                                                console.log(updateResult.error);
+                                                this.showToast(updateResult.error);
+                                                return;
+                                            }
+                                            this.finishSuccess();
+                                        });
+
                                 } else {
-                                    this.showToast('Visita concluida com sucesso!');
-                                    this.router.navigate([`/dashboard/notificacoes`]);
+                                    this.finishSuccess();
                                 }
-                            } else {
-                                console.log(deleteResult.error)
-                                this.showToast(deleteResult.error);
                             }
                         });
                 } else {
@@ -157,6 +158,23 @@ export class ActionsSectionComponent {
     }
     onSaveAudio(audioFile?: File) {
         this.audioFile = audioFile
+    }
+    private finishSuccess() {
+        this.showToast('Visita concluída com sucesso!');
+        this.resetInputs();
+        this.nextDiligence.emit();
+    }
+    resetInputs() {
+        this.form.reset({
+            factsObservations: '',
+            generalObservations: '',
+            propertyObservations: ''
+        });
+
+        this.debtorFound.set(undefined);
+        this.audioFile = undefined;
+        this.photos.set([]);
+
     }
     async sendAudio() {
         if (this.audioFile) {

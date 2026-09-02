@@ -12,14 +12,13 @@ export class DiligencesService {
     return await this.api.get<Diligence>('api/diligences/' + id)
   }
   async create(dto: CreateDiligenceDTO): Promise<ApiResponse<Diligence>> {
-    console.log('DIL')
-    console.log(dto)
     return await this.api.post<Diligence>('api/diligences', dto)
   }
   async update(id: string, dto: UpdateDiligenceDTO): Promise<ApiResponse<null>> {
+    console.log('Updating diligence with DTO:', dto);
     return await this.api.patch<null>('api/diligences/' + id, dto)
   }
   async getDiligencesByAttemptId(id: string): Promise<ApiResponse<Diligence[]>> {
-    return await this.api.get<Diligence[]>('api/diligence/attempt/' + id)
+    return await this.api.get<Diligence[]>('api/diligences/attempt/' + id)
   }
 }

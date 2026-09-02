@@ -4,10 +4,10 @@
             <h1 class="text-xl">Concluir criação</h1>
         </div>
         <div class="flex flex-col gap-6">
-            <mat-form-field appearance="outline" class="!w-full" floatLabel="always">
+            <mat-form-field appearance="outline" class="!w-full !h-40" floatLabel="always">
                 <mat-label>Observação (opcional)</mat-label>
-                <textarea matInput type="text" formControlName="observation" placeholder="Observação..."
-                    class="!text-xs"></textarea>
+                <textarea rows="6" style="height: 128px !important; min-height: 128px !important;" matInput type="text" formControlName="observation" placeholder="Observação..." 
+                    class="!text-xs !min-h-32 !h-32"></textarea>
             </mat-form-field>
             <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Selecione um Notificador</mat-label>

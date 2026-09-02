@@ -72,6 +72,20 @@ const SMALL_SIZE = 8;
 const LINE_HEIGHT = 12;
 const BULLET_INDENT = 12;
 
+// Indentação do bloco "Síntese dos Fatos" / "Observações do imóvel"
+// em relação à margem esquerda (igual ao PDF de referência).
+const SINTESE_INDENT = 30;
+
+// Offsets (a partir de MARGIN_LEFT) das colunas das linhas de campos
+// "lado a lado", calibrados para bater com o PDF de referência.
+const OFFSET_RG = 185;
+const OFFSET_PROTOCOLO_COM_RG = 400;
+const OFFSET_PROTOCOLO_SEM_RG = 300;
+
+const OFFSET_POR_HORA_CERTA = 85;
+const OFFSET_FORMA = 215;
+const OFFSET_DATA_HORA = 400;
+
 const COLOR_TEXT = rgb(0.08, 0.08, 0.08);
 const COLOR_MUTED = rgb(0.28, 0.28, 0.28);
 const COLOR_LINE = rgb(0.45, 0.45, 0.45);
@@ -153,35 +167,35 @@ function drawDadosIntimado(
     }
   );
 
-  ctx.advance(17);
+  ctx.advance(20);
 
-  // CPF / CNPJ
-  ctx.drawInlineLabelValue(
-    'Cpf/Cnpj:',
-    data.cpfCnpj
-  );
+  // Cpf/Cnpj, Rg e Protocolo — sempre na MESMA linha (a linha só avança
+  // uma vez, depois de todos os campos terem sido desenhados na mesma y).
+  const protocoloOffset = data.rg
+    ? OFFSET_PROTOCOLO_COM_RG
+    : OFFSET_PROTOCOLO_SEM_RG;
 
-  // RG
+  const camposIdentificacao = [
+    { label: 'Cpf/Cnpj:', value: data.cpfCnpj, xOffset: 0 },
+  ];
+
   if (data.rg) {
-    ctx.drawInlineLabelValue(
-      'Rg:',
-      data.rg,
-      {
-        xOffset: 190,
-      }
-    );
+    camposIdentificacao.push({
+      label: 'Rg:',
+      value: data.rg,
+      xOffset: OFFSET_RG,
+    });
   }
 
-  // Protocolo
-  ctx.drawInlineLabelValue(
-    'Protocolo:',
-    data.protocolo,
-    {
-      xOffset: data.rg ? 330 : 300,
-    }
-  );
+  camposIdentificacao.push({
+    label: 'Protocolo:',
+    value: data.protocolo,
+    xOffset: protocoloOffset,
+  });
 
-  ctx.advance(17);
+  ctx.drawUnderlinedLabelValueRow(camposIdentificacao);
+
+  ctx.advance(18);
 }
 
 // ============================================================
@@ -194,44 +208,77 @@ function drawDiligencia(
   numero: number
 ): void {
   /*
-   * A referência do Dejair não utiliza cards/caixas.
-   * Cada diligência é um bloco textual separado por
-   * uma linha horizontal.
+   * Layout idêntico ao PDF de referência: cada diligência é um bloco
+   * textual separado por uma linha horizontal, sem cards/caixas.
+   *
+   * Ordem:
+   *   1) Foi intimado / Por hora certa / Forma / Data e hora (1 linha)
+   *   2) Endereço (1 linha, sem quebra)
+   *   3) Obs.: Notificação: <tipoNotificacao>  (+ observações livres, se houver)
+   *   4) Bloco indentado: "Síntese dos Fatos:" + itens
+   *   5) Bloco indentado: "Observações do imóvel:" + itens (se houver)
+   *   6) Linha separadora
    */
 
   ctx.ensureSpace(110);
 
   // ----------------------------------------------------------
-  // Resultado
+  // Foi intimado / Por hora certa / Forma / Data e hora
   // ----------------------------------------------------------
 
-  ctx.drawText(
-    dil.positiva ? 'Sim' : 'Não',
+  ctx.drawUnderlinedLabelValueRow([
     {
-      font: ctx.fontBold,
-      size: BODY_SIZE,
-    }
+      label: 'Foi intimado:',
+      value: dil.positiva ? 'Sim' : 'Não',
+      xOffset: 0,
+    },
+    {
+      label: 'Por hora certa:',
+      value: dil.porHoraCerta ? 'Sim' : 'Não',
+      xOffset: OFFSET_POR_HORA_CERTA,
+    },
+    {
+      label: 'Forma:',
+      value: dil.forma,
+      xOffset: OFFSET_FORMA,
+    },
+    {
+      label: 'Data e hora:',
+      value: dil.dataHora,
+      xOffset: OFFSET_DATA_HORA,
+    },
+  ]);
+
+  ctx.advance(15);
+
+  // ----------------------------------------------------------
+  // Endereço (linha única, sem quebra — igual à referência)
+  // ----------------------------------------------------------
+
+  ctx.drawUnderlinedLabelValueNoWrap(
+    'Endereço',
+    dil.endereco
   );
 
   ctx.advance(15);
 
   // ----------------------------------------------------------
-  // Notificação
+  // Obs.: Notificação: <tipo>  (+ observações livres opcionais)
   // ----------------------------------------------------------
 
-  ctx.drawInlineLabelValue(
-    'Notificação:',
-    dil.tipoNotificacao,
-    {
-      labelBold: true,
-      valueBold: false,
-    }
+  const valorObs = dil.observacoes?.trim()
+    ? `Notificação: ${dil.tipoNotificacao}  —  ${dil.observacoes.trim()}`
+    : `Notificação: ${dil.tipoNotificacao}`;
+
+  ctx.drawUnderlinedLabelValueNoWrap(
+    'Obs.:',
+    valorObs
   );
 
-  ctx.advance(14);
+  ctx.advance(15);
 
   // ----------------------------------------------------------
-  // Síntese dos fatos
+  // Síntese dos fatos (bloco indentado)
   // ----------------------------------------------------------
 
   ctx.drawText(
@@ -239,17 +286,18 @@ function drawDiligencia(
     {
       font: ctx.fontBold,
       size: BODY_SIZE,
+      x: MARGIN_LEFT + SINTESE_INDENT,
     }
   );
 
   ctx.advance(13);
 
   for (const fato of dil.sinteseDosFatos) {
-    ctx.drawBullet(fato);
+    ctx.drawBullet(fato, SINTESE_INDENT);
   }
 
   // ----------------------------------------------------------
-  // Observações do imóvel
+  // Observações do imóvel (bloco indentado, opcional)
   // ----------------------------------------------------------
 
   if (
@@ -263,107 +311,22 @@ function drawDiligencia(
       {
         font: ctx.fontBold,
         size: BODY_SIZE,
+        x: MARGIN_LEFT + SINTESE_INDENT,
       }
     );
 
     ctx.advance(13);
 
     for (const observacao of dil.observacoesImovel) {
-      ctx.drawBullet(observacao);
+      ctx.drawBullet(observacao, SINTESE_INDENT);
     }
   }
 
-  ctx.advance(5);
-
-  // ----------------------------------------------------------
-  // Linha "Foi intimado / Por hora certa / Forma / Data e hora"
-  // ----------------------------------------------------------
-
-  ctx.drawInlineLabelValue(
-    'Foi intimado:',
-    dil.positiva ? 'Sim' : 'Não',
-    {
-      labelBold: true,
-      valueBold: true,
-      xOffset: 0,
-    }
-  );
-
-  ctx.drawInlineLabelValue(
-    'Por hora certa:',
-    dil.porHoraCerta ? 'Sim' : 'Não',
-    {
-      labelBold: true,
-      valueBold: true,
-      xOffset: 100,
-    }
-  );
-
-  ctx.drawInlineLabelValue(
-    'Forma:',
-    dil.forma,
-    {
-      labelBold: true,
-      valueBold: true,
-      xOffset: 245,
-    }
-  );
-
-  ctx.drawInlineLabelValue(
-    'Data e hora:',
-    dil.dataHora,
-    {
-      labelBold: true,
-      valueBold: true,
-      xOffset: 365,
-    }
-  );
-
-  ctx.advance(15);
-
-  // ----------------------------------------------------------
-  // Endereço
-  // ----------------------------------------------------------
-
-  ctx.drawUnderlinedLabelValue(
-    'Endereço',
-    dil.endereco
-  );
-
-  ctx.advance(15);
-
-  // ----------------------------------------------------------
-  // Observação
-  // ----------------------------------------------------------
-
-  if (dil.observacoes?.trim()) {
-    ctx.drawInlineLabelValue(
-      'Obs.:',
-      dil.observacoes,
-      {
-        labelBold: true,
-        valueBold: false,
-      }
-    );
-
-    ctx.advance(14);
-  } else {
-    ctx.drawText(
-      'Obs.:',
-      {
-        font: ctx.fontBold,
-        size: BODY_SIZE,
-      }
-    );
-
-    ctx.advance(14);
-  }
+  ctx.advance(8);
 
   // ----------------------------------------------------------
   // Separador da diligência
   // ----------------------------------------------------------
-
-  ctx.advance(4);
 
   ctx.drawHorizontalRule();
 
@@ -427,6 +390,9 @@ class PdfCursor {
     const x =
       (PAGE_WIDTH - width) / 2;
 
+    // Título centralizado em negrito, SEM sublinhado no texto
+    // (a referência sublinha apenas visualmente por causa da linha
+    // de largura total logo abaixo, não do próprio texto).
     this.page.drawText(title, {
       x,
       y: this.y,
@@ -435,21 +401,22 @@ class PdfCursor {
       color: COLOR_TEXT,
     });
 
-    // Sublinhado do título
+    // Linha horizontal de largura total, abaixo do título
+    // (igual ao PDF de referência).
     this.page.drawLine({
       start: {
-        x,
-        y: this.y - 2,
+        x: MARGIN_LEFT,
+        y: this.y - 10,
       },
       end: {
-        x: x + width,
-        y: this.y - 2,
+        x: PAGE_WIDTH - MARGIN_RIGHT,
+        y: this.y - 10,
       },
       thickness: 0.7,
       color: COLOR_TEXT,
     });
 
-    this.advance(27);
+    this.advance(30);
   }
 
   // ----------------------------------------------------------
@@ -552,100 +519,77 @@ class PdfCursor {
   }
 
   // ----------------------------------------------------------
-  // Label + valor na mesma linha
+  // Linha com um ou mais pares "label sublinhado + valor em negrito",
+  // todos desenhados na MESMA altura (y) e com um único advance() no
+  // final — é isso que evita o efeito "escada" quando há vários campos
+  // lado a lado na mesma linha.
   // ----------------------------------------------------------
 
-  drawInlineLabelValue(
-    label: string,
-    value: string,
-    options: {
-      xOffset?: number;
-      labelBold?: boolean;
-      valueBold?: boolean;
-    } = {}
+  drawUnderlinedLabelValueRow(
+    campos: Array<{
+      label: string;
+      value: string;
+      xOffset: number;
+    }>
   ): void {
-    const x =
-      MARGIN_LEFT +
-      (options.xOffset ?? 0);
+    this.ensureSpace(LINE_HEIGHT, false);
 
-    const labelBold =
-      options.labelBold ?? true;
+    const y = this.y;
 
-    const valueBold =
-      options.valueBold ?? false;
+    for (const campo of campos) {
+      const x = MARGIN_LEFT + campo.xOffset;
 
-    const labelFont =
-      labelBold
-        ? this.fontBold
-        : this.fontRegular;
+      const labelText = `${campo.label} `;
 
-    const valueFont =
-      valueBold
-        ? this.fontBold
-        : this.fontRegular;
+      const labelWidth =
+        this.fontBold.widthOfTextAtSize(
+          labelText,
+          BODY_SIZE
+        );
 
-    const labelText = `${label} `;
-
-    const labelWidth =
-      labelFont.widthOfTextAtSize(
-        labelText,
-        BODY_SIZE
-      );
-
-    const availableWidth =
-      PAGE_WIDTH -
-      MARGIN_RIGHT -
-      x -
-      labelWidth;
-
-    const lines = wrapText(
-      value,
-      valueFont,
-      BODY_SIZE,
-      Math.max(availableWidth, 50)
-    );
-
-    this.ensureSpace(
-      lines.length * LINE_HEIGHT,
-      false
-    );
-
-    this.page.drawText(labelText, {
-      x,
-      y: this.y,
-      size: BODY_SIZE,
-      font: labelFont,
-      color: COLOR_TEXT,
-    });
-
-    lines.forEach((line, index) => {
-      this.page.drawText(line, {
-        x:
-          x +
-          labelWidth,
-        y:
-          this.y -
-          index * LINE_HEIGHT,
+      // Label em negrito + sublinhado
+      this.page.drawText(labelText, {
+        x,
+        y,
         size: BODY_SIZE,
-        font: valueFont,
+        font: this.fontBold,
         color: COLOR_TEXT,
       });
-    });
 
-    this.advance(
-      lines.length * LINE_HEIGHT
-    );
+      this.page.drawLine({
+        start: { x, y: y - 1.5 },
+        end: { x: x + labelWidth, y: y - 1.5 },
+        thickness: 0.5,
+        color: COLOR_TEXT,
+      });
+
+      // Valor em negrito, sem sublinhado
+      this.page.drawText(campo.value, {
+        x: x + labelWidth,
+        y,
+        size: BODY_SIZE,
+        font: this.fontBold,
+        color: COLOR_TEXT,
+      });
+    }
+
+    this.advance(LINE_HEIGHT);
   }
 
   // ----------------------------------------------------------
-  // Label + valor sublinhados
+  // Label sublinhado + valor em negrito, em linha ÚNICA (sem quebra
+  // de texto) — usado em "Endereço" e "Obs.:", igual à referência.
   // ----------------------------------------------------------
 
-  drawUnderlinedLabelValue(
+  drawUnderlinedLabelValueNoWrap(
     label: string,
     value: string
   ): void {
-    const labelText = `${label}: `;
+    this.ensureSpace(LINE_HEIGHT, false);
+
+    const x = MARGIN_LEFT;
+
+    const labelText = `${label} `;
 
     const labelWidth =
       this.fontBold.widthOfTextAtSize(
@@ -653,108 +597,41 @@ class PdfCursor {
         BODY_SIZE
       );
 
-    const availableWidth =
-      CONTENT_WIDTH -
-      labelWidth;
+    this.page.drawText(labelText, {
+      x,
+      y: this.y,
+      size: BODY_SIZE,
+      font: this.fontBold,
+      color: COLOR_TEXT,
+    });
 
-    const lines = wrapText(
-      value,
-      this.fontBold,
-      BODY_SIZE,
-      availableWidth
-    );
-
-    this.ensureSpace(
-      lines.length * LINE_HEIGHT,
-      false
-    );
-
-    this.page.drawText(
-      labelText,
-      {
-        x: MARGIN_LEFT,
-        y: this.y,
-        size: BODY_SIZE,
-        font: this.fontBold,
-        color: COLOR_TEXT,
-      }
-    );
-
-    // Sublinha o label
     this.page.drawLine({
-      start: {
-        x: MARGIN_LEFT,
-        y: this.y - 1.5,
-      },
-      end: {
-        x:
-          MARGIN_LEFT +
-          labelWidth,
-        y: this.y - 1.5,
-      },
+      start: { x, y: this.y - 1.5 },
+      end: { x: x + labelWidth, y: this.y - 1.5 },
       thickness: 0.5,
       color: COLOR_TEXT,
     });
 
-    lines.forEach((line, index) => {
-      const lineX =
-        MARGIN_LEFT +
-        labelWidth;
-
-      this.page.drawText(
-        line,
-        {
-          x: lineX,
-          y:
-            this.y -
-            index * LINE_HEIGHT,
-          size: BODY_SIZE,
-          font: this.fontBold,
-          color: COLOR_TEXT,
-        }
-      );
-
-      const lineWidth =
-        this.fontBold.widthOfTextAtSize(
-          line,
-          BODY_SIZE
-        );
-
-      this.page.drawLine({
-        start: {
-          x: lineX,
-          y:
-            this.y -
-            index * LINE_HEIGHT -
-            1.5,
-        },
-        end: {
-          x:
-            lineX +
-            lineWidth,
-          y:
-            this.y -
-            index * LINE_HEIGHT -
-            1.5,
-        },
-        thickness: 0.5,
-        color: COLOR_TEXT,
-      });
+    this.page.drawText(value, {
+      x: x + labelWidth,
+      y: this.y,
+      size: BODY_SIZE,
+      font: this.fontBold,
+      color: COLOR_TEXT,
     });
 
-    this.advance(
-      lines.length * LINE_HEIGHT
-    );
+    this.advance(LINE_HEIGHT);
   }
 
   // ----------------------------------------------------------
   // Bullet
   // ----------------------------------------------------------
 
-  drawBullet(text: string): void {
+  drawBullet(text: string, extraIndent = 0): void {
+    const indent = BULLET_INDENT + extraIndent;
+
     const availableWidth =
-      CONTENT_WIDTH -
-      BULLET_INDENT;
+      CONTENT_WIDTH - indent;
 
     const lines = wrapText(
       text,
@@ -774,7 +651,7 @@ class PdfCursor {
           ? `• ${line}`
           : `  ${line}`,
         {
-          x: MARGIN_LEFT + 4,
+          x: MARGIN_LEFT + extraIndent,
           y:
             this.y -
             index * LINE_HEIGHT,

@@ -95,8 +95,25 @@ export class NewAddressModal implements OnInit {
             );
 
             if (result.success) {
-                console.log(result.data);
-
+                console.log('result.data: ', result.data)
+                if (result.data.latitude === undefined || result.data.longitude === undefined) {
+                    this.errors.set([
+                        'Não foi possível buscar o endereço. Latitude ou longitude não encontrados.'
+                    ]);
+                    return;
+                }
+                if (!result.data.name || !result.data.state || !result.data.country) {
+                    this.errors.set([
+                        'Não foi possível buscar o endereço. Nome, estado ou país não encontrados.'
+                    ]);
+                    return;
+                }
+                if (!result.data.city && !result.data.neighborhood && !result.data.street) {
+                    this.errors.set([
+                        'Não foi possível buscar o endereço. Cidade, bairro ou rua não encontrados.'
+                    ]);
+                    return;
+                }
                 const addressToCreate = {
                     city:result.data.city,
                     country:result.data.country,

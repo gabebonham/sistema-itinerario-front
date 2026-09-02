@@ -24,7 +24,6 @@ export class NewAttemptModal implements OnInit {
     private fb = inject(FormBuilder);
     form = this.fb.group({
         debtorName: ['', Validators.required],
-        debtorRg: ['', Validators.required],
         debtorCpfCnpj: ['', Validators.required],
         protocol: ['', Validators.required],
     });
@@ -51,7 +50,6 @@ export class NewAttemptModal implements OnInit {
         const createDebtorDto: CreateDebtorDTO = {
             name: this.form.value.debtorName!,
             cpfCnpj: this.form.value.debtorCpfCnpj!,
-            rg: this.form.value.debtorRg!,
         }
         this.debtorService.create(createDebtorDto).then(result => {
             if (result.success) {

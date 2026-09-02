@@ -1,4 +1,4 @@
-import { Component, computed, effect, EventEmitter, inject, Input, input, OnInit, Output, signal } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, Input, input, OnInit, output, Output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AttemptService } from '../../../../services/attempt.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -15,7 +15,7 @@ import { AttemptsWithNoDiligencesEntry } from './attempts-with-no-diligences-ent
     ],
     templateUrl: './attempts-with-no-diligences-entries.component.html',
 })
-export class AttemptsWithNoDiligencesEntries implements OnInit {
+export class AttemptsWithNoDiligencesEntries  {
     private snackBar = inject(MatSnackBar);
     private attemptService = inject(AttemptService);
     isLoading = input.required<boolean>();
@@ -23,17 +23,14 @@ export class AttemptsWithNoDiligencesEntries implements OnInit {
     attempts = input.required<Attempt[]>();
     localAttempts = signal<Attempt[]>([])
 
-    pageSize = 5;
-    currentPage = 1;
+    pageSize = input(5);
+    currentPage = input(1);
+    totalPages = input.required();
+    updateCurrentPage = output<number>();
 
     @Output() nextPage = new EventEmitter<number>();
     @Output() previousPage = new EventEmitter<number>();
-    ngOnInit(): void {
-        // const page = Number(this.route.snapshot.queryParamMap.get('page')) || 1;
-        // this.currentPage = page;
-        // this.onPageChange()
 
-    }
     constructor() {
         effect(() => {
             this.localAttempts.set(this.attempts())
@@ -41,36 +38,21 @@ export class AttemptsWithNoDiligencesEntries implements OnInit {
         )
     }
 
-    totalPages = computed(() =>
-        Math.max(1, Math.ceil(this.localAttempts().length / this.pageSize))
-    );
 
-    paginatedDiligences = computed(() => {
-        const start = (this.currentPage - 1) * this.pageSize;
-        return this.localAttempts().slice(start, start + this.pageSize);
-    });
-
+    handleUpdateCurrentPage(page: number) {
+        this.updateCurrentPage.emit(page);
+    }
     @Input() hasMorePages!: boolean;
     @Input() hasPreviousPages!: boolean;
-    onPageChange() {
-        // this.router.navigate([], {
-        //     relativeTo: this.route,
-        //     queryParams: { page: this.currentPage },
-        //     queryParamsHandling: 'merge',
-        // });
-    }
+
     onNextPage(): void {
         if (this.hasMorePages) {
-            this.nextPage.emit(this.currentPage + 1);
-            this.currentPage = this.currentPage + 1
-            this.onPageChange()
+            this.nextPage.emit(this.currentPage() + 1);
         }
     }
     onPreviousPage(): void {
         if (this.hasPreviousPages) {
-            this.previousPage.emit(this.currentPage - 1);
-            this.currentPage = this.currentPage - 1
-            this.onPageChange()
+            this.previousPage.emit(this.currentPage() - 1);
         }
     }
 
@@ -89,7 +71,7 @@ export class AttemptsWithNoDiligencesEntries implements OnInit {
         this.loadingCancel.set(id)
         this.attemptService.cancelAttempt(id).then(result => {
             if (result.success) {
-                this.localAttempts.set(this.localAttempts().filter(attempt => attempt.id != id))
+                this.localAttempts.update(attempts=>attempts.filter(attempt => attempt.id != id))
                 this.loadingCancel.set(undefined)
             } else {
                 this.showToast("Erro ao cancelar tentativa.")

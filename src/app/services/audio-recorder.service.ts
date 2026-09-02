@@ -9,7 +9,11 @@ export class AudioRecorderService {
   private audioChunks: Blob[] = [];
   private stream?: MediaStream;
 
-  async startRecording(): Promise<void> {
+async startRecording(): Promise<void> {
+  try {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      throw new Error('getUserMedia não está disponível neste navegador/contexto.');
+    }
 
     this.stream = await navigator.mediaDevices.getUserMedia({
       audio: true
@@ -26,8 +30,13 @@ export class AudioRecorderService {
     };
 
     this.mediaRecorder.start();
-  }
 
+    console.log('Gravação iniciada');
+  } catch (error) {
+    console.error('Erro ao acessar o microfone:', error);
+    throw error;
+  }
+}
   stopRecording(): Promise<Blob> {
 
     return new Promise((resolve, reject) => {

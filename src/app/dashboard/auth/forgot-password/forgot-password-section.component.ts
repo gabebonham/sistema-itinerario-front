@@ -1,4 +1,4 @@
-import { Component, inject, input, Input, output, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from "@angular/material/icon";
@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AuthService } from '../../../services/auth.service';
-import { LoginDTO } from '../../../DTOS/login.dto';
 
 @Component({
     selector: 'app-forgot-password-section',
@@ -75,10 +74,11 @@ export class ForgotPasswordSectionComponent {
 
         this.authService.sendEmail(this.emailForm.value.email!).then(result => {
             if (!result.success) {
+                this.isLoading.set(false);
                 this.showToast("Erro ao enviar o código.")
             } else {
+                this.isLoading.set(false);
                 this.currentForgotPasswordSection.set('codeSection')
-
             }
         })
     }
@@ -95,8 +95,10 @@ export class ForgotPasswordSectionComponent {
 
         this.authService.sendCode(this.codeForm.value.code!, this.emailForm.value.email!).then(result => {
             if (!result.success) {
+                this.isLoading.set(false);
                 this.showToast("Erro ao validar o código.")
             } else {
+                this.isLoading.set(false);
                 this.code.set(parseInt(this.codeForm.value.code!))
                 this.currentForgotPasswordSection.set('updateSection')
             }
@@ -133,7 +135,7 @@ export class ForgotPasswordSectionComponent {
         return false;
     }
     updatePassword() {
-        if (this.validatePasswordInput()){
+        if (this.validatePasswordInput()) {
             return;
         }
         if (this.passwordForm.invalid) {
@@ -145,8 +147,10 @@ export class ForgotPasswordSectionComponent {
 
         this.authService.updatePassword(this.passwordForm.value.password!, this.code(), this.emailForm.value.email!).then(async result => {
             if (!result.success) {
+                this.isLoading.set(false);
                 this.showToast("Erro ao atualizar senha.")
             } else {
+                this.isLoading.set(false);
                 this.showToast('Senha atualizda com sucesso!');
 
                 await new Promise(resolve => setTimeout(resolve, 800));

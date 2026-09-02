@@ -1,15 +1,18 @@
-import { Component, input, Input, output, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, inject, input, Input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
 
 @Component({
     selector: 'app-diligence-entry',
     standalone: true,
-    imports: [MatIconModule],
+    imports: [NgClass, MatIconModule, MatSnackBarModule],
     templateUrl: './diligence-entry.component.html',
 })
 export class DiligenceEntryComponent {
+    private snackBar = inject(MatSnackBar);
     @Input() name!: string;
     @Input() id!: string;
     @Input() attemptId!: string;
@@ -21,7 +24,8 @@ export class DiligenceEntryComponent {
     @Input() diligenceOrdinal!: string;
     @Input() protocol!: string;
     cancelAttempt = output<string>()
-    loadingCancel = input.required<string|undefined>()
+    loadingCancel = input.required<string | undefined>()
+    visited = input.required<boolean>()
     constructor(private router: Router) { }
 
     getDateFormatted(date: Date): string {
@@ -30,8 +34,8 @@ export class DiligenceEntryComponent {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
-            hour:'2-digit',
-            minute:'2-digit'
+            hour: '2-digit',
+            minute: '2-digit'
         });
     }
     getWindowIcon(window: string): string {
@@ -46,10 +50,22 @@ export class DiligenceEntryComponent {
                 return 'help_outline';
         }
     }
-    goToDiligence(id: string): void {
-        this.router.navigate(['/dashboard/tentativas', id]);
+    goToAttempt(id: string): void {
+        if (this.visited()) {
+            this.router.navigate(['/dashboard/tentativas', id]);
+
+        } else {
+            this.showToast("Só é possível retomar uma tentativa cuja última diligência tenha sido concluída.")
+        }
     }
-    onCancelAttempt(attemptId:string) {
+    onCancelAttempt(attemptId: string) {
         this.cancelAttempt.emit(attemptId)
+    }
+    showToast(text: string) {
+        this.snackBar.open(text, 'Fechar', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+        });
     }
 }

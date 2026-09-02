@@ -34,15 +34,16 @@ export class AttemptEntryComponent implements OnInit {
     openObservationsModal(diligence: Diligence) {
         const ref = this.dialog.open(ShowObservationsModal, {
             width: '650px',
-            minWidth:'650px',
+            minWidth: '650px',
             height: '700px',
             data: {
+                diligenceId: diligence.id,
                 generalObservations: diligence.generalObservations,
                 factsObservations: diligence.factsObservations,
                 propertyObservations: diligence.propertyObservations,
                 plannerObservations: diligence.plannerObservations,
-                imageUrls:diligence.imageUrls,
-                audioUrl:diligence.audioUrl
+                imageUrls: diligence.imageUrls,
+                audioUrl: diligence.audioUrl
             }
         });
         ref.afterClosed().subscribe();
@@ -54,7 +55,11 @@ export class AttemptEntryComponent implements OnInit {
     }
 
     getDiligencesInAscOrder(diligences: Diligence[]) {
-        return [...diligences].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+        return [...diligences].sort(
+            (a, b) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+        );
     }
     exportPdf() {
         this.debtorService.getById(this.attempt().debtorId).then(result => {
@@ -70,10 +75,12 @@ export class AttemptEntryComponent implements OnInit {
                     endereco: diligence.address?.name!,
                     observacoes: diligence.generalObservations.join(' | ')
                 }))
+                console.log('result.data: ', result.data);
+                console.log('this.attempt(): ', this.attempt());
                 const report: RelatorioIntimacaoData = {
                     nomeIntimado: result.data.name,
                     cpfCnpj: result.data.cpfCnpj,
-                    rg: result.data.rg,
+                    rg: '',
                     diligencias: diligencesInput,
                     protocolo: this.attempt().protocol,
                     impressoEm: new Date(),
@@ -85,15 +92,35 @@ export class AttemptEntryComponent implements OnInit {
         })
 
     }
+    getFormattedDate(date: Date | string | undefined): string {
+        if (!date) {
+            return '';
+        }
 
-    getFormattedDate(date: Date): string {
-        return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', hour:'numeric', minute:'numeric' });
+        const parsedDate = date instanceof Date
+            ? date
+            : new Date(date);
+
+        return parsedDate.toLocaleDateString('pt-BR');
     }
-    formatarDataHoraDiligencia(date: Date): string {
+    formatarDataHoraDiligencia(date: Date | string | undefined): string {
+        if (!date) {
+            return '';
+        }
+
+        const parsedDate = date instanceof Date
+            ? date
+            : new Date(date);
+
+        if (isNaN(parsedDate.getTime())) {
+            return '';
+        }
+
         const pad = (n: number) => n.toString().padStart(2, '0');
-        return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(
-            date.getHours()
-        )}:${pad(date.getMinutes())}`;
+
+        return `${pad(parsedDate.getDate())}/${pad(parsedDate.getMonth() + 1)}/${parsedDate.getFullYear()} ${pad(
+            parsedDate.getHours()
+        )}:${pad(parsedDate.getMinutes())}`;
     }
     showToast(text: string) {
         this.snackBar.open(text, 'Fechar', {

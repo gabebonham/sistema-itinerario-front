@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class AddressesEntryComponent {
 
-    name = input.required<string>();
+    name = input<string|null>();
 
     street = input<string | null>(null);
     number = input<string | null>(null);

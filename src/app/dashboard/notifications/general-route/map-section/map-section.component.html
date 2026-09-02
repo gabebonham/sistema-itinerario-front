@@ -17,39 +17,46 @@
 
 @if (mapsReady()) {
 
-    <google-map
-        height="500px"
-        width="100%"
-        [center]="origin"
-        [zoom]="14">
+<google-map
+    height="500px"
+    width="100%"
+    [center]="origin"
+    [zoom]="14">
 
+    <!-- Origem -->
+    <map-marker
+        [position]="origin"
+        title="Origem">
+    </map-marker>
+
+    <!-- Intermediários -->
+    @for (intermediate of intermediates(); track $index) {
         <map-marker
-            [position]="origin"
-            title="Origem">
+            [position]="intermediate"
+            [title]="'Parada ' + ($index + 1)">
         </map-marker>
+    }
 
-        @if (destination(); as destination) {
+    <!-- Destino -->
+    @if (destination(); as destination) {
+        <map-marker
+            [position]="destination"
+            title="Destino">
+        </map-marker>
+    }
 
-            <map-marker
-                [position]="destination"
-                title="Destino">
-            </map-marker>
+    <!-- Rota -->
+    @if (routePath().length > 0) {
+        <map-polyline
+            [path]="routePath()"
+            [options]="{
+                strokeWeight: 5,
+                strokeOpacity: 0.9
+            }">
+        </map-polyline>
+    }
 
-        }
-
-        @if (routePath().length > 0) {
-
-            <map-polyline
-                [path]="routePath()"
-                [options]="{
-                    strokeWeight: 5,
-                    strokeOpacity: 0.9
-                }">
-            </map-polyline>
-
-        }
-
-    </google-map>
+</google-map>
 
 }
 

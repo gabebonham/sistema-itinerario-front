@@ -12,6 +12,7 @@ import { Debtor } from '../../../models/debtor';
 import { ActionsSectionComponent } from './actions-section/actions-section.component';
 import { SupportObservationsSectionComponent } from './support-observations-section/support-observations-section.component';
 import { AttemptService } from '../../../services/attempt.service';
+import { StringifyOptions } from 'node:querystring';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class NotificationComponent implements OnInit {
     private debtorService = inject(DebtorService);
     private attemptService = inject(AttemptService);
     diligence = signal<Diligence | undefined>(undefined)
+    notificationId = signal<string | undefined>(undefined)
     debtor = signal<Debtor | undefined>(undefined)
     isAddressesLoading = signal(true)
     constructor(private route: ActivatedRoute) {
@@ -34,11 +36,13 @@ export class NotificationComponent implements OnInit {
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             const id = params.get('id') ?? '';
+            this.notificationId.set(id)
             this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
             if (id) {
                 this.notificationService.getById(id).then(notificationResult => {
                     if (notificationResult.success) {
-                        this.getLastDiligenceByAttemptId(notificationResult.data?.attemptId!)
+                        console.log('notificationResult.data: ', notificationResult.data)
+                        this.getLastDiligenceByAttemptId(notificationResult.data?.diligence?.attemptId!)
                         this.getDebtor(notificationResult.data?.debtorId!)
                     } else {
                         this.showToast("Erro ao buscar notificação.")
@@ -47,6 +51,7 @@ export class NotificationComponent implements OnInit {
             }
         })
     }
+
     getLastDiligenceByAttemptId(id: string) {
         this.attemptService.getById(id).then(result => {
             if (result.success) {
@@ -56,6 +61,7 @@ export class NotificationComponent implements OnInit {
             }
         })
     }
+
     getDebtor(id: string) {
         this.debtorService.getById(id).then(diligenceResult => {
             if (diligenceResult.success) {
@@ -65,6 +71,7 @@ export class NotificationComponent implements OnInit {
             }
         })
     }
+
     showToast(text: string) {
         this.snackBar.open(text, 'Fechar', {
             duration: 3000,

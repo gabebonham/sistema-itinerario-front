@@ -9,6 +9,7 @@ import { NotificationsComponent } from './dashboard/notifications/notifications.
 import { AuthComponent } from './dashboard/auth/auth.component';
 import { guestGuard } from './guards/guest.guard';
 import { authGuard } from './guards/auth.guard';
+import { GeneralRouteComponent } from './dashboard/notifications/general-route/general-route.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -26,6 +27,7 @@ export const routes: Routes = [
             { path: 'tentativas/:id', component: PlanningComponent },
             { path: 'notificacoes', component: NotificationsComponent },
             { path: 'notificacoes/:id', component: NotificationComponent },
+            { path: 'rota-geral/:id', component: GeneralRouteComponent },
             { path: 'historico', component: HistoryComponent },
             { path: 'notificadores', component: NotificatorsComponent },
             { path: '', redirectTo: 'tentativas', pathMatch: 'full' },

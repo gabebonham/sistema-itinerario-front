@@ -14,12 +14,11 @@ import {
 } from '@angular/material/snack-bar';
 
 import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
+import { GoogleMapsService } from '../../../../services/google-maps.service';
+import { RouteService } from '../../../../services/route.service';
+import { Debtor } from '../../../../models/debtor';
+import { Address } from '../../../../models/address';
 
-import { Debtor } from '../../../models/debtor';
-import { CreateAddressDTO } from '../../../DTOS/create-address.dto';
-
-import { RouteService } from '../../../services/route.service';
-import { GoogleMapsService } from '../../../services/google-maps.service';
 
 @Component({
     selector: 'app-map-section',
@@ -37,12 +36,13 @@ export class MapSectionComponent {
 
     routeService = inject(RouteService);
 
-    address = input<CreateAddressDTO | undefined>(undefined);
+    addresses = input<Address[]>([]);
     debtor = input<Debtor>();
 
     durationSeconds = signal(0)
     durationMeters = signal(0)
     mapsReady = signal(false);
+    orderedAddresses = signal<Address[]>([]);
 
     encodedPolyline = signal<string | null>(null);
 
@@ -58,17 +58,19 @@ export class MapSectionComponent {
     destination = signal<google.maps.LatLngLiteral | undefined>(
         undefined
     );
-
+    intermediates = signal<google.maps.LatLngLiteral[]>([]);
     constructor() {
         effect(() => {
-            const address = this.address();
+
+            const addresses = this.addresses();
+
             const mapsReady = this.mapsReady();
 
-            if (!mapsReady || !address) {
+            if (!mapsReady || addresses.length === 0) {
                 return;
             }
 
-            this.getRouteData(address);
+            this.getRouteData(addresses);
         });
 
         this.initializeMaps();
@@ -83,6 +85,7 @@ export class MapSectionComponent {
         }
     }
     fitMapBounds() {
+
         if (!this.map?.googleMap) {
             return;
         }
@@ -90,33 +93,88 @@ export class MapSectionComponent {
         const bounds = new google.maps.LatLngBounds();
 
         bounds.extend(this.origin);
-        bounds.extend(this.destination()!);
+
+        const destination = this.destination();
+
+        if (destination) {
+            bounds.extend(destination);
+        }
+
+        for (const intermediate of this.intermediates()) {
+            bounds.extend(intermediate);
+        }
 
         this.map.googleMap.fitBounds(bounds);
     }
-    getRouteData(address: CreateAddressDTO) {
+    getRouteData(addresses: Address[]) {
         this.destination.set({
+            lat: addresses[addresses.length - 1].lat,
+            lng: addresses[addresses.length - 1].lng
+        })
+
+        this.intermediates.set(addresses.slice(0, -1).map(address => ({
             lat: address.lat,
             lng: address.lng
-        });
-            this.fitMapBounds();
+        })));
+        this.fitMapBounds();
         this.routeService.calculateRoute({
             origin: {
                 latitude: this.origin.lat,
                 longitude: this.origin.lng
             },
-            destination: {
+            intermediates: addresses.slice(0, -1).map(address => ({
                 latitude: address.lat,
                 longitude: address.lng
+            })),
+            destination: {
+                latitude: addresses[addresses.length - 1].lat,
+                longitude: addresses[addresses.length - 1].lng
             }
         }).then(async response => {
             if (!response.success) {
-                this.showToast(response.error)
+                this.showToast(response.error);
                 return;
-
             }
-            this.durationSeconds.set(response.data.durationSeconds);
-            this.durationMeters.set(response.data.distanceMeters);
+            const intermediateAddresses = addresses.slice(0, -1);
+            const destination = addresses[addresses.length - 1];
+
+            let optimizedAddresses: Address[];
+
+            if (intermediateAddresses.length === 0) {
+                optimizedAddresses = [destination];
+            } else {
+                const optimizedIndexes =
+                    response.data.optimizedIntermediateWaypointIndex ?? [];
+
+                optimizedAddresses = [
+                    ...optimizedIndexes.map(
+                        index => intermediateAddresses[index]
+                    ),
+                    destination
+                ];
+            }
+
+            this.orderedAddresses.set(optimizedAddresses);
+
+            this.intermediates.set(
+                optimizedAddresses.slice(0, -1).map(address => ({
+                    lat: address.lat,
+                    lng: address.lng
+                }))
+            );
+
+            this.destination.set({
+                lat: destination.lat,
+                lng: destination.lng
+            });
+
+            this.durationSeconds.set(
+                response.data.durationSeconds
+            );
+
+            this.durationMeters.set(
+                response.data.distanceMeters
+            );
 
             this.encodedPolyline.set(
                 response.data.encodedPolyline
@@ -139,14 +197,13 @@ export class MapSectionComponent {
                 }))
             );
 
-
+            this.fitMapBounds();
         }).catch(error => {
             this.showToast(error)
         });
     }
 
     showToast(text: string) {
-
         this.snackBar.open(text, 'Fechar', {
             duration: 3000,
             horizontalPosition: 'right',

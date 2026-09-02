@@ -24,23 +24,25 @@ export class AddressesSectionComponent {
     updatePlace = output<PlaceSuggestion | undefined>()
     buildAddress = output<CreateAddressDTO>()
     constructor(private dialog: MatDialog) {
-        this.localAddresses.set(
-            this.addresses().map(address => ({
-                name: address.name,
-                new: false,
-                city: address.city,
-                neighborhood: address.neighborhood,
-                street: address.street,
-                number: address.number,
-                complement: address.complement,
-                zipCode: address.zipCode,
-                state: address.state,
-                country: address.country,
-                lat: address.lat,
-                lng: address.lng,
-                diligenceId: address.diligenceId,
-            }))
-        );
+        effect(() => {
+            this.localAddresses.set(
+                this.addresses().filter(address => !!address).map(address => ({
+                    name: address.name,
+                    new: false,
+                    city: address.city,
+                    neighborhood: address.neighborhood,
+                    street: address.street,
+                    number: address.number,
+                    complement: address.complement,
+                    zipCode: address.zipCode,
+                    state: address.state,
+                    country: address.country,
+                    lat: address.lat,
+                    lng: address.lng,
+                    diligenceId: address.diligenceId,
+                }))
+            );
+        })
     }
     openModal() {
         const ref = this.dialog.open(NewAddressModal, {
@@ -50,6 +52,7 @@ export class AddressesSectionComponent {
         });
         ref.afterClosed().subscribe((result: { success: boolean, data: CreateAddressDTO }) => {
             if (result.success) {
+                
                 const newEntry = {
                     city: result.data.city,
                     country: result.data.country,

@@ -17,8 +17,7 @@
     <div class="h-full flex flex-col gap-6 w-full">
       <div class="w-full h-[500px] ">@if (debtor()) {
         <div class="w-full h-[500px]">
-          <app-map-section [debtor]="debtor()!" [addresses]="addresses()">
-          </app-map-section>
+          <app-map-section [debtor]="debtor()!" [address]="newAddress()" ></app-map-section>
         </div>
         }
       </div>

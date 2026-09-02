@@ -12,9 +12,9 @@ export class MediaService {
         return await this.api.uploadFile<{ urls?: string[], paths?: string[] }>('api/storage/images', { files })
     }
     async getAudioByDiligenceId(id: string): Promise<ApiResponse<{ urls?: string[], paths?: string[] }>> {
-        return await this.api.get<{ urls?: string[], paths?: string[] }>('api/storage/audio/diligeces/' + id + '/url')
+        return await this.api.get<{ urls?: string[], paths?: string[] }>('api/storage/audio/diligences/' + id + '/url')
     }
     async getImagesByDiligenceId(id: string): Promise<ApiResponse<{ urls?: string[], paths?: string[] }>> {
-        return await this.api.get<{ urls?: string[], paths?: string[] }>('api/storage/images/diligeces/' + id + '/urls')
+        return await this.api.get<{ urls?: string[], paths?: string[] }>('api/storage/images/diligences/' + id + '/urls')
     }
 }

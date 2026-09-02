@@ -1,15 +1,16 @@
 import { Injectable, signal } from '@angular/core';
 import { DiligenceOrdinal } from '../models/diligence';
-import { AttemptStatus, DisplayAttemptStatus } from '../models/attempt';
+import { DisplayAttemptStatus } from '../models/attempt';
 
 export interface AttemptsFilter {
     protocol: string;
     debtorName: string;
     window:string;
     diligenceOrdinal:DiligenceOrdinal|'';
-    status:DisplayAttemptStatus|'';
+    statuses:DisplayAttemptStatus[];
     from: string;
     to: string;
+    diligenceVisited: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -20,9 +21,10 @@ export class AttemptsFilterService {
         debtorName: '',
         window:'',
         diligenceOrdinal:'',
-        status:'',
+        statuses:[],
         from: '',
         to: '',
+        diligenceVisited: true
     });
 
     updateFilter(partial: Partial<AttemptsFilter>): void {

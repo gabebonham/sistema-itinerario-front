@@ -25,7 +25,7 @@ export class NotificationsSection  {
             this.notificationEntries.set(this.notifications().map(notification=>({
                 id:notification.id,
                 createdAt:notification.createdAt,
-                address:notification.diligence?.address?.neighborhood!,
+                address:notification.diligence?.address?.name!,
                 debtorName:notification.diligence?.debtorName!,
                 diligenceFinish:notification.diligence?.finish!,
                 diligenceStart:notification.diligence?.start!,
@@ -48,6 +48,7 @@ export class NotificationsSection  {
 
     @Input() hasMorePages!: boolean;
     @Input() hasPreviousPages!: boolean;
+    
     onPageChange() {
         // this.router.navigate([], {
         //     relativeTo: this.route,

@@ -16,4 +16,6 @@ export interface UpdateDiligenceDTO {
     imageUrls?: string[];
     audioUrls?: string[];
     wasDebtorFound:boolean
+    visited?:boolean
+    attemptId?:string
 }

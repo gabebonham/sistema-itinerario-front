@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DashboardSection } from '../../models/dashboard-section';
 import { DashboardStateService } from '../../services/dashboard-state.service';
@@ -11,6 +11,7 @@ import { Diligence } from '../../models/diligence';
 import { NewAttemptModal } from './components/new-attempt-modal/new-attempt-modal.component';
 import { Attempt } from '../../models/attempt';
 import { AttemptsWithNoDiligencesEntries } from './components/attempts-with-no-diligences-entries/attempts-with-no-diligences-entries.component';
+import { AttemptsFilter, AttemptsFilterService } from '../../services/attempts-filter.service';
 
 
 @Component({
@@ -19,25 +20,52 @@ import { AttemptsWithNoDiligencesEntries } from './components/attempts-with-no-d
         MatSidenavModule,
         DiligencesFilteredSearchComponent,
         DiligencesEntriesComponent,
-        AttemptsWithNoDiligencesEntries
+        AttemptsWithNoDiligencesEntries,
     ],
     templateUrl: './attempt.component.html',
 })
-export class AttemptComponent implements OnInit {
+export class AttemptComponent {
     private attemptService = inject(AttemptService);
     diligences = signal<Diligence[]>([]);
-    attemptsWithoutDiligences = signal<Attempt[]>([]);
-    
+    pendingAttempts = signal<Attempt[]>([]);
+
     activeSection: DashboardSection = dashboardSections.find(section => section.name == 'Tentativas')!;
-    hasMoreEntriesPages = false;
-    hasPreviousEntriesPages = false;
-    currentEntriesPage = 1;
+
+    diligencesCurrentPage = signal(1);
+    diligencesPageSize = signal(5);
+    diligencesTotalPages = signal(1);
+    diligencesHasNext = signal(false);
+    diligencesHasPrevious = signal(false);
+
+    pendingAttemptsCurrentPage = signal(1);
+    pendingAttemptsPageSize = signal(5);
+    pendingAttemptsTotalPages = signal(1);
+    pendingAttemptsHasNext = signal(false);
+    pendingAttemptsHasPrevious = signal(false);
+
+    filterService = inject(AttemptsFilterService);
     dashboardState = inject(DashboardStateService);
     isDiligencesLoading = signal(true)
+    isPendingAttemptsLoading = signal(true)
+
     constructor(private dialog: MatDialog) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Tentativas')!);
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
+        effect(() => {
+            const filter = this.filterService.filter();
+            this.fetchDiligencesPage(filter);
+        });
+        this.fetchPendingAttempts();
     }
+
+    onUpdateDiligencesCurrentPage(page: number) {
+        this.diligencesCurrentPage.set(page);
+    }
+
+    onUpdatePendingAttemptsCurrentPage(page: number) {
+        this.pendingAttemptsCurrentPage.set(page);
+    }
+
 
     openModal() {
         const ref = this.dialog.open(NewAttemptModal, {
@@ -46,33 +74,32 @@ export class AttemptComponent implements OnInit {
         });
         ref.afterClosed().subscribe();
     }
-    ngOnInit(): void {
-        this.attemptService.getPendingPaginated(this.currentEntriesPage, 5).then((result) => {
-            const diligences = result.data.data
-                .filter((attempt:Attempt) => !!attempt.lastDiligence)
+
+    fetchDiligencesPage(filter: AttemptsFilter): void {
+        this.isDiligencesLoading.set(true)
+        this.attemptService.getWithLastDiligencesPaginated(this.diligencesCurrentPage(), 5, {...filter, statuses  :['Pendente']}).then((result) => {
+            const visitedDiligences = result.data.data
+                .filter((attempt: Attempt) => !!attempt.lastDiligence)
                 .map(attempt => attempt.lastDiligence)
-                .filter((diligence): diligence is Diligence => !!diligence);
-            const attemptsWithoutDiligences = result.data.data
-                .filter((attempt:Attempt) => !attempt.lastDiligence)
-            this.diligences.set(diligences);
-            this.attemptsWithoutDiligences.set(attemptsWithoutDiligences);
-            this.hasMoreEntriesPages = result.data.hasNext;
-            this.hasPreviousEntriesPages = result.data.hasPrevious;
-            this.currentEntriesPage = result.data.page;
+                .filter((diligence): diligence is Diligence => diligence !== undefined);
+            this.diligences.set(visitedDiligences);
+            this.diligencesHasNext.set(result.data.hasNext);
+            this.diligencesHasPrevious.set(result.data.hasPrevious);
+            this.diligencesCurrentPage.set(result.data.page);
             this.isDiligencesLoading.set(false)
         });
     }
-    fetchDiligencesPage(page: number): void {
-        this.isDiligencesLoading.set(true)
-        this.attemptService.getAllPaginated(page, 5).then((result) => {
-            const diligences = result.data.data
-                .map(attempt => attempt.lastDiligence)
-                .filter((diligence): diligence is Diligence => diligence !== undefined);
-            this.diligences.set(diligences);
-            this.hasMoreEntriesPages = result.data.hasNext;
-            this.hasPreviousEntriesPages = result.data.hasPrevious;
-            this.currentEntriesPage = result.data.page;
-            this.isDiligencesLoading.set(false)
+
+    fetchPendingAttempts(): void {
+        this.isPendingAttemptsLoading.set(true)
+        this.attemptService.getPendingPaginated(this.pendingAttemptsCurrentPage(), 5).then((result) => {
+            const pendingAttempts = result.data.data
+                .filter((attempt: Attempt) => !attempt.lastDiligence)
+            this.pendingAttempts.set(pendingAttempts);
+            this.pendingAttemptsHasNext.set(result.data.hasNext);
+            this.pendingAttemptsHasPrevious.set(result.data.hasPrevious);
+            this.pendingAttemptsCurrentPage.set(result.data.page);
+            this.isPendingAttemptsLoading.set(false)
         });
     }
 }

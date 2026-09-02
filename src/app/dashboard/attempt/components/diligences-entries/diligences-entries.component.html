@@ -33,7 +33,7 @@
       <mat-icon
         class="{{ hasPreviousPages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
         (click)="onPreviousPage()">arrow_back</mat-icon>
-      {{ currentPage() }} / {{ totalPages() }}
+      {{ currentPage() }}
       <mat-icon class="{{ hasMorePages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
         (click)="onNextPage()">arrow_forward</mat-icon>
     </div>

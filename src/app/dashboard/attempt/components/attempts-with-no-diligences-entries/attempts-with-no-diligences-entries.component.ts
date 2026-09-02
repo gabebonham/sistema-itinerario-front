@@ -74,7 +74,7 @@ export class AttemptsWithNoDiligencesEntries  {
                 this.localAttempts.update(attempts=>attempts.filter(attempt => attempt.id != id))
                 this.loadingCancel.set(undefined)
             } else {
-                this.showToast("Erro ao cancelar tentativa.")
+                this.showToast(result.error)
             }
         })
     }

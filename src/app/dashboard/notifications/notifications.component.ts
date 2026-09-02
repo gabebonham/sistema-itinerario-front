@@ -8,7 +8,6 @@ import { Notification } from '../../models/notification';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsSection } from './notifications-section/notifications-section.component';
-import { User } from '../../models/user';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,7 +21,6 @@ import { Router } from '@angular/router';
 })
 export class NotificationsComponent implements OnInit {
     private snackBar = inject(MatSnackBar);
-
     activeSection: DashboardSection =
         dashboardSections.find(section => section.name === 'Notificações')!;
 
@@ -46,6 +44,19 @@ export class NotificationsComponent implements OnInit {
     }
     planGeneralRoute() {
         this.router.navigate(['/dashboard/rota-geral', this.currentUser()?.id]);
+    }
+    currentMoment() {
+        const now = new Date();
+        const hours = now.getHours();
+        const day = now.getDay();
+        if (day == 6){
+            return 'Sábado'
+        }
+        if (hours < 12) {
+            return 'Manhã'
+        } else {
+            return 'Tarde'
+        }
     }
     async ngOnInit(): Promise<void> {
         const user = this.currentUser();

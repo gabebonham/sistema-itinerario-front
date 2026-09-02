@@ -136,24 +136,34 @@ export class MapSectionComponent {
                 return;
             }
             const intermediateAddresses = addresses.slice(0, -1);
-            const destination = addresses[addresses.length - 1];
+            const destination = addresses.at(-1);
+
+            if (!destination) {
+                return;
+            }
+
+            const optimizedIndexes =
+                response.data.optimizedIntermediateWaypointIndex ?? [];
 
             let optimizedAddresses: Address[];
 
-            if (intermediateAddresses.length === 0) {
-                optimizedAddresses = [destination];
-            } else {
-                const optimizedIndexes =
-                    response.data.optimizedIntermediateWaypointIndex ?? [];
-
+            if (intermediateAddresses.length <= 1) {
                 optimizedAddresses = [
-                    ...optimizedIndexes.map(
-                        index => intermediateAddresses[index]
-                    ),
+                    ...intermediateAddresses,
+                    destination
+                ];
+            } else {
+                optimizedAddresses = [
+                    ...optimizedIndexes
+                        .filter(index =>
+                            index >= 0 &&
+                            index < intermediateAddresses.length
+                        )
+                        .map(index => intermediateAddresses[index]),
                     destination
                 ];
             }
-
+            console.log('OPTIMIZED ADDRESSES:', optimizedAddresses);
             this.orderedAddresses.set(optimizedAddresses);
 
             this.intermediates.set(

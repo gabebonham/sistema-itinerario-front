@@ -38,7 +38,8 @@ export class GeneralRouteComponent implements OnInit {
     currentDebtor = signal<Debtor | undefined>(undefined)
     isAddressesLoading = signal(true)
     loadingNextDiligence = signal(true)
-    constructor(private route: ActivatedRoute,private router: Router) {
+
+    constructor(private route: ActivatedRoute, private router: Router) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Notificações')!);
     }
     ngOnInit(): void {
@@ -49,12 +50,39 @@ export class GeneralRouteComponent implements OnInit {
             if (id) {
                 this.notificationService.getAllByNotificatorId(id).then(notificationResult => {
                     if (notificationResult.success) {
-                        this.diligences.set(notificationResult.data.data.map(notification => notification.diligence!).filter(diligence => diligence !== undefined) as Diligence[])
-                        this.localDiligences.set(notificationResult.data.data.map(notification => notification.diligence!).filter(diligence => diligence !== undefined) as Diligence[])
-                        this.localNotifications.set(notificationResult.data.data.map(notification => notification.id!).filter(id => id !== undefined) as string[])
-                        
-                        this.addresses.set(notificationResult.data.data.map(notification => notification.diligence?.address!).filter(address => address !== undefined) as Address[])
-                        this.getNextDiligence()
+
+                        const validNotifications = notificationResult.data.data
+                            .filter(notification => {
+                                const diligence = notification.diligence;
+
+                                return diligence !== undefined
+                                    && !diligence.visited
+                                    && this.validateDate(diligence.start);
+                            });
+
+                        const validDiligences = validNotifications
+                            .map(notification => notification.diligence)
+                            .filter((diligence): diligence is Diligence => diligence !== undefined);
+
+                        const validNotificationIds = validNotifications
+                            .map(notification => notification.id)
+                            .filter((id): id is string => id !== undefined);
+
+                        this.diligences.set(validDiligences);
+                        this.localDiligences.set(validDiligences);
+                        this.localNotifications.set(validNotificationIds);
+
+                        this.addresses.set(
+                            validDiligences
+                                .map(diligence => diligence.address)
+                                .filter((address): address is Address => address !== undefined)
+                        );
+
+                        console.log('Diligences:', this.diligences());
+                        console.log('localDiligences:', this.localDiligences());
+                        console.log('addresses:', this.addresses());
+                        console.log('Notifications:', this.localNotifications());
+                        this.getNextDiligence();
                     } else {
                         this.showToast("Erro ao buscar notificações.")
                     }
@@ -62,6 +90,19 @@ export class GeneralRouteComponent implements OnInit {
             }
         })
     }
+
+    validateDate(date: string | Date): boolean {
+        const now = new Date();
+        const diligenceDate = new Date(date);
+        const isToday =
+            diligenceDate.getFullYear() === now.getFullYear() &&
+            diligenceDate.getMonth() === now.getMonth() &&
+            diligenceDate.getDate() === now.getDate();
+
+        const result = isToday && diligenceDate.getTime() > now.getTime();
+        return result
+    }
+
     getNextDiligence() {
         if (!this.localDiligences() || this.localDiligences().length === 0) {
             this.showToast("Todas as diligências foram visitadas.")

@@ -60,7 +60,6 @@ export class AttemptService {
     }
     params.append('diligenceVisited', filter?.diligenceVisited.toString() ?? 'true');
 
-    console.log('params', params.toString())
     return await this.api.get<PaginatedResponse<Attempt[]>>(
       'api/attempts/with-last-diligences',
       { params }
@@ -142,8 +141,8 @@ export class AttemptService {
       { params }
     );
   }
-  async cancelAttempt(id: string): Promise<ApiResponse<null>> {
-    return await this.api.patch<null>('api/attempts/' + id + '/cancel')
+  async cancelAttempt(id: string): Promise<ApiResponse<Attempt>> {
+    return await this.api.patch<Attempt>('api/attempts/' + id + '/cancel')
   }
   async deliverAttempt(id: string): Promise<ApiResponse<null>> {
     return await this.api.patch<null>('api/attempts/' + id + '/deliver')
@@ -154,5 +153,11 @@ export class AttemptService {
     params.append('pageSize', pageSize.toString());
     params.append('statuses', 'Pending');
     return await this.api.get<PaginatedResponse<Attempt[]>>('api/attempts', { params })
+  }
+  async getWithNoDiligencesPaginated(page: number, pageSize: number): Promise<ApiResponse<PaginatedResponse<Attempt[]>>> {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('pageSize', pageSize.toString());
+    return await this.api.get<PaginatedResponse<Attempt[]>>('api/attempts/with-no-diligences', { params })
   }
 }

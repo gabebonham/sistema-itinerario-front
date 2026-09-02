@@ -93,7 +93,7 @@ export class DiligencesEntriesComponent  {
                 this.localDiligences.update(diligences => diligences.filter(diligence => diligence.attemptId != id))
                 this.loadingCancel.set(undefined)
             } else {
-                this.showToast("Erro ao cancelar tentativa.")
+                this.showToast(result.error)
             }
         })
     }

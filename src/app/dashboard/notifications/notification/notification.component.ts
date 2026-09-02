@@ -12,7 +12,7 @@ import { Debtor } from '../../../models/debtor';
 import { ActionsSectionComponent } from './actions-section/actions-section.component';
 import { SupportObservationsSectionComponent } from './support-observations-section/support-observations-section.component';
 import { AttemptService } from '../../../services/attempt.service';
-import { StringifyOptions } from 'node:querystring';
+import { Address } from '../../../models/address';
 
 
 @Component({
@@ -29,6 +29,7 @@ export class NotificationComponent implements OnInit {
     diligence = signal<Diligence | undefined>(undefined)
     notificationId = signal<string | undefined>(undefined)
     debtor = signal<Debtor | undefined>(undefined)
+    addresses = signal<Address[]>([])
     isAddressesLoading = signal(true)
     constructor(private route: ActivatedRoute) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Notificações')!);
@@ -41,7 +42,6 @@ export class NotificationComponent implements OnInit {
             if (id) {
                 this.notificationService.getById(id).then(notificationResult => {
                     if (notificationResult.success) {
-                        console.log('notificationResult.data: ', notificationResult.data)
                         this.getLastDiligenceByAttemptId(notificationResult.data?.diligence?.attemptId!)
                         this.getDebtor(notificationResult.data?.debtorId!)
                     } else {
@@ -55,13 +55,20 @@ export class NotificationComponent implements OnInit {
     getLastDiligenceByAttemptId(id: string) {
         this.attemptService.getById(id).then(result => {
             if (result.success) {
-                this.diligence.set(result.data.lastDiligence)
-            } else {
-                this.showToast("Erro ao buscar diligência.")
-            }
-        })
-    }
+                const diligence = result.data.lastDiligence;
 
+                this.diligence.set(diligence);
+
+                this.addresses.set(
+                    diligence?.address
+                        ? [diligence.address]
+                        : []
+                );
+            } else {
+                this.showToast("Erro ao buscar diligência.");
+            }
+        });
+    }
     getDebtor(id: string) {
         this.debtorService.getById(id).then(diligenceResult => {
             if (diligenceResult.success) {

@@ -66,7 +66,6 @@ export class AttemptComponent {
         this.pendingAttemptsCurrentPage.set(page);
     }
 
-
     openModal() {
         const ref = this.dialog.open(NewAttemptModal, {
             width: '1200px',
@@ -92,7 +91,7 @@ export class AttemptComponent {
 
     fetchPendingAttempts(): void {
         this.isPendingAttemptsLoading.set(true)
-        this.attemptService.getPendingPaginated(this.pendingAttemptsCurrentPage(), 5).then((result) => {
+        this.attemptService.getWithNoDiligencesPaginated(this.pendingAttemptsCurrentPage(), 5).then((result) => {
             const pendingAttempts = result.data.data
                 .filter((attempt: Attempt) => !attempt.lastDiligence)
             this.pendingAttempts.set(pendingAttempts);

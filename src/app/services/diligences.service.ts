@@ -4,6 +4,7 @@ import { CreateDiligenceDTO } from "../DTOS/create-attempt.dto";
 import { UpdateDiligenceDTO } from "../DTOS/update-diligence.dto";
 import { ApiResponse } from "../DTOS/api-response";
 import { ApiService } from "./api";
+import { PaginatedResponse } from "../DTOS/paginated-response";
 
 @Injectable({ providedIn: 'root' })
 export class DiligencesService {
@@ -20,5 +21,11 @@ export class DiligencesService {
   }
   async getDiligencesByAttemptId(id: string): Promise<ApiResponse<Diligence[]>> {
     return await this.api.get<Diligence[]>('api/diligences/attempt/' + id)
+  }
+  async getProgressByNotificatorId(id: string): Promise<ApiResponse<PaginatedResponse<Diligence[]>>> {
+    return await this.api.get<PaginatedResponse<Diligence[]>>('api/diligences/notificator/' + id + '/progress')
+  }
+  async patchDiligenceProgress(id: string, inProgress: boolean): Promise<ApiResponse<Diligence>> {
+    return await this.api.patch<Diligence>('api/diligences/' + id + '/progress', { inProgress })
   }
 }

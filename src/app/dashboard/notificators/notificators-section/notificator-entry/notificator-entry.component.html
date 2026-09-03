@@ -1,5 +1,5 @@
 <div
-    class="w-full border-1 border-border rounded-lg p-4 flex items-center gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100">
+    class="flex flex-col w-full border-1 border-border rounded-lg p-4 flex items-center gap-4 shadow-md hover:shadow-primary/30 transition-all delay-100">
     <div class="flex items-center gap-6 w-full">
         <div class="flex items-center gap-2 w-3/5">
             <div>
@@ -19,11 +19,69 @@
                 <mat-icon class="!text-text-muted" style="font-size: 16px; width: 16px; height: 16px;">
                     calendar_today
                 </mat-icon>
-                <p class="!text-text-muted !text-xs">{{ getDateFormatted(createdAt()) }}</p>
+                <p class="!text-text-muted !text-xs">Criado em: {{ getDateFormatted(createdAt()) }}</p>
             </div>
             <div class="flex items-center"><mat-icon (click)="onDelete()"
                     class="cursor-pointer !text-error/50 hover:!text-error transition-color duration-100">delete</mat-icon>
             </div>
         </div>
+    </div>
+    <div class="w-full">
+        @if (loadingProgress()) {
+        <div class="flex items-center justify-center w-full h-full p-4">
+            <div class="spinner"></div>
+        </div>
+        } @else {
+        @if (diligences().length == 0) {
+        <div class="flex justify-center items-center pb-4">
+        </div>
+        } @else {
+        <div class="rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 flex flex-col gap-3">
+
+            <!-- Status -->
+            <div class="flex items-center gap-2">
+                <span class="relative flex h-3 w-3">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75">
+                    </span>
+
+                    <span class="relative inline-flex h-3 w-3 rounded-full bg-primary">
+                    </span>
+                </span>
+
+                <span class="text-sm font-semibold text-primary">
+                    Diligências em andamento
+                </span>
+            </div>
+
+        @for (diligence of diligences(); track diligence.id) {
+            <!-- Informações -->
+            <div class="flex flex-col gap-1.5 text-xs">
+                <div class="flex items-center gap-2">
+                    <mat-icon class="!text-text-muted !text-[16px] !w-[16px] !h-[16px]">
+                        location_on
+                    </mat-icon>
+
+                    <span class="text-text-muted">
+                        {{ diligence?.address?.name }}
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <mat-icon class="!text-text-muted !text-[16px] !w-[16px] !h-[16px]">
+                        schedule
+                    </mat-icon>
+
+                    <span class="text-text-muted">
+                        {{ getDateTimeFormatted(diligence?.start) }}
+                        -
+                        {{ getDateTimeFormatted(diligence?.finish) }}
+                    </span>
+                </div>
+            </div>
+
+        }
+        </div>
+    }
+        }
     </div>
 </div>

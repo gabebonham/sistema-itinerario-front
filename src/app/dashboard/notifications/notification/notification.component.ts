@@ -13,6 +13,7 @@ import { ActionsSectionComponent } from './actions-section/actions-section.compo
 import { SupportObservationsSectionComponent } from './support-observations-section/support-observations-section.component';
 import { AttemptService } from '../../../services/attempt.service';
 import { Address } from '../../../models/address';
+import { DiligencesService } from '../../../services/diligences.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class NotificationComponent implements OnInit {
     dashboardState = inject(DashboardStateService);
     private notificationService = inject(NotificationService);
     private debtorService = inject(DebtorService);
+    private diligenceService = inject(DiligencesService);
     private attemptService = inject(AttemptService);
     diligence = signal<Diligence | undefined>(undefined)
     notificationId = signal<string | undefined>(undefined)
@@ -51,7 +53,13 @@ export class NotificationComponent implements OnInit {
             }
         })
     }
-
+    updateDiligenceProgress(id: string) {
+        this.diligenceService.patchDiligenceProgress(id, true).then(result => {
+            if (!result.success) {
+                this.showToast("Erro ao atualizar progresso da diligência.");
+            }
+        });
+    }
     getLastDiligenceByAttemptId(id: string) {
         this.attemptService.getById(id).then(result => {
             if (result.success) {
@@ -64,6 +72,10 @@ export class NotificationComponent implements OnInit {
                         ? [diligence.address]
                         : []
                 );
+                if (diligence) {
+
+                    this.updateDiligenceProgress(diligence?.id)
+                }
             } else {
                 this.showToast("Erro ao buscar diligência.");
             }

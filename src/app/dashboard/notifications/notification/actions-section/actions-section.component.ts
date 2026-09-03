@@ -130,6 +130,7 @@ export class ActionsSectionComponent {
                                 if (this.debtorFound()!) {
                                     this.attemptService.deliverAttempt(this.diligence()?.attemptId!).then(updateResult => {
                                         if (updateResult.success) {
+                                            this.updateDiligenceProgress(this.diligence()?.id!)
                                             this.showToast('Visita concluida com sucesso!');
                                             this.router.navigate([`/dashboard/notificacoes`]);
                                         } else {
@@ -138,6 +139,7 @@ export class ActionsSectionComponent {
                                         }
                                     })
                                 } else {
+                                    this.updateDiligenceProgress(this.diligence()?.id!)
                                     this.showToast('Visita concluida com sucesso!');
                                     this.router.navigate([`/dashboard/notificacoes`]);
                                 }
@@ -154,6 +156,13 @@ export class ActionsSectionComponent {
             .finally(() => {
                 this.isLoading.set(false);
             });
+    }
+    updateDiligenceProgress(id: string) {
+        this.diligenceService.patchDiligenceProgress(id, false).then(result => {
+            if (!result.success) {
+                this.showToast("Erro ao atualizar progresso da diligência.");
+            }
+        });
     }
     onSaveAudio(audioFile?: File) {
         this.audioFile = audioFile

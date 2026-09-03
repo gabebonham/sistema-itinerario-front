@@ -28,6 +28,7 @@ export class Diligence {
     attemptId: string;
     address?: Address;
     porHoraCerta: boolean;
+    inProgress?: boolean;
     plannerObservations?: string;
     imageUrls?: string[];
     audioUrl?: string;
@@ -54,6 +55,7 @@ export class Diligence {
         debtorId: string,
         visited: boolean,
         porHoraCerta: boolean,
+        inProgress?: boolean,
         imageUrls?: string[],
         audioUrl?: string,
         plannerObservations?: string,
@@ -68,6 +70,7 @@ export class Diligence {
         this.notificatorName = notificatorName;
         this.protocol = protocol;
         this.start = start;
+        this.inProgress = inProgress;
         this.factsObservations = factsObservations;
         this.propertyObservations = propertyObservations;
         this.generalObservations = generalObservations;

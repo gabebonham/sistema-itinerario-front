@@ -159,7 +159,15 @@ export class ActionsSectionComponent {
     onSaveAudio(audioFile?: File) {
         this.audioFile = audioFile
     }
+    updateDiligenceProgress(id: string) {
+        this.diligenceService.patchDiligenceProgress(id, false).then(result => {
+            if (!result.success) {
+                this.showToast("Erro ao atualizar progresso da diligência.");
+            }
+        });
+    }
     private finishSuccess() {
+        this.updateDiligenceProgress(this.diligence()?.id!)
         this.showToast('Visita concluída com sucesso!');
         this.resetInputs();
         this.nextDiligence.emit();

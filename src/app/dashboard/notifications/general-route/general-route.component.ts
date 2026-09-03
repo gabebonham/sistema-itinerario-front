@@ -27,7 +27,9 @@ export class GeneralRouteComponent implements OnInit {
     private notificationService = inject(NotificationService);
     private debtorService = inject(DebtorService);
     private attemptService = inject(AttemptService);
+    private diligencesService = inject(DiligencesService);
 
+    orderedAddresses = signal<Address[]>([]);
     currentDiligence = signal<Diligence | undefined>(undefined)
     diligences = signal<Diligence[]>([])
     localDiligences = signal<Diligence[]>([])
@@ -77,11 +79,7 @@ export class GeneralRouteComponent implements OnInit {
                                 .map(diligence => diligence.address)
                                 .filter((address): address is Address => address !== undefined)
                         );
-
-                        console.log('Diligences:', this.diligences());
-                        console.log('localDiligences:', this.localDiligences());
-                        console.log('addresses:', this.addresses());
-                        console.log('Notifications:', this.localNotifications());
+                        this.updateDiligencesProgress();
                         this.getNextDiligence();
                     } else {
                         this.showToast("Erro ao buscar notificações.")
@@ -90,7 +88,9 @@ export class GeneralRouteComponent implements OnInit {
             }
         })
     }
-
+    onOrderedAddressesChange(addresses: Address[]) {
+        this.orderedAddresses.set(addresses);
+    }
     validateDate(date: string | Date): boolean {
         const now = new Date();
         const diligenceDate = new Date(date);
@@ -119,6 +119,28 @@ export class GeneralRouteComponent implements OnInit {
             this.localDiligences.update(diligences => diligences.slice(1))
         }
         this.loadingNextDiligence.set(false)
+    }
+    async updateDiligencesProgress() {
+        for (const diligence of this.localDiligences()) {
+            const result =
+                await this.diligencesService.patchDiligenceProgress(
+                    diligence.id,
+                    true
+                );
+
+            if (!result.success) {
+                this.showToast(
+                    "Erro ao atualizar progresso da diligência."
+                );
+            }
+        }
+    }
+    updateDiligenceProgress(id: string) {
+        this.diligencesService.patchDiligenceProgress(id, true).then(result => {
+            if (!result.success) {
+                this.showToast("Erro ao atualizar progresso da diligência.");
+            }
+        });
     }
     getLastDiligenceByAttemptId(id: string) {
         this.attemptService.getById(id).then(result => {

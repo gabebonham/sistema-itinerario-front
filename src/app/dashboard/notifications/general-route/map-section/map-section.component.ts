@@ -3,6 +3,7 @@ import {
     effect,
     inject,
     input,
+    output,
     signal,
     ViewChild
 } from '@angular/core';
@@ -45,6 +46,8 @@ export class MapSectionComponent {
     orderedAddresses = signal<Address[]>([]);
 
     encodedPolyline = signal<string | null>(null);
+
+    orderedAddressesChange = output<Address[]>();
 
     routePath = signal<google.maps.LatLngLiteral[]>([]);
 
@@ -163,9 +166,8 @@ export class MapSectionComponent {
                     destination
                 ];
             }
-            console.log('OPTIMIZED ADDRESSES:', optimizedAddresses);
             this.orderedAddresses.set(optimizedAddresses);
-
+            this.orderedAddressesChange.emit(optimizedAddresses);
             this.intermediates.set(
                 optimizedAddresses.slice(0, -1).map(address => ({
                     lat: address.lat,

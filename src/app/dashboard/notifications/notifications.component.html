@@ -6,32 +6,30 @@
         <h1 class="text-3xl font-bold pt-2">Notificações Pendentes</h1>
         <p class="text-text-muted text-sm py-4 ">Consulte todas as notificações pendentes registradas a serem retomadas.
         </p>
+        <div class="">
+          <form [formGroup]="form" class="w-full flex items-center gap-2 py-2">
+            <mat-form-field appearance="outline" class="!w-full " floatLabel="always">
+              <mat-label>Carga Horária</mat-label>
+              <textarea matInput formControlName="hours" placeholder="..."
+                class="!text-xs  !placeholder-text-muted"></textarea>
+            </mat-form-field>
+          </form>
+        </div>
+
+        @if (zone() && !form.invalid){
+
         <div class="py-4">
-          <button (click)="planGeneralRoute()"
-            class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-lg w-full h-10">
+          <button (click)="planGeneralRoute()" [disabled]="!zone() || form.invalid"
+            class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-lg w-full h-10 disabled:opacity-50 disabled:cursor-not-allowed">
             Percorrer {{ currentMoment()}}
           </button>
         </div>
+        }
       </div>
-      <div>
-        <form [formGroup]="form" class="w-full flex flex-col">
-          <mat-form-field appearance="outline" class="!w-full !h-36" floatLabel="always">
-            <mat-label>Zona</mat-label>
-            <textarea matInput formControlName="zone" placeholder="..."
-              class="!text-xs !h-28 !min-h-28 !placeholder-text-muted !overflow-y-auto"></textarea>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="!w-full !h-36" floatLabel="always">
-            <mat-label>Carga Horária</mat-label>
-            <textarea matInput formControlName="hours" placeholder="..."
-              class="!text-xs !h-28 !min-h-28 !placeholder-text-muted !overflow-y-auto"></textarea>
-          </mat-form-field>
 
-        </form>
-      </div>
     </div>
     <div class="flex flex-col gap-6">
-      <app-notifications-section [isLoading]="isLoading()"
-        [notifications]="notifications()"></app-notifications-section>
+      <app-notifications-section (updateZone)="handleUpdateZone($event)"></app-notifications-section>
     </div>
   </div>
 </div>

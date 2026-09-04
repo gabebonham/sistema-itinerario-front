@@ -184,12 +184,11 @@ export class PlanningComponent implements OnInit {
     handleCreateNotification(notificatorId: string, debtorId: string, diligenceId: string) {
         const dto: CreateNotificationDto = {
             debtorId,
-            notificatorId,
             diligenceId
         }
         this.notificationService.create(dto).then(result => {
             if (result.success) {
-
+                
             } else {
                 this.showToast('Erro ao disparar notificação.')
             }

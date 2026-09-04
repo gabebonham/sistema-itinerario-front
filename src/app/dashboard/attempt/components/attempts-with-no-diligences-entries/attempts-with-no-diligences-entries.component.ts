@@ -69,6 +69,7 @@ export class AttemptsWithNoDiligencesEntries  {
     }
     handleCancelAttempt(id: string) {
         this.loadingCancel.set(id)
+        console.log(id)
         this.attemptService.cancelAttempt(id).then(result => {
             if (result.success) {
                 this.localAttempts.update(attempts=>attempts.filter(attempt => attempt.id != id))

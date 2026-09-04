@@ -28,6 +28,7 @@ export class HistoryComponent implements OnInit {
         this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().name);
         this.breadCrumbs = this.dashboardState.activeSection.name
         this.attemptService.getConcludedPaginated(this.currentPage, this.pageSize).then((result) => {
+            console.log(result.data)
             this.attemptList.set(result.data.data)
             this.hasMorePages = result.data.hasNext;
             this.hasPreviousPages = result.data.hasPrevious;
@@ -67,7 +68,8 @@ export class HistoryComponent implements OnInit {
 
     fetchAttemptPage(): void {
         this.isLoading.set(true)
-        this.attemptService.getAllPaginated(this.currentPage, this.pageSize).then((result) => {
+        this.attemptService.getConcludedPaginated(this.currentPage, this.pageSize).then((result) => {
+            console.log(result.data)
             this.attemptList.set(result.data.data)
             this.hasMorePages = result.data.hasNext;
             this.hasPreviousPages = result.data.hasPrevious;

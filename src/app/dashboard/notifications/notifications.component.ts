@@ -35,13 +35,14 @@ export class NotificationsComponent implements OnInit {
     authService = inject(AuthService);
     private fb = inject(FormBuilder);
     form = this.fb.group({
-        hours: ['', Validators.required],
-        zone: ['', Validators.required],
+        hours: [null as number | null, Validators.required],
     });
-
-    zone = signal(undefined)
-    window = signal(undefined)
-    hours = signal(undefined)
+    currentPage = signal<number>(1)
+    hasNext = signal<boolean | undefined>(undefined)
+    hasPrevious = signal<boolean | undefined>(undefined)
+    zone = signal<number | undefined>(undefined)
+    window = signal<string | undefined>(undefined)
+    hours = signal<number | undefined>(undefined)
     currentLat = signal(-30.0346)
     currentLng = signal(-51.2177)
     notifications = signal<Notification[]>([]);
@@ -57,16 +58,22 @@ export class NotificationsComponent implements OnInit {
             this.dashboardState.activeSection().name
         );
     }
+    handleUpdateZone(zone:number){
+        this.zone.set(zone)
+    }
     planGeneralRoute() {
         if (this.form.invalid) {
             this.form.markAllAsTouched();
+            return;
+        }
+        if (!this.zone() || !this.form.value.hours) {
             return;
         }
         this.router.navigate(
             ['/dashboard/rota-geral', this.currentUser()?.id],
             {
                 queryParams: {
-                    zone: this.form.value.zone!,
+                    zone: this.zone()!,
                     hours: this.form.value.hours!,
                 }
             }
@@ -94,14 +101,24 @@ export class NotificationsComponent implements OnInit {
             return;
         }
 
-        await this.loadNotifications(user.id);
+        await this.loadNotifications();
     }
 
-    private async loadNotifications(userId: string): Promise<void> {
+    fetchNotifications() {
+        if (!this.zone()) {
+            return;
+        }
+        this.loadNotifications()
+    }
+    private async loadNotifications(): Promise<void> {
+        if (!this.zone()) {
+            this.isLoading.set(false);
+            return;
+        }
         this.isLoading.set(true);
 
         const result =
-            await this.notificationService.getAllByNotificatorId(userId);
+            await this.notificationService.getAllPaginatedByZone(this.currentPage(), 6, this.zone()!);
 
         if (result.success) {
             this.notifications.set(

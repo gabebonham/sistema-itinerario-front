@@ -54,7 +54,7 @@ export class NotificationComponent implements OnInit {
         })
     }
     updateDiligenceProgress(id: string) {
-        this.diligenceService.patchDiligenceProgress(id, true).then(result => {
+        this.diligenceService.patchDiligenceProgress({id, inProgress:true}).then(result => {
             if (!result.success) {
                 this.showToast("Erro ao atualizar progresso da diligência.");
             }

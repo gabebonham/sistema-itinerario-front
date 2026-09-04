@@ -2,11 +2,12 @@ import { Component, input, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { DiligenceOrdinal } from '../../../../models/diligence';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-notification-entry',
     standalone: true,
-    imports: [MatIconModule],
+    imports: [CommonModule,MatIconModule],
     templateUrl: './notification-entry.component.html',
 })
 export class NotificationEntryComponent {
@@ -22,7 +23,25 @@ export class NotificationEntryComponent {
     createdAt = input.required<Date>();
 
     constructor(private router: Router) { }
+    isOld(start: Date, window: string): boolean {
+        const startDate = new Date(start);
+        const now = new Date();
 
+        const isDifferentDay =
+            startDate.getFullYear() !== now.getFullYear() ||
+            startDate.getMonth() !== now.getMonth() ||
+            startDate.getDate() !== now.getDate();
+
+        if (isDifferentDay) {
+            return true;
+        }
+
+        const currentWindow = now.getHours() < 12
+            ? 'Manhã'
+            : 'Tarde';
+
+        return window !== currentWindow;
+    }
     getDateFormatted(date: Date): string {
         const d = new Date(date);
         return d.toLocaleDateString('pt-BR', {

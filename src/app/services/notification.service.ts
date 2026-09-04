@@ -14,6 +14,14 @@ export class NotificationService {
   async getById(id: string): Promise<ApiResponse<Notification>> {
     return await this.api.get<Notification>('api/notifications/' + id)
   }
+  async getAllPaginatedByZone(page: number, pageSize: number, zone: number): Promise<ApiResponse<PaginatedResponse<Notification[]>>> {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('pageSize', pageSize.toString());
+    params.append('zone', zone.toString());
+
+    return await this.api.get<PaginatedResponse<Notification[]>>('api/notifications', {params})
+  }
   async delete(id: string): Promise<ApiResponse<null>> {
     return await this.api.delete<null>('api/notifications/' + id)
   }

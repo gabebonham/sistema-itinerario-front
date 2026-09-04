@@ -40,31 +40,42 @@ export class AttemptService {
     }
 
     if (filter?.window) {
-      params.append('window', filter.window);
+      params.append('window', this.getWindowValue(filter.window));
     }
 
     if (filter?.diligenceOrdinal) {
-      params.append('diligenceOrdinal', filter.diligenceOrdinal);
+      params.append('diligenceOrdinal', this.getOrdinalValue(filter.diligenceOrdinal));
     }
 
     if (filter?.statuses) {
-      filter.statuses.forEach(status => params.append('statuses', this.getEnumValue(status)));
+      filter.statuses.forEach(status => params.append('statuses', this.getStatusValue(status)));
     }
 
     if (filter?.from) {
-      params.append('from', filter.from);
+      params.append('from', this.formatDate(filter.from));
     }
 
     if (filter?.to) {
-      params.append('to', filter.to);
+      params.append('to', this.formatDate(filter.to));
     }
     params.append('diligenceVisited', filter?.diligenceVisited.toString() ?? 'true');
+    console.log(params)
 
     return await this.api.get<PaginatedResponse<Attempt[]>>(
       'api/attempts/with-last-diligences',
       { params }
     );
   }
+  private formatDate(date: string): string  {
+
+    const [day, month, year] = date.split('/');
+
+    if (!day || !month || !year || year.length !== 4) {
+        return '';
+    }
+
+    return `${year}-${month}-${day}`;
+}
   async getAllPaginated(
     page: number = 1,
     pageSize: number = 8,
@@ -85,31 +96,53 @@ export class AttemptService {
     }
 
     if (filter?.window) {
-      params.append('window', filter.window);
+      params.append('window', this.getWindowValue(filter.window));
     }
 
     if (filter?.diligenceOrdinal) {
-      params.append('diligenceOrdinal', filter.diligenceOrdinal);
+      params.append('diligenceOrdinal', this.getOrdinalValue(filter.diligenceOrdinal));
     }
 
     if (filter?.statuses) {
-      filter.statuses.forEach(status => params.append('statuses', this.getEnumValue(status)));
+      filter.statuses.forEach(status => params.append('statuses', this.getStatusValue(status)));
     }
 
     if (filter?.from) {
-      params.append('from', filter.from);
+      params.append('from', this.formatDate(filter.from));
     }
 
     if (filter?.to) {
-      params.append('to', filter.to);
+      params.append('to', this.formatDate(filter.to));
     }
-
+    console.log(params)
     return await this.api.get<PaginatedResponse<Attempt[]>>(
       'api/attempts',
       { params }
     );
   }
-  private getEnumValue(status: DisplayAttemptStatus): string {
+  private getWindowValue(window:string){
+    if (window=='Manhã') {
+      return 'Morning'
+    } else if(window =='Tarde'){
+      return 'Afternoon'
+    } else if (window=='Sábado'){
+      return 'Saturday'
+    } else {
+      return ''
+    }
+  }
+    private getOrdinalValue(ordinal:string){
+    if (ordinal=='1ª Diligência') {
+      return 'First'
+    } else if(ordinal =='2ª Diligência'){
+      return 'Second'
+    } else if (ordinal=='3ª Diligência'){
+      return 'Third'
+    } else {
+      return ''
+    }
+  }
+  private getStatusValue(status: DisplayAttemptStatus): string {
     switch (status) {
       case 'Pendente':
         return 'Pending';
@@ -158,6 +191,7 @@ export class AttemptService {
     const params = new URLSearchParams();
     params.append('page', page.toString());
     params.append('pageSize', pageSize.toString());
+    params.append('statuses', 'Pending');
     return await this.api.get<PaginatedResponse<Attempt[]>>('api/attempts/with-no-diligences', { params })
   }
 }

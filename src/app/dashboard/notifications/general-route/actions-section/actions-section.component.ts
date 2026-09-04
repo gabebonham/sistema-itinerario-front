@@ -160,7 +160,7 @@ export class ActionsSectionComponent {
         this.audioFile = audioFile
     }
     updateDiligenceProgress(id: string) {
-        this.diligenceService.patchDiligenceProgress(id, false).then(result => {
+        this.diligenceService.patchDiligenceProgress({id, inProgress:false, finish:new Date()}).then(result => {
             if (!result.success) {
                 this.showToast("Erro ao atualizar progresso da diligência.");
             }

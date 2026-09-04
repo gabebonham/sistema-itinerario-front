@@ -61,6 +61,7 @@ export class AttemptEntryComponent implements OnInit {
                 new Date(b.createdAt).getTime()
         );
     }
+
     exportPdf() {
         this.debtorService.getById(this.attempt().debtorId).then(result => {
             if (result.success) {

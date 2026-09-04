@@ -5,6 +5,19 @@
       <h1 class="text-md font-bold text-text-black">Retomar uma Notificação</h1>
     </div>
     <p class="!text-text-muted !text-xs">Clique na notificação para entrar em campo.</p>
+    <form [formGroup]="form" class="w-full flex items-center gap-2 py-2">
+      <mat-form-field appearance="outline" class="!w-full " floatLabel="always">
+        <mat-label>Zona</mat-label>
+        <textarea matInput formControlName="zone" placeholder="..."
+          class="!text-xs  !placeholder-text-muted"></textarea>
+      </mat-form-field>
+    </form>
+    <div class="">
+      <button (click)="fetchNotifications()" [disabled]="form.invalid"
+        class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-lg w-full h-10 disabled:opacity-50 disabled:cursor-not-allowed">
+        Buscar notificações
+      </button>
+    </div>
   </div>
   <div class="flex flex-col gap-3">
     @if (isLoading()) {
@@ -17,10 +30,10 @@
     </div>
     } @else if (!isLoading() && notifications().length != 0) {
     @for (item of notificationEntries(); track item.protocol) {
-    <app-notification-entry [id]="item.id" [notificatorName]="item.notificatorName" [diligenceOrdinal]="item.diligenceOrdinal"
-      [diligenceWindow]="item.diligenceWindow" [diligenceStart]="item.diligenceStart"
-      [diligenceFinish]="item.diligenceFinish" [address]="item.address" [debtorName]="item.debtorName"
-      [protocol]="item.protocol" [createdAt]="item.createdAt"></app-notification-entry>
+    <app-notification-entry [id]="item.id" [notificatorName]="item.notificatorName"
+      [diligenceOrdinal]="item.diligenceOrdinal" [diligenceWindow]="item.diligenceWindow"
+      [diligenceStart]="item.diligenceStart" [diligenceFinish]="item.diligenceFinish" [address]="item.address"
+      [debtorName]="item.debtorName" [protocol]="item.protocol" [createdAt]="item.createdAt"></app-notification-entry>
     }
     }
   </div>
@@ -29,7 +42,7 @@
       <mat-icon
         class="{{ hasPreviousPages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
         (click)="onPreviousPage()">arrow_back</mat-icon>
-      {{ currentPage }}
+      {{ currentPage() }}
       <mat-icon class="{{ hasMorePages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
         (click)="onNextPage()">arrow_forward</mat-icon>
     </div>

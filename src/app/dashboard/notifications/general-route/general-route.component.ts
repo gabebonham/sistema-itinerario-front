@@ -16,6 +16,7 @@ import { DebtorService } from '../../../services/debtor.service';
 import { Address } from '../../../models/address';
 import { RouteService } from '../../../services/route.service';
 import { Attempt } from '../../../models/attempt';
+import { AuthService } from '../../../services/auth.service';
 
 
 @Component({
@@ -30,8 +31,9 @@ export class GeneralRouteComponent implements OnInit {
     private attemptService = inject(AttemptService);
     private diligencesService = inject(DiligencesService);
     private routeService = inject(RouteService);
+    private authService = inject(AuthService);
 
-    currentLastDiligence = signal<Diligence|undefined>(undefined);
+    currentLastDiligence = signal<Diligence | undefined>(undefined);
     orderedAddresses = signal<Address[]>([]);
     currentDiligence = signal<Diligence | undefined>(undefined)
     diligences = signal<Diligence[]>([])
@@ -43,14 +45,21 @@ export class GeneralRouteComponent implements OnInit {
     currentDebtor = signal<Debtor | undefined>(undefined)
     isAddressesLoading = signal(true)
     loadingNextDiligence = signal(true)
+    currentUser = this.authService.currentUser;
 
-    currentOrigin = signal<{lat:number,lng:number} | undefined>(undefined)
-    window = signal('Manhã')
+    currentOrigin = signal<{ lat: number, lng: number } | undefined>(undefined)
+    window = signal<string | undefined>(undefined)
     zone = signal<string | undefined>(undefined)
     hours = signal<string | undefined>(undefined)
 
     constructor(private route: ActivatedRoute, private router: Router) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Notificações')!);
+    }
+    getCurrentWindow() {
+        const hour = new Date().getHours();
+
+        const window = hour < 12 ? 'Manhã' : 'Tarde';
+        this.window.set(window)
     }
     getCurrentLocation(): Promise<GeolocationCoordinates> {
         return new Promise((resolve, reject) => {
@@ -63,7 +72,7 @@ export class GeneralRouteComponent implements OnInit {
     async getLocation() {
         try {
             const coords = await this.getCurrentLocation();
-            this.currentOrigin.set({lat:coords.latitude,lng:coords.longitude});
+            this.currentOrigin.set({ lat: coords.latitude, lng: coords.longitude });
             return true
         } catch (error) {
             this.showToast('Localização não disponível.');
@@ -71,6 +80,7 @@ export class GeneralRouteComponent implements OnInit {
         }
     }
     ngOnInit(): void {
+        this.getCurrentWindow()
         this.getLocation().then(result => {
             if (!result) {
                 this.router.navigate(['/dashboard/notificacoes'])
@@ -79,6 +89,10 @@ export class GeneralRouteComponent implements OnInit {
             this.route.paramMap.subscribe(params => {
                 const id = params.get('id') ?? '';
                 this.notificatorId.set(id)
+                if (id != this.currentUser()?.id) {
+                    this.showToast("Id de notificador inválido.")
+                    this.router.navigate(['/dashboard/notificacoes'])
+                }
                 this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
                 this.route.queryParamMap.subscribe(params => {
                     const zone = params.get('zone') ?? '';
@@ -156,8 +170,13 @@ export class GeneralRouteComponent implements OnInit {
         for (const diligence of this.localDiligences()) {
             const result =
                 await this.diligencesService.patchDiligenceProgress(
-                    diligence.id,
-                    true
+                    {
+                        id: diligence.id,
+                        inProgress: true,
+                        notificatorId: this.notificatorId()!,
+                        notificatorName: this.currentUser()?.name!,
+                        start: new Date()
+                    }
                 );
 
             if (!result.success) {
@@ -168,7 +187,15 @@ export class GeneralRouteComponent implements OnInit {
         }
     }
     updateDiligenceProgress(id: string) {
-        this.diligencesService.patchDiligenceProgress(id, true).then(result => {
+        this.diligencesService.patchDiligenceProgress(
+            {
+                id,
+                inProgress: false,
+                notificatorId: this.notificatorId()!,
+                notificatorName: this.currentUser()?.name!,
+                start: new Date()
+            }
+        ).then(result => {
             if (!result.success) {
                 this.showToast("Erro ao atualizar progresso da diligência.");
             }

@@ -20,6 +20,7 @@ export class NotificatorEntryComponent implements OnInit {
 
     delete = output<string>()
     diligences = signal<Diligence[]>([])
+    doneCount = signal<number|undefined>(undefined)
     loadingProgress = signal<boolean>(true)
 
     diligenceService = inject(DiligencesService)
@@ -42,11 +43,13 @@ export class NotificatorEntryComponent implements OnInit {
     onDelete() {
         this.delete.emit(this.id())
     }
+
     fetchNotificatorProgress() {
         this.diligenceService.getProgressByNotificatorId(this.id()).then((result) => {
             if (result.success) {
                 const progress = result.data;
-                this.diligences.set(progress.data ?? []);
+                this.diligences.set(progress.ongoingDiligences ?? []);
+                this.doneCount.set(progress.doneDiligencesCount)
             } else {
                 this.showToast(result.error);
             }

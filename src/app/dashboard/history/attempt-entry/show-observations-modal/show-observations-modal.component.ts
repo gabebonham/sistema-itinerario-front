@@ -3,15 +3,19 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angu
 import { MatIconModule } from '@angular/material/icon';
 import { ImagePreviewComponent } from './image-preview/image-preview.component';
 import { MediaService } from '../../../../services/media.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @Component({
     selector: 'app-show-observations-modal',
-    imports: [MatDialogModule, MatIconModule,],
+    imports: [MatDialogModule, MatSnackBarModule, MatIconModule,],
     templateUrl: './show-observations-modal.component.html',
 })
 export class ShowObservationsModal implements OnInit {
+    private snackBar = inject(MatSnackBar);
     isLoading = false
+    isLoadingImgs = signal(true)
+    isLoadingAudio = signal(true)
     generalObservations = signal<string[]>([])
     imageUrls = signal<string[]>([])
     audioUrls = signal<string[]>([])
@@ -33,16 +37,21 @@ export class ShowObservationsModal implements OnInit {
         this.mediaService.getAudioByDiligenceId(this.data.diligenceId).then(result => {
             if (result.success) {
                 this.audioUrls.set(result.data.urls ?? [])
+                this.isLoadingAudio.set(false)
+            } else {
+                this.showToast("Erro ao carregar áudio.")
+                this.isLoadingAudio.set(false)
             }
         })
         this.mediaService.getImagesByDiligenceId(this.data.diligenceId).then(result => {
             if (result.success) {
                 this.imageUrls.set(result.data.urls ?? [])
+                this.isLoadingImgs.set(false)
+            } else {
+                this.showToast("Erro ao carregar imagens.")
+                this.isLoadingImgs.set(false)
             }
         })
-        console.log('asdf')
-        console.log(this.audioUrls())
-        console.log(this.imageUrls())
     }
     confirm() {
         this.dialogRef.close(true);
@@ -55,6 +64,13 @@ export class ShowObservationsModal implements OnInit {
             maxWidth: '95vw',
             maxHeight: '95vh',
             panelClass: 'image-dialog'
+        });
+    }
+    showToast(text: string) {
+        this.snackBar.open(text, 'Fechar', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
         });
     }
 }

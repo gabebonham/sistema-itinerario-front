@@ -23,8 +23,8 @@ export class NewWindowModal {
     private fb = inject(FormBuilder);
 
     form = this.fb.group({
-        fromTime: ['', Validators.required],
-        toTime: ['', Validators.required],
+        fromTime: [''],
+        toTime: [''],
         dateValue: ['', Validators.required],
         window: ['', Validators.required],
     });
@@ -37,6 +37,11 @@ export class NewWindowModal {
         @Inject(MAT_DIALOG_DATA) public data: { windowsLeft: string[], diligenceOrdinal: DiligenceOrdinal }
     ) {
         this.windowsLeft = data.windowsLeft;
+        if (this.windowsLeft.length > 0) {
+            this.form.patchValue({
+                window: this.windowsLeft[0]
+            });
+        }
     }
 
     confirm(): void {
@@ -55,7 +60,7 @@ export class NewWindowModal {
 
         const start = this.createDate(dateValue, fromTime);
         const finish = this.createDate(dateValue, toTime);
-
+        
         this.dialogRef.close({
             success: true,
             data: {
@@ -67,7 +72,7 @@ export class NewWindowModal {
             }
         });
     }
-    private createDate(date: string, time: string): Date {
+    private createDate(date: string, time: string = '00:00'): Date {
         const [day, month, year] = date.split('/').map(Number);
         const [hours, minutes] = time.split(':').map(Number);
 

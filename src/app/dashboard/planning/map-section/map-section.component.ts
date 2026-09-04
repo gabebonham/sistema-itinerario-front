@@ -3,8 +3,7 @@ import {
     effect,
     inject,
     input,
-    signal,
-    ViewChild
+    signal
 } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
@@ -12,13 +11,10 @@ import {
     MatSnackBar,
     MatSnackBarModule
 } from '@angular/material/snack-bar';
-
-import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 import { Debtor } from '../../../models/debtor';
 import { CreateAddressDTO } from '../../../DTOS/create-address.dto';
-
-import { RouteService } from '../../../services/route.service';
 import { GoogleMapsService } from '../../../services/google-maps.service';
 
 @Component({
@@ -35,20 +31,10 @@ export class MapSectionComponent {
     private snackBar = inject(MatSnackBar);
     private googleMapsService = inject(GoogleMapsService);
 
-    routeService = inject(RouteService);
-
     address = input<CreateAddressDTO | undefined>(undefined);
     debtor = input<Debtor>();
 
-    durationSeconds = signal(0)
-    durationMeters = signal(0)
     mapsReady = signal(false);
-
-    encodedPolyline = signal<string | null>(null);
-
-    routePath = signal<google.maps.LatLngLiteral[]>([]);
-
-    @ViewChild(GoogleMap) map!: GoogleMap;
 
     origin: google.maps.LatLngLiteral = {
         lat: -30.0346,
@@ -68,7 +54,10 @@ export class MapSectionComponent {
                 return;
             }
 
-            this.getRouteData(address);
+            this.destination.set({
+                lat: address.lat,
+                lng: address.lng
+            });
         });
 
         this.initializeMaps();
@@ -79,79 +68,15 @@ export class MapSectionComponent {
             await this.googleMapsService.load();
             this.mapsReady.set(true);
         } catch (error) {
-            this.showToast('Erro ao inicializar o Google Maps.')
+            this.showToast('Erro ao inicializar o Google Maps.');
         }
-    }
-    fitMapBounds() {
-        if (!this.map?.googleMap) {
-            return;
-        }
-
-        const bounds = new google.maps.LatLngBounds();
-
-        bounds.extend(this.origin);
-        bounds.extend(this.destination()!);
-
-        this.map.googleMap.fitBounds(bounds);
-    }
-    getRouteData(address: CreateAddressDTO) {
-        this.destination.set({
-            lat: address.lat,
-            lng: address.lng
-        });
-            this.fitMapBounds();
-        this.routeService.calculateRoute({
-            origin: {
-                latitude: this.origin.lat,
-                longitude: this.origin.lng
-            },
-            destination: {
-                latitude: address.lat,
-                longitude: address.lng
-            }
-        }).then(async response => {
-            if (!response.success) {
-                this.showToast(response.error)
-                return;
-
-            }
-            this.durationSeconds.set(response.data.durationSeconds);
-            this.durationMeters.set(response.data.distanceMeters);
-
-            this.encodedPolyline.set(
-                response.data.encodedPolyline
-            );
-
-            const { encoding } =
-                await google.maps.importLibrary(
-                    'geometry'
-                ) as google.maps.GeometryLibrary;
-
-            const decodedPath =
-                encoding.decodePath(
-                    response.data.encodedPolyline
-                );
-
-            this.routePath.set(
-                decodedPath.map(point => ({
-                    lat: point.lat(),
-                    lng: point.lng()
-                }))
-            );
-
-
-        }).catch(error => {
-            this.showToast(error)
-        });
     }
 
     showToast(text: string) {
-
         this.snackBar.open(text, 'Fechar', {
             duration: 3000,
             horizontalPosition: 'right',
             verticalPosition: 'top',
         });
-
     }
 }

@@ -1,5 +1,6 @@
 import { ApiResponse } from "../DTOS/api-response";
 import { RouteData, RouteRequest } from "../DTOS/route.dto";
+import { Notification } from "../models/notification";
 import { ApiService } from "./api";
 import { inject, Injectable } from "@angular/core";
 
@@ -15,6 +16,15 @@ export class RouteService {
             request
         );
 
+        return response;
+    }
+    async prepareRoute(id:string, dto:any): Promise<ApiResponse<{notifications:Notification[],route:RouteData}>> {
+        console.log('dto')
+        console.log(dto)
+        const response = await this.api.post<{notifications:Notification[],route:RouteData}>(
+            '/api/routes/notificator/'+id+'/prepare-route',
+            dto
+        );
         return response;
     }
 }

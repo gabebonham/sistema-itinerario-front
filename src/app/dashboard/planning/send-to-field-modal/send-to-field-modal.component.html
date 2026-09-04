@@ -10,10 +10,10 @@
                     class="!text-xs !min-h-32 !h-32"></textarea>
             </mat-form-field>
             <mat-form-field appearance="outline" floatLabel="always">
-                <mat-label>Selecione um Notificador</mat-label>
-                <mat-select [(value)]="notificator">
-                    @for (option of notificators(); track option) {
-                    <mat-option [value]="option">{{ option.name }}</mat-option>
+                <mat-label>Selecione uma Zona</mat-label>
+                <mat-select [(value)]="zone">
+                    @for (option of [1,2,3]; track option) {
+                    <mat-option [value]="option">{{ option }}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>

@@ -22,8 +22,8 @@ export class DiligencesService {
   async getDiligencesByAttemptId(id: string): Promise<ApiResponse<Diligence[]>> {
     return await this.api.get<Diligence[]>('api/diligences/attempt/' + id)
   }
-  async getProgressByNotificatorId(id: string): Promise<ApiResponse<PaginatedResponse<Diligence[]>>> {
-    return await this.api.get<PaginatedResponse<Diligence[]>>('api/diligences/notificator/' + id + '/progress')
+  async getProgressByNotificatorId(id: string): Promise<ApiResponse<{ongoingDiligences:Diligence[], doneDiligencesCount:number}>> {
+    return await this.api.get<{ongoingDiligences:Diligence[], doneDiligencesCount:number}>('api/diligences/notificator/' + id + '/progress')
   }
   async patchDiligenceProgress(id: string, inProgress: boolean): Promise<ApiResponse<Diligence>> {
     return await this.api.patch<Diligence>('api/diligences/' + id + '/progress', { inProgress })

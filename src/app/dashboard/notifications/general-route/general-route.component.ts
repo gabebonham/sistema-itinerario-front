@@ -14,6 +14,8 @@ import { AttemptService } from '../../../services/attempt.service';
 import { DiligencesService } from '../../../services/diligences.service';
 import { DebtorService } from '../../../services/debtor.service';
 import { Address } from '../../../models/address';
+import { RouteService } from '../../../services/route.service';
+import { Attempt } from '../../../models/attempt';
 
 
 @Component({
@@ -24,11 +26,12 @@ import { Address } from '../../../models/address';
 export class GeneralRouteComponent implements OnInit {
     private snackBar = inject(MatSnackBar);
     dashboardState = inject(DashboardStateService);
-    private notificationService = inject(NotificationService);
     private debtorService = inject(DebtorService);
     private attemptService = inject(AttemptService);
     private diligencesService = inject(DiligencesService);
+    private routeService = inject(RouteService);
 
+    currentLastDiligence = signal<Diligence|undefined>(undefined);
     orderedAddresses = signal<Address[]>([]);
     currentDiligence = signal<Diligence | undefined>(undefined)
     diligences = signal<Diligence[]>([])
@@ -41,51 +44,79 @@ export class GeneralRouteComponent implements OnInit {
     isAddressesLoading = signal(true)
     loadingNextDiligence = signal(true)
 
+    currentOrigin = signal<{lat:number,lng:number} | undefined>(undefined)
+    window = signal('Manhã')
+    zone = signal<string | undefined>(undefined)
+    hours = signal<string | undefined>(undefined)
+
     constructor(private route: ActivatedRoute, private router: Router) {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Notificações')!);
     }
+    getCurrentLocation(): Promise<GeolocationCoordinates> {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(
+                position => resolve(position.coords),
+                error => reject(error)
+            );
+        });
+    }
+    async getLocation() {
+        try {
+            const coords = await this.getCurrentLocation();
+            this.currentOrigin.set({lat:coords.latitude,lng:coords.longitude});
+            return true
+        } catch (error) {
+            this.showToast('Localização não disponível.');
+            return false
+        }
+    }
     ngOnInit(): void {
-        this.route.paramMap.subscribe(params => {
-            const id = params.get('id') ?? '';
-            this.notificatorId.set(id)
-            this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
-            if (id) {
-                this.notificationService.getAllByNotificatorId(id).then(notificationResult => {
-                    if (notificationResult.success) {
-
-                        const validNotifications = notificationResult.data.data
-                            .filter(notification => {
-                                const diligence = notification.diligence;
-
-                                return diligence !== undefined
-                                    && !diligence.visited
-                                    && this.validateDate(diligence.start);
-                            });
-
-                        const validDiligences = validNotifications
-                            .map(notification => notification.diligence)
-                            .filter((diligence): diligence is Diligence => diligence !== undefined);
-
-                        const validNotificationIds = validNotifications
-                            .map(notification => notification.id)
-                            .filter((id): id is string => id !== undefined);
-
-                        this.diligences.set(validDiligences);
-                        this.localDiligences.set(validDiligences);
-                        this.localNotifications.set(validNotificationIds);
-
-                        this.addresses.set(
-                            validDiligences
-                                .map(diligence => diligence.address)
-                                .filter((address): address is Address => address !== undefined)
-                        );
-                        this.updateDiligencesProgress();
-                        this.getNextDiligence();
-                    } else {
-                        this.showToast("Erro ao buscar notificações.")
-                    }
-                })
+        this.getLocation().then(result => {
+            if (!result) {
+                this.router.navigate(['/dashboard/notificacoes'])
+                return
             }
+            this.route.paramMap.subscribe(params => {
+                const id = params.get('id') ?? '';
+                this.notificatorId.set(id)
+                this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
+                this.route.queryParamMap.subscribe(params => {
+                    const zone = params.get('zone') ?? '';
+                    const hours = params.get('hours') ?? '';
+                    this.zone.set(zone)
+                    this.hours.set(hours)
+                    if (id && zone && hours) {
+                        const dto = {
+                            zone,
+                            hours,
+                            originLat: this.currentOrigin()?.lat,
+                            originLng: this.currentOrigin()?.lng,
+                            window: this.window()
+                        }
+                        this.routeService.prepareRoute(id, dto)
+                            .then(result => {
+                                if (result.success) {
+                                    const validDiligences = result.data.notifications.map(notification => notification.diligence)
+                                        .filter(diligence => diligence !== undefined)
+                                    const validNotificationIds = result.data.notifications.map(notification => notification.id)
+                                    this.diligences.set(validDiligences);
+                                    this.localDiligences.set(validDiligences);
+                                    this.localNotifications.set(validNotificationIds);
+
+                                    this.addresses.set(
+                                        validDiligences
+                                            .map(diligence => diligence.address)
+                                            .filter((address): address is Address => address !== undefined)
+                                    );
+                                    this.updateDiligencesProgress();
+                                    this.getNextDiligence();
+                                } else {
+                                    this.showToast(result.error)
+                                }
+                            })
+                    }
+                });
+            })
         })
     }
     onOrderedAddressesChange(addresses: Address[]) {
@@ -113,6 +144,7 @@ export class GeneralRouteComponent implements OnInit {
         const nextDiligence = this.localDiligences()[0]
         const nextNotificationId = this.localNotifications()[0]
         if (nextDiligence) {
+            this.getLastDiligenceByAttemptId(nextDiligence.attemptId)
             this.currentDiligence.set(nextDiligence)
             this.currentNotificationId.set(nextNotificationId)
             this.localNotifications.update(notifications => notifications.slice(1))
@@ -145,7 +177,7 @@ export class GeneralRouteComponent implements OnInit {
     getLastDiligenceByAttemptId(id: string) {
         this.attemptService.getById(id).then(result => {
             if (result.success) {
-                this.currentDiligence.set(result.data.lastDiligence)
+                this.currentLastDiligence.set(result.data.lastDiligence)
             } else {
                 this.showToast("Erro ao buscar diligência.")
             }

@@ -1,56 +1,34 @@
 <div class="relative w-full h-full overflow-hidden rounded-xl border-1 border-border shadow-lg">
+
     <div class="flex items-center gap-4 bg-gradient-to-r from-quarternary to-primary px-6 py-4">
-        <mat-icon class="!text-white p-4 bg-text-muted rounded-full box-content">person</mat-icon>
+
+        <mat-icon class="!text-white p-4 bg-text-muted rounded-full box-content">
+            person
+        </mat-icon>
+
         <div>
-            <p class="text-text-muted !font-bold">DEVEDOR</p>
-            <h1 class="!text-white text-xl">{{ debtor()?.name}}</h1>
-            <p class="!text-white">
-                Distância: 
-                <span class="!font-bold">{{durationMeters() / 1000 }} km</span>
+            <p class="text-text-muted !font-bold">
+                DEVEDOR
             </p>
-            <p class="!text-white">
-                Tempo estimado: 
-                <span class="!font-bold">{{durationSeconds() / 60 }} min</span>
-            </p>
+
+            <h1 class="!text-white text-xl">
+                {{ debtor()?.name }}
+            </h1>
         </div>
+
     </div>
 
-@if (mapsReady()) {
+    @if (mapsReady()) {
 
-    <google-map
-        height="500px"
-        width="100%"
-        [center]="origin"
-        [zoom]="14">
-
-        <map-marker
-            [position]="origin"
-            title="Origem">
-        </map-marker>
+    <google-map height="500px" width="100%" [center]="destination()!" [zoom]="16">
 
         @if (destination(); as destination) {
-
-            <map-marker
-                [position]="destination"
-                title="Destino">
-            </map-marker>
-
-        }
-
-        @if (routePath().length > 0) {
-
-            <map-polyline
-                [path]="routePath()"
-                [options]="{
-                    strokeWeight: 5,
-                    strokeOpacity: 0.9
-                }">
-            </map-polyline>
-
+        <map-marker [position]="destination" title="Endereço">
+        </map-marker>
         }
 
     </google-map>
 
-}
+    }
 
 </div>

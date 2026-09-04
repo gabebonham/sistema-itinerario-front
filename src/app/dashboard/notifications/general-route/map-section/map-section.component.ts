@@ -2,6 +2,7 @@ import {
     Component,
     effect,
     inject,
+    Input,
     input,
     output,
     signal,
@@ -53,10 +54,7 @@ export class MapSectionComponent {
 
     @ViewChild(GoogleMap) map!: GoogleMap;
 
-    origin: google.maps.LatLngLiteral = {
-        lat: -30.0346,
-        lng: -51.2177
-    };
+    origin = input.required<google.maps.LatLngLiteral>()
 
     destination = signal<google.maps.LatLngLiteral | undefined>(
         undefined
@@ -95,7 +93,7 @@ export class MapSectionComponent {
 
         const bounds = new google.maps.LatLngBounds();
 
-        bounds.extend(this.origin);
+        bounds.extend(this.origin());
 
         const destination = this.destination();
 
@@ -122,8 +120,8 @@ export class MapSectionComponent {
         this.fitMapBounds();
         this.routeService.calculateRoute({
             origin: {
-                latitude: this.origin.lat,
-                longitude: this.origin.lng
+                latitude: this.origin().lat,
+                longitude: this.origin().lng
             },
             intermediates: addresses.slice(0, -1).map(address => ({
                 latitude: address.lat,

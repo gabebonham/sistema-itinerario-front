@@ -9,13 +9,19 @@ import { AuthService } from '../../services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsSection } from './notifications-section/notifications-section.component';
 import { Router } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
     selector: 'app-notifications',
     imports: [
         MatSidenavModule,
         MatSnackBarModule,
-        NotificationsSection
+        NotificationsSection,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule
     ],
     templateUrl: './notifications.component.html',
 })
@@ -27,10 +33,19 @@ export class NotificationsComponent implements OnInit {
     dashboardState = inject(DashboardStateService);
     notificationService = inject(NotificationService);
     authService = inject(AuthService);
+    private fb = inject(FormBuilder);
+    form = this.fb.group({
+        hours: ['', Validators.required],
+        zone: ['', Validators.required],
+    });
 
+    zone = signal(undefined)
+    window = signal(undefined)
+    hours = signal(undefined)
+    currentLat = signal(-30.0346)
+    currentLng = signal(-51.2177)
     notifications = signal<Notification[]>([]);
     isLoading = signal(true);
-
     currentUser = this.authService.currentUser;
 
     constructor(private router: Router) {
@@ -43,13 +58,25 @@ export class NotificationsComponent implements OnInit {
         );
     }
     planGeneralRoute() {
-        this.router.navigate(['/dashboard/rota-geral', this.currentUser()?.id]);
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+        this.router.navigate(
+            ['/dashboard/rota-geral', this.currentUser()?.id],
+            {
+                queryParams: {
+                    zone: this.form.value.zone!,
+                    hours: this.form.value.hours!,
+                }
+            }
+        );
     }
     currentMoment() {
         const now = new Date();
         const hours = now.getHours();
         const day = now.getDay();
-        if (day == 6){
+        if (day == 6) {
             return 'Sábado'
         }
         if (hours < 12) {

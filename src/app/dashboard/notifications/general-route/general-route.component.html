@@ -16,7 +16,7 @@
     } @else {
 
     <div class="flex flex-col gap-8">
-      <app-map-section (orderedAddressesChange)="onOrderedAddressesChange($event)" [addresses]="addresses()" [debtor]="currentDebtor()"></app-map-section>
+      <app-map-section [origin]="currentOrigin()!" (orderedAddressesChange)="onOrderedAddressesChange($event)" [addresses]="addresses()" [debtor]="currentDebtor()"></app-map-section>
       <app-actions-section [notificationId]="currentNotificationId()" [diligence]="currentDiligence()"
         [debtor]="currentDebtor()" (nextDiligence)="getNextDiligence()"></app-actions-section>
       <app-support-observations-section [factsObservations]="currentDiligence()?.factsObservations ?? []"

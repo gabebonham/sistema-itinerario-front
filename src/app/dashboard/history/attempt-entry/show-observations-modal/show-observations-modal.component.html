@@ -31,15 +31,28 @@
         <div class="w-11/12 border-b-border border-b-1"></div>
         <h1 class="text-lg">Fotos</h1>
         <div class="flex items-center gap-4">
+            @if (isLoadingImgs()){
+            <div class="flex items-center justify-center w-full h-full p-4">
+                <div class="spinner"></div>
+            </div>
+            } @else {
+
             @for (item of imageUrls(); track item) {
             <img [src]="item" class="w-24 h-24 object-cover rounded-lg cursor-pointer" (click)="openImage(item)" />
             }
+            }
         </div>
         <h1 class="text-lg">Audio</h1>
+        @if (isLoadingImgs()){
+        <div class="flex items-center justify-center w-full h-full p-4">
+            <div class="spinner"></div>
+        </div>
+        } @else {
         @for (item of audioUrls(); track $index) {
         <div>
             <audio [src]="item" controls></audio>
         </div>
+        }
         }
     </div>
 

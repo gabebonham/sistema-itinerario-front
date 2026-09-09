@@ -57,40 +57,38 @@ export class NotificationsComponent implements OnInit {
         this.dashboardState.setBreadCrumbs(
             this.dashboardState.activeSection().name
         );
+
+        this.currentMoment();
     }
-    handleUpdateZone(zone:number){
+    handleUpdateZone(zone: number) {
         this.zone.set(zone)
     }
-    planGeneralRoute() {
-        if (this.form.invalid) {
-            this.form.markAllAsTouched();
-            return;
-        }
-        if (!this.zone() || !this.form.value.hours) {
-            return;
-        }
+    planGeneralRoute(data:{ zone: number, hours: number }) {
         this.router.navigate(
             ['/dashboard/rota-geral', this.currentUser()?.id],
             {
                 queryParams: {
-                    zone: this.zone()!,
-                    hours: this.form.value.hours!,
+                    zone: data.zone,
+                    hours: data.hours,
                 }
             }
         );
     }
+
     currentMoment() {
-        const now = new Date();
-        const hours = now.getHours();
-        const day = now.getDay();
-        if (day == 6) {
-            return 'Sábado'
-        }
-        if (hours < 12) {
-            return 'Manhã'
+        const today = new Date();
+        const hour = today.getHours();
+        const weekDay = today.getDate();
+
+        let window: string | undefined = undefined;
+        if (weekDay == 6) {
+            window = hour < 12 ? 'Sábado' : undefined;
+        } else if (weekDay == 7) {
+            window = undefined;
         } else {
-            return 'Tarde'
+            window = hour < 12 ? 'Manhã' : 'Tarde';
         }
+        this.window.set(window)
     }
     async ngOnInit(): Promise<void> {
         const user = this.currentUser();

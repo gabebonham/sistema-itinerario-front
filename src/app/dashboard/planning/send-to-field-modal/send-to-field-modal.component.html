@@ -9,14 +9,7 @@
                 <textarea rows="6" style="height: 128px !important; min-height: 128px !important;" matInput type="text" formControlName="observation" placeholder="Observação..." 
                     class="!text-xs !min-h-32 !h-32"></textarea>
             </mat-form-field>
-            <mat-form-field appearance="outline" floatLabel="always">
-                <mat-label>Selecione uma Zona</mat-label>
-                <mat-select [(value)]="zone">
-                    @for (option of [1,2,3]; track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
+
         </div>
     </form>
     <div>

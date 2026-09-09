@@ -23,7 +23,6 @@ export class SendToFieldModal implements OnInit {
     diligencesService = inject(DiligencesService)
     userService = inject(UserService)
     notificators = signal<{id:string, name:string}[]>([])
-    zone = signal(undefined)
     notificator = signal<{id:string, name:string}|undefined>(undefined)
     private fb = inject(FormBuilder);
     form = this.fb.group({
@@ -67,7 +66,6 @@ export class SendToFieldModal implements OnInit {
         const diligenceToCreate = {
             ...this.data.diligence,
             plannerObservations: this.form.value.observation!,
-            zone:this.zone()
         }
         this.diligencesService.create(diligenceToCreate).then((result) => {
         this.isLoading.set(false);

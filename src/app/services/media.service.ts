@@ -6,15 +6,15 @@ import { ApiResponse } from '../DTOS/api-response';
 export class MediaService {
     private api = inject(ApiService);
     async uploadAudio(file: File) {
-        return await this.api.uploadFile<{ urls?: string[], paths?: string[] }>('api/storage/audio', { file })
+        return await this.api.uploadFile<{ url?: string, transcribedAudio?: string }>('api/storage/audio', { file })
     }
     async uploadImages(files: File[]) {
-        return await this.api.uploadFile<{ urls?: string[], paths?: string[] }>('api/storage/images', { files })
+        return await this.api.uploadFile<{ url?: string, transcribedAudio?: string }[]>('api/storage/images', { files })
     }
-    async getAudioByDiligenceId(id: string): Promise<ApiResponse<{ urls?: string[], paths?: string[] }>> {
-        return await this.api.get<{ urls?: string[], paths?: string[] }>('api/storage/audio/diligences/' + id + '/url')
+    async getAudioByDiligenceId(id: string): Promise<ApiResponse<{ imageUrls?: string[], audioUrl?: string, transcribedAudio?:string }>> {
+        return await this.api.get<{ imageUrls?: string[], audioUrl?: string, transcribedAudio?:string }>('api/storage/audio/diligences/' + id + '/url')
     }
-    async getImagesByDiligenceId(id: string): Promise<ApiResponse<{ urls?: string[], paths?: string[] }>> {
-        return await this.api.get<{ urls?: string[], paths?: string[] }>('api/storage/images/diligences/' + id + '/urls')
+    async getImagesByDiligenceId(id: string): Promise<ApiResponse<{ imageUrls?: string[], audioUrl?: string, transcribedAudio?:string }>> {
+        return await this.api.get<{ imageUrls?: string[], audioUrl?: string, transcribedAudio?:string }>('api/storage/images/diligences/' + id + '/urls')
     }
 }

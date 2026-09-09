@@ -17,6 +17,7 @@ import { Address } from '../../../models/address';
 import { RouteService } from '../../../services/route.service';
 import { Attempt } from '../../../models/attempt';
 import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environtments/environment.dev';
 
 
 @Component({
@@ -56,9 +57,18 @@ export class GeneralRouteComponent implements OnInit {
         this.dashboardState.setActiveSection(dashboardSections.find(section => section.name == 'Notificações')!);
     }
     getCurrentWindow() {
-        const hour = new Date().getHours();
+        const today = new Date();
+        const hour = today.getHours();
+        const weekDay = today.getDate();
 
-        const window = hour < 12 ? 'Manhã' : 'Tarde';
+        let window:string | undefined = undefined;
+        if (weekDay == 6) {
+            window = hour < 12 ? 'Sábado' : undefined;
+        } else if (weekDay == 7) {
+            window = undefined;
+        } else {
+            window = hour < 12 ? 'Manhã' : 'Tarde';
+        }
         this.window.set(window)
     }
     getCurrentLocation(): Promise<GeolocationCoordinates> {
@@ -70,6 +80,10 @@ export class GeneralRouteComponent implements OnInit {
         });
     }
     async getLocation() {
+        if (!environment.production) {
+            this.currentOrigin.set({ lat: -20.4697, lng: -54.6201 });
+            return true
+        }
         try {
             const coords = await this.getCurrentLocation();
             this.currentOrigin.set({ lat: coords.latitude, lng: coords.longitude });

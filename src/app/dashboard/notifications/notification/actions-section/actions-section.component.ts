@@ -105,9 +105,9 @@ export class ActionsSectionComponent {
             this.showToast("Erro ao salvar imagens.")
             return
         }
-        const audioUrls = audioResult.data.paths
-        const imageUrls = imagesResult.data.paths
-
+        const audioData = audioResult.data
+        const imageData = imagesResult.data ?? []
+        const imageUrls = imageData.map(data=>data.url).filter(data=>data!=undefined)
         const concludeVisitDto: UpdateDiligenceDTO = {
             factsObservations: this.form.value.factsObservations ?
                 this.form.value.factsObservations.split(';') : undefined,
@@ -116,8 +116,9 @@ export class ActionsSectionComponent {
             propertyObservations: this.form.value.propertyObservations ?
                 this.form.value.propertyObservations.split(';') : undefined,
             wasDebtorFound: this.debtorFound()!,
-            audioUrls,
+            audioUrl:audioData.url,
             imageUrls,
+            transcribedAudio:audioData.transcribedAudio,
             attemptId: this.diligence()?.attemptId,
             visited: true
         };
@@ -171,14 +172,14 @@ export class ActionsSectionComponent {
         if (this.audioFile) {
             return await this.mediaService.uploadAudio(this.audioFile)
         } else {
-            return { success: true, data: { paths: undefined } }
+            return { success: true, data: { url: undefined, transcribedAudio: undefined } }
         }
     }
     async sendImages() {
         if (this.photos().length > 0) {
             return await this.mediaService.uploadImages(this.photos().map(photo => photo.file))
         } else {
-            return { success: true, data: { paths: undefined } }
+            return { success: true, data: [] }
         }
     }
     showToast(text: string) {

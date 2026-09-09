@@ -26,6 +26,7 @@ export class Diligence {
     concludedVisitNumber: number;
     diligenceOrdinal: DiligenceOrdinal;
     attemptId: string;
+    transcribedAudio?: string;
     address?: Address;
     porHoraCerta: boolean;
     inProgress?: boolean;
@@ -55,6 +56,7 @@ export class Diligence {
         debtorId: string,
         visited: boolean,
         porHoraCerta: boolean,
+        transcribedAudio?: string,
         inProgress?: boolean,
         imageUrls?: string[],
         audioUrl?: string,
@@ -86,6 +88,7 @@ export class Diligence {
         this.audioUrl = audioUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.transcribedAudio = transcribedAudio;
         this.visited = visited;
     }
 }

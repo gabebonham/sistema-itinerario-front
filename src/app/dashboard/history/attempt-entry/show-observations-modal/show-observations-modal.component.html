@@ -43,16 +43,20 @@
             }
         </div>
         <h1 class="text-lg">Audio</h1>
-        @if (isLoadingImgs()){
+        @if (isLoadingAudio()){
         <div class="flex items-center justify-center w-full h-full p-4">
             <div class="spinner"></div>
         </div>
         } @else {
-        @for (item of audioUrls(); track $index) {
+        @if (audioUrl()) {
         <div>
-            <audio [src]="item" controls></audio>
+            <audio [src]="audioUrl()" controls></audio>
         </div>
         }
+        }
+        <h1>Transcrição</h1>
+        @for (item of transcribedAudio(); track item) {
+        <p> - {{item}}</p>
         }
     </div>
 

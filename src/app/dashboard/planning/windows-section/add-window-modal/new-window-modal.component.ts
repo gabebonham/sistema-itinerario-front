@@ -60,7 +60,7 @@ export class NewWindowModal {
 
         const start = this.createDate(dateValue, fromTime);
         const finish = this.createDate(dateValue, toTime);
-        
+
         this.dialogRef.close({
             success: true,
             data: {
@@ -72,9 +72,12 @@ export class NewWindowModal {
             }
         });
     }
-    private createDate(date: string, time: string = '00:00'): Date {
+    private createDate(date: string, time?: string): Date {
         const [day, month, year] = date.split('/').map(Number);
-        const [hours, minutes] = time.split(':').map(Number);
+
+        const [hours, minutes] = (time || '00:00')
+            .split(':')
+            .map(Number);
 
         return new Date(
             year,

@@ -14,7 +14,8 @@ export interface UpdateDiligenceDTO {
     porHoraCerta?: boolean;
     plannerObservations?: string;
     imageUrls?: string[];
-    audioUrls?: string[];
+    audioUrl?: string;
+    transcribedAudio?: string;
     wasDebtorFound:boolean
     visited?:boolean
     attemptId?:string

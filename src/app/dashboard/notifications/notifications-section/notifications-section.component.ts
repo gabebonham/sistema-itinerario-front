@@ -35,9 +35,13 @@ export class NotificationsSection {
     private fb = inject(FormBuilder);
     form = this.fb.group({
         zone: [null as number | null, Validators.required],
+        hours: [null as number | null, Validators.required],
     });
+    planGeneralRouteOutput = output<{ zone: number, hours: number }>();
     updateZone = output<number>()
     zone = input<undefined | number>(undefined)
+    window = input.required<string>()
+
     @Output() nextPage = new EventEmitter<number>();
     @Output() previousPage = new EventEmitter<number>();
     constructor() {
@@ -56,13 +60,23 @@ export class NotificationsSection {
             })))
         })
     }
+
     fetchNotifications() {
         if (!this.form.value.zone) {
             return;
         }
         this.loadNotifications(Number(this.form.value.zone!))
     }
-
+    planGeneralRoute() {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+        if (!this.form.value.zone|| !this.form.value.hours) {
+            return;
+        }
+        this.planGeneralRouteOutput.emit({ zone: this.form.value.zone!, hours: this.form.value.hours! });
+    }
     private async loadNotifications(zone: number): Promise<void> {
 
         this.isLoading.set(true);

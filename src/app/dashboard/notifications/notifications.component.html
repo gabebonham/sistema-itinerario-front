@@ -7,29 +7,21 @@
         <p class="text-text-muted text-sm py-4 ">Consulte todas as notificações pendentes registradas a serem retomadas.
         </p>
         <div class="">
-          <form [formGroup]="form" class="w-full flex items-center gap-2 py-2">
-            <mat-form-field appearance="outline" class="!w-full " floatLabel="always">
-              <mat-label>Carga Horária</mat-label>
-              <textarea matInput formControlName="hours" placeholder="..."
-                class="!text-xs  !placeholder-text-muted"></textarea>
-            </mat-form-field>
-          </form>
+
         </div>
 
-        @if (zone() && !form.invalid){
 
-        <div class="py-4">
-          <button (click)="planGeneralRoute()" [disabled]="!zone() || form.invalid"
-            class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-lg w-full h-10 disabled:opacity-50 disabled:cursor-not-allowed">
-            Percorrer {{ currentMoment()}}
-          </button>
-        </div>
-        }
       </div>
 
     </div>
+    @if (window()) {
     <div class="flex flex-col gap-6">
-      <app-notifications-section (updateZone)="handleUpdateZone($event)"></app-notifications-section>
+      <app-notifications-section [window]="window()!" (planGeneralRouteOutput)="planGeneralRoute($event)" (updateZone)="handleUpdateZone($event)"></app-notifications-section>
     </div>
+    } @else {
+    <div class="w-full h-42 flex justify-center items-center bg-error/20 text-error">
+      <h1 class="text-center">Não é possível executar diligências neste horário.</h1>
+    </div>
+    }
   </div>
 </div>

@@ -1,14 +1,21 @@
-<div class="bg-white rounded-xl border-1 border-border px-2 py-3 shadow-lg">
-  <div class="pb-6 flex flex-col gap-2">
-    <div class="flex items-center gap-2">
-      <mat-icon class="!text-text-muted !text-lg !h-7">notifications</mat-icon>
-      <h1 class="text-md font-bold text-text-black">Retomar uma Notificação</h1>
+<div class="flex flex-col gap-4">
+  <div class="bg-white rounded-xl border-1 border-border px-2 py-3 shadow-lg">
+    <div class="pb-6 flex flex-col gap-2">
+      <div class="flex items-center gap-2">
+        <mat-icon class="!text-text-muted !text-lg !h-7">notifications</mat-icon>
+        <h1 class="text-md font-bold text-text-black">Retomar as Notificações</h1>
+      </div>
+      <p class="!text-text-muted !text-xs">Preencha os campos abaixo para buscar notificações.</p>
     </div>
-    <p class="!text-text-muted !text-xs">Clique na notificação para entrar em campo.</p>
     <form [formGroup]="form" class="w-full flex items-center gap-2 py-2">
       <mat-form-field appearance="outline" class="!w-full " floatLabel="always">
         <mat-label>Zona</mat-label>
         <textarea matInput formControlName="zone" placeholder="..."
+          class="!text-xs  !placeholder-text-muted"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="!w-full " floatLabel="always">
+        <mat-label>Carga Horária</mat-label>
+        <textarea matInput formControlName="hours" placeholder="..."
           class="!text-xs  !placeholder-text-muted"></textarea>
       </mat-form-field>
     </form>
@@ -19,32 +26,42 @@
       </button>
     </div>
   </div>
-  <div class="flex flex-col gap-3">
-    @if (isLoading()) {
-    <div class="flex items-center justify-center w-full h-full p-4">
-      <div class="spinner"></div>
+  <div class="bg-white rounded-xl border-1 border-border px-2 py-3 shadow-lg">
+    @if (!form.invalid && !isLoading() && notificationEntries().length != 0){
+    <div class="py-4">
+      <button (click)="planGeneralRoute()" 
+        class="cursor-pointer bg-primary !font-semibold text-white text-lg rounded-lg w-full h-10 disabled:opacity-50 disabled:cursor-not-allowed">
+        Percorrer {{ window()}}
+      </button>
     </div>
-    } @else if (!isLoading() && notifications().length == 0) {
-    <div class="flex justify-center items-center pb-4">
-      <h1>Sem registros...</h1>
+    }
+    <div class="flex flex-col gap-3">
+      @if (isLoading()) {
+      <div class="flex items-center justify-center w-full h-full p-4">
+        <div class="spinner"></div>
+      </div>
+      } @else if (!isLoading() && notificationEntries().length == 0) {
+      <div class="flex justify-center items-center pb-4">
+        <h1>Sem registros...</h1>
+      </div>
+      } @else if (!isLoading() && notificationEntries().length != 0) {
+      @for (item of notificationEntries(); track item.protocol) {
+      <app-notification-entry [id]="item.id" [notificatorName]="item.notificatorName"
+        [diligenceOrdinal]="item.diligenceOrdinal" [diligenceWindow]="item.diligenceWindow"
+        [diligenceStart]="item.diligenceStart" [diligenceFinish]="item.diligenceFinish" [address]="item.address"
+        [debtorName]="item.debtorName" [protocol]="item.protocol" [createdAt]="item.createdAt"></app-notification-entry>
+      }
+      }
     </div>
-    } @else if (!isLoading() && notifications().length != 0) {
-    @for (item of notificationEntries(); track item.protocol) {
-    <app-notification-entry [id]="item.id" [notificatorName]="item.notificatorName"
-      [diligenceOrdinal]="item.diligenceOrdinal" [diligenceWindow]="item.diligenceWindow"
-      [diligenceStart]="item.diligenceStart" [diligenceFinish]="item.diligenceFinish" [address]="item.address"
-      [debtorName]="item.debtorName" [protocol]="item.protocol" [createdAt]="item.createdAt"></app-notification-entry>
-    }
-    }
-  </div>
-  <div class="flex justify-center items-center pt-4">
-    <div class="flex items-center gap-8">
-      <mat-icon
-        class="{{ hasPreviousPages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
-        (click)="onPreviousPage()">arrow_back</mat-icon>
-      {{ currentPage() }}
-      <mat-icon class="{{ hasMorePages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
-        (click)="onNextPage()">arrow_forward</mat-icon>
+    <div class="flex justify-center items-center pt-4">
+      <div class="flex items-center gap-8">
+        <mat-icon
+          class="{{ hasPreviousPages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
+          (click)="onPreviousPage()">arrow_back</mat-icon>
+        {{ currentPage() }}
+        <mat-icon class="{{ hasMorePages ? '!text-text-black cursor-pointer' : '!text-text-muted cursor-not-allowed' }}"
+          (click)="onNextPage()">arrow_forward</mat-icon>
+      </div>
     </div>
   </div>
 </div>

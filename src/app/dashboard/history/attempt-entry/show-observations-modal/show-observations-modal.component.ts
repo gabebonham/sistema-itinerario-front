@@ -17,8 +17,9 @@ export class ShowObservationsModal implements OnInit {
     isLoadingImgs = signal(true)
     isLoadingAudio = signal(true)
     generalObservations = signal<string[]>([])
+    transcribedAudio = signal<string[]>([])
     imageUrls = signal<string[]>([])
-    audioUrls = signal<string[]>([])
+    audioUrl = signal<string|undefined>(undefined)
     factsObservations = signal<string[]>([])
     propertyObservations = signal<string[]>([])
     plannerObservations = signal<string | undefined>(undefined)
@@ -32,11 +33,14 @@ export class ShowObservationsModal implements OnInit {
         this.factsObservations.set(data.factsObservations)
         this.propertyObservations.set(data.propertyObservations)
         this.plannerObservations.set(data.plannerObservations)
+        this.transcribedAudio.set(data.transcribedAudio.split('\n'))
     }
     ngOnInit(): void {
         this.mediaService.getAudioByDiligenceId(this.data.diligenceId).then(result => {
             if (result.success) {
-                this.audioUrls.set(result.data.urls ?? [])
+                console.log('result.data')
+                console.log(result.data)
+                this.audioUrl.set(result.data.audioUrl)
                 this.isLoadingAudio.set(false)
             } else {
                 this.showToast("Erro ao carregar áudio.")
@@ -45,7 +49,7 @@ export class ShowObservationsModal implements OnInit {
         })
         this.mediaService.getImagesByDiligenceId(this.data.diligenceId).then(result => {
             if (result.success) {
-                this.imageUrls.set(result.data.urls ?? [])
+                this.imageUrls.set(result.data.imageUrls ?? [])
                 this.isLoadingImgs.set(false)
             } else {
                 this.showToast("Erro ao carregar imagens.")

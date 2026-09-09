@@ -43,6 +43,7 @@ export class AttemptEntryComponent implements OnInit {
                 propertyObservations: diligence.propertyObservations,
                 plannerObservations: diligence.plannerObservations,
                 imageUrls: diligence.imageUrls,
+                transcribedAudio:diligence.transcribedAudio,
                 audioUrl: diligence.audioUrl
             }
         });

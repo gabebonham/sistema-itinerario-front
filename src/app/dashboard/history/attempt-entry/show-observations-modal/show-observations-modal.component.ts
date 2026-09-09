@@ -43,7 +43,7 @@ export class ShowObservationsModal implements OnInit {
                 this.audioUrl.set(result.data.audioUrl)
                 this.isLoadingAudio.set(false)
             } else {
-                this.showToast("Erro ao carregar áudio.")
+                this.showToast(result.error)
                 this.isLoadingAudio.set(false)
             }
         })
@@ -52,7 +52,7 @@ export class ShowObservationsModal implements OnInit {
                 this.imageUrls.set(result.data.imageUrls ?? [])
                 this.isLoadingImgs.set(false)
             } else {
-                this.showToast("Erro ao carregar imagens.")
+                this.showToast(result.error)
                 this.isLoadingImgs.set(false)
             }
         })

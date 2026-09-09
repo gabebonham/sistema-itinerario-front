@@ -41,7 +41,7 @@ export class SendToFieldModal implements OnInit {
                 }) )
                 this.notificators.set(notificators)
             } else {
-                this.showToast("Erro ao carregar notificadores.")
+                this.showToast(result.error)
             }
 
         })

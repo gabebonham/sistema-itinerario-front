@@ -75,7 +75,7 @@ export class ForgotPasswordSectionComponent {
         this.authService.sendEmail(this.emailForm.value.email!).then(result => {
             if (!result.success) {
                 this.isLoading.set(false);
-                this.showToast("Erro ao enviar o código.")
+                this.showToast(result.error)
             } else {
                 this.isLoading.set(false);
                 this.currentForgotPasswordSection.set('codeSection')
@@ -96,7 +96,7 @@ export class ForgotPasswordSectionComponent {
         this.authService.sendCode(this.codeForm.value.code!, this.emailForm.value.email!).then(result => {
             if (!result.success) {
                 this.isLoading.set(false);
-                this.showToast("Erro ao validar o código.")
+                this.showToast(result.error)
             } else {
                 this.isLoading.set(false);
                 this.code.set(parseInt(this.codeForm.value.code!))
@@ -148,7 +148,7 @@ export class ForgotPasswordSectionComponent {
         this.authService.updatePassword(this.passwordForm.value.password!, this.code(), this.emailForm.value.email!).then(async result => {
             if (!result.success) {
                 this.isLoading.set(false);
-                this.showToast("Erro ao atualizar senha.")
+                this.showToast(result.error)
             } else {
                 this.isLoading.set(false);
                 this.showToast('Senha atualizda com sucesso!');

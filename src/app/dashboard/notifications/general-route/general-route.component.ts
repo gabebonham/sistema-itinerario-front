@@ -61,7 +61,7 @@ export class GeneralRouteComponent implements OnInit {
         const hour = today.getHours();
         const weekDay = today.getDate();
 
-        let window:string | undefined = undefined;
+        let window: string | undefined = undefined;
         if (weekDay == 6) {
             window = hour < 12 ? 'Sábado' : undefined;
         } else if (weekDay == 7) {
@@ -109,40 +109,52 @@ export class GeneralRouteComponent implements OnInit {
                 }
                 this.dashboardState.setBreadCrumbs(this.dashboardState.activeSection().getNameWithId(id));
                 this.route.queryParamMap.subscribe(params => {
-                    const zone = params.get('zone') ?? '';
-                    const hours = params.get('hours') ?? '';
+                    const zone = params.get('zone') ?? undefined;
+                    const hours = params.get('hours') ?? undefined;
+                    const pending = params.get('pending') == 'true' ? true : params.get('pending') == 'false' ? false : undefined;
                     this.zone.set(zone)
                     this.hours.set(hours)
-                    if (id && zone && hours) {
-                        const dto = {
-                            zone,
-                            hours,
-                            originLat: this.currentOrigin()?.lat,
-                            originLng: this.currentOrigin()?.lng,
-                            window: this.window()
-                        }
-                        this.routeService.prepareRoute(id, dto)
-                            .then(result => {
-                                if (result.success) {
-                                    const validDiligences = result.data.notifications.map(notification => notification.diligence)
-                                        .filter(diligence => diligence !== undefined)
-                                    const validNotificationIds = result.data.notifications.map(notification => notification.id)
-                                    this.diligences.set(validDiligences);
-                                    this.localDiligences.set(validDiligences);
-                                    this.localNotifications.set(validNotificationIds);
-
-                                    this.addresses.set(
-                                        validDiligences
-                                            .map(diligence => diligence.address)
-                                            .filter((address): address is Address => address !== undefined)
-                                    );
-                                    this.updateDiligencesProgress();
-                                    this.getNextDiligence();
-                                } else {
-                                    this.showToast(result.error)
-                                }
-                            })
+                    if (!id) {
+                        this.router.navigate(['/dashboard/notificacoes'])
+                        return
                     }
+                    if (!hours) {
+                        this.router.navigate(['/dashboard/notificacoes'])
+                        return
+                    }
+                    if ((!pending && !zone) || (pending && zone)) {
+                        this.router.navigate(['/dashboard/notificacoes'])
+                        return
+                    }
+                    const dto = {
+                        zone,
+                        hours,
+                        pending,
+                        originLat: this.currentOrigin()?.lat,
+                        originLng: this.currentOrigin()?.lng,
+                        window: this.window()
+                    }
+                    this.routeService.prepareRoute(id, dto)
+                        .then(result => {
+                            if (result.success) {
+                                const validDiligences = result.data.notifications.map(notification => notification.diligence)
+                                    .filter(diligence => diligence !== undefined)
+                                const validNotificationIds = result.data.notifications.map(notification => notification.id)
+                                this.diligences.set(validDiligences);
+                                this.localDiligences.set(validDiligences);
+                                this.localNotifications.set(validNotificationIds);
+
+                                this.addresses.set(
+                                    validDiligences
+                                        .map(diligence => diligence.address)
+                                        .filter((address): address is Address => address !== undefined)
+                                );
+                                this.updateDiligencesProgress();
+                                this.getNextDiligence();
+                            } else {
+                                this.showToast(result.error)
+                            }
+                        })
                 });
             })
         })
@@ -195,7 +207,7 @@ export class GeneralRouteComponent implements OnInit {
 
             if (!result.success) {
                 this.showToast(
-                    "Erro ao atualizar progresso da diligência."
+                    result.error
                 );
             }
         }
@@ -211,7 +223,7 @@ export class GeneralRouteComponent implements OnInit {
             }
         ).then(result => {
             if (!result.success) {
-                this.showToast("Erro ao atualizar progresso da diligência.");
+                this.showToast(result.error);
             }
         });
     }
@@ -220,7 +232,7 @@ export class GeneralRouteComponent implements OnInit {
             if (result.success) {
                 this.currentLastDiligence.set(result.data.lastDiligence)
             } else {
-                this.showToast("Erro ao buscar diligência.")
+                this.showToast(result.error)
             }
         })
     }
@@ -230,7 +242,7 @@ export class GeneralRouteComponent implements OnInit {
             if (result.success) {
                 this.currentDebtor.set(result.data)
             } else {
-                this.showToast("Erro ao buscar devedor.")
+                this.showToast(result.error)
             }
         })
     }

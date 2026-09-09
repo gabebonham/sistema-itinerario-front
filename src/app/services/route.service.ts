@@ -19,8 +19,6 @@ export class RouteService {
         return response;
     }
     async prepareRoute(id:string, dto:any): Promise<ApiResponse<{notifications:Notification[],route:RouteData}>> {
-        console.log('dto')
-        console.log(dto)
         const response = await this.api.post<{notifications:Notification[],route:RouteData}>(
             '/api/routes/notificator/'+id+'/prepare-route',
             dto

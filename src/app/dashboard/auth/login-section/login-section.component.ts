@@ -101,7 +101,6 @@ export class LoginSectionComponent {
                 }
             })
             .catch((err) => {
-                console.log(err)
                 this.showToast('Erro ao fazer login.');
             })
             .finally(() => {

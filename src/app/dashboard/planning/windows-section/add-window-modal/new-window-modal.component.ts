@@ -91,8 +91,8 @@ export class NewWindowModal {
     }
     private getFormErrors(): string[] {
         const labels: Record<string, string> = {
-            fromTime: 'De (Hora)',
-            toTime: 'Até (Hora)',
+            fromTime: 'Início (Esperado)',
+            toTime: 'Fim (Esperado)',
             window: 'Janela',
             dateValue: 'Dia',
         };

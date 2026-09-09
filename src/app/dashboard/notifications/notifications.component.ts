@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DiligencesService } from '../../services/diligences.service';
 
 @Component({
     selector: 'app-notifications',
@@ -32,6 +33,7 @@ export class NotificationsComponent implements OnInit {
 
     dashboardState = inject(DashboardStateService);
     notificationService = inject(NotificationService);
+    diligencesService = inject(DiligencesService);
     authService = inject(AuthService);
     private fb = inject(FormBuilder);
     form = this.fb.group({
@@ -48,7 +50,8 @@ export class NotificationsComponent implements OnInit {
     notifications = signal<Notification[]>([]);
     isLoading = signal(true);
     currentUser = this.authService.currentUser;
-
+    hasPendingDiligences = signal<boolean>(false)
+    isLoadingPendingVerification = signal(true)
     constructor(private router: Router) {
         this.dashboardState.setActiveSection(
             dashboardSections.find(section => section.name === 'Notificações')!
@@ -59,20 +62,71 @@ export class NotificationsComponent implements OnInit {
         );
 
         this.currentMoment();
+        this.getPendingDiligences();
+        const hours = this.getHoursFromCookie();
+
+        if (hours) {
+            const parsedHours = parseInt(hours, 10);
+
+            if (Number.isInteger(parsedHours)) {
+                this.form.patchValue({ hours: parsedHours });
+            }
+        }
+    }
+    getPendingDiligences() {
+        if (!this.currentUser()?.id) {
+            this.router.navigate(['/auth'])
+            return
+        }
+        this.diligencesService.getProgressByNotificatorId(this.currentUser()?.id!).then(result => {
+            if (result.success) {
+                const hasPendingDiligences = result.data.ongoingDiligences.length > 0
+                this.hasPendingDiligences.set(hasPendingDiligences)
+            } else {
+                this.showToast(result.error)
+            }
+        }).finally(()=>{
+            this.isLoadingPendingVerification.set(false)
+        })
     }
     handleUpdateZone(zone: number) {
         this.zone.set(zone)
+        this.setZoneToCookie(zone)
     }
-    planGeneralRoute(data:{ zone: number, hours: number }) {
+    planGeneralRoute(data: { zone?: number, hours?: number, pending?: boolean }) {
         this.router.navigate(
             ['/dashboard/rota-geral', this.currentUser()?.id],
             {
                 queryParams: {
                     zone: data.zone,
                     hours: data.hours,
+                    pending: data.pending
                 }
             }
         );
+    }
+    setHoursToCookie(hours: number) {
+        document.cookie = `hours=${hours}; path=/`;
+    }
+    setZoneToCookie(zone: number) {
+        document.cookie = `zone=${zone}; path=/`;
+    }
+    getHoursFromCookie() {
+        const cookies = document.cookie.split('; ');
+
+        const cookie = cookies.find(row => row.startsWith('hours='));
+
+        const hours = cookie?.split('=')[1];
+        return hours
+    }
+    planPendingRoute(pending: boolean) {
+        if (!this.form.value.hours) {
+            this.form.markAsTouched()
+            this.showToast("Carga horária deve ser informada")
+            return
+        }
+        this.setHoursToCookie(this.form.value.hours!)
+        this.planGeneralRoute({ pending, hours: this.form.value.hours! })
     }
 
     currentMoment() {
@@ -133,7 +187,7 @@ export class NotificationsComponent implements OnInit {
                 }))
             );
         } else {
-            this.showToast('Erro ao buscar notificações.');
+            this.showToast(result.error);
         }
 
         this.isLoading.set(false);

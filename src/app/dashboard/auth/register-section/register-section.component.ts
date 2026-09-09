@@ -161,7 +161,7 @@ export class RegisterSectionComponent {
 
                 window.location.reload();
             } else {
-                this.showToast('Erro ao fazer cadastro.');
+                this.showToast(result.error);
             }
         } finally {
             this.isLoading.set(false);

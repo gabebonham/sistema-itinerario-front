@@ -71,7 +71,9 @@ export class ActionsSectionComponent {
     removePhoto(index: number): void {
         this.photos.update(list => list.filter((_, i) => i !== index));
     }
-
+    canFinish() {
+        return !this.isLoading() && !this.audioRecorder?.isRecording()
+    }
     async finish() {
         if (this.notificationId() === undefined) {
             this.showToast('Notificação inválida.');
@@ -99,16 +101,18 @@ export class ActionsSectionComponent {
         const audioResult = await this.sendAudio()
         const imagesResult = await this.sendImages()
         if (!audioResult.success) {
-            this.showToast("Erro ao salvar audio.")
+            this.showToast(audioResult.error ?? 'Erro ao salvar audio.')
+            this.isLoading.set(false);
             return
         }
         if (!imagesResult.success) {
-            this.showToast("Erro ao salvar imagens.")
+            this.showToast(imagesResult.error ?? 'Erro ao salvar imagens.')
+            this.isLoading.set(false);
             return
         }
         const audioData = audioResult.data
         const imageData = imagesResult.data ?? []
-        const imageUrls = imageData.map(data=>data.url).filter(data=>data!=undefined)
+        const imageUrls = imageData.map(data => data.url).filter(data => data != undefined)
         const concludeVisitDto: UpdateDiligenceDTO = {
             factsObservations: this.form.value.factsObservations ?
                 this.form.value.factsObservations.split(';') : undefined,
@@ -117,51 +121,51 @@ export class ActionsSectionComponent {
             propertyObservations: this.form.value.propertyObservations ?
                 this.form.value.propertyObservations.split(';') : undefined,
             wasDebtorFound: this.debtorFound()!,
-            audioUrl:audioData.url,
+            audioUrl: audioData.url,
             imageUrls,
-            transcribedAudio:audioData.transcribedAudio,
+            transcribedAudio: audioData.transcribedAudio,
             attemptId: this.diligence()?.attemptId,
             visited: true
         };
         this.diligenceService.update(diligenceId, concludeVisitDto)
             .then(result => {
                 if (result.success) {
-                    this.notificationService.delete(this.notificationId()!)
+                    return this.notificationService.delete(this.notificationId()!)
                         .then(deleteResult => {
                             if (deleteResult.success) {
 
                                 if (this.debtorFound()!) {
-                                    this.attemptService
+                                    return this.attemptService
                                         .deliverAttempt(this.diligence()?.attemptId!)
                                         .then(updateResult => {
 
                                             if (!updateResult.success) {
-                                                console.log(updateResult.error);
                                                 this.showToast(updateResult.error);
                                                 return;
                                             }
+
                                             this.finishSuccess();
                                         });
-
-                                } else {
-                                    this.finishSuccess();
                                 }
+
+                                this.finishSuccess();
                             }
+                            return;
                         });
-                } else {
-                    console.log(result.error)
-                    this.showToast(result.error);
                 }
+                this.showToast(result.error);
+                return;
             })
             .finally(() => {
                 this.isLoading.set(false);
+                this.resetInputs();
             });
     }
     onSaveAudio(audioFile?: File) {
         this.audioFile = audioFile
     }
     updateDiligenceProgress(id: string) {
-        this.diligenceService.patchDiligenceProgress({id, inProgress:false, finish:new Date()}).then(result => {
+        this.diligenceService.patchDiligenceProgress({ id, inProgress: false, finish: new Date() }).then(result => {
             if (!result.success) {
                 this.showToast("Erro ao atualizar progresso da diligência.");
             }
@@ -184,19 +188,20 @@ export class ActionsSectionComponent {
         this.audioFile = undefined;
         this.photos.set([]);
 
+        this.audioRecorder?.deleteAudio();
     }
     async sendAudio() {
         if (this.audioFile) {
             return await this.mediaService.uploadAudio(this.audioFile)
         } else {
-            return { success: true, data: { url: undefined, transcribedAudio: undefined } }
+            return { success: true, data: { url: undefined, transcribedAudio: undefined }, error:undefined }
         }
     }
     async sendImages() {
         if (this.photos().length > 0) {
             return await this.mediaService.uploadImages(this.photos().map(photo => photo.file))
         } else {
-            return { success: true, data: [] }
+            return { success: true, data: [], error:undefined }
         }
     }
     showToast(text: string) {

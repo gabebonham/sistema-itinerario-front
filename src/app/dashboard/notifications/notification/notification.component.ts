@@ -47,7 +47,7 @@ export class NotificationComponent implements OnInit {
                         this.getLastDiligenceByAttemptId(notificationResult.data?.diligence?.attemptId!)
                         this.getDebtor(notificationResult.data?.debtorId!)
                     } else {
-                        this.showToast("Erro ao buscar notificação.")
+                        this.showToast(notificationResult.error)
                     }
                 })
             }
@@ -56,7 +56,7 @@ export class NotificationComponent implements OnInit {
     updateDiligenceProgress(id: string) {
         this.diligenceService.patchDiligenceProgress({id, inProgress:true}).then(result => {
             if (!result.success) {
-                this.showToast("Erro ao atualizar progresso da diligência.");
+                this.showToast(result.error);
             }
         });
     }
@@ -77,7 +77,7 @@ export class NotificationComponent implements OnInit {
                     this.updateDiligenceProgress(diligence?.id)
                 }
             } else {
-                this.showToast("Erro ao buscar diligência.");
+                this.showToast(result.error);
             }
         });
     }
@@ -86,7 +86,7 @@ export class NotificationComponent implements OnInit {
             if (diligenceResult.success) {
                 this.debtor.set(diligenceResult.data)
             } else {
-                this.showToast("Erro ao buscar devedor.")
+                this.showToast(diligenceResult.error)
             }
         })
     }

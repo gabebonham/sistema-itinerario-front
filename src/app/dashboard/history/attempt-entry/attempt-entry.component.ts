@@ -89,7 +89,7 @@ export class AttemptEntryComponent implements OnInit {
                 }
                 baixarRelatorio(report)
             } else {
-                this.showToast("Erro ao buscar devedor.")
+                this.showToast(result.error)
             }
         })
 

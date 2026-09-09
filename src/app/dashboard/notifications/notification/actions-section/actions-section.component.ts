@@ -98,11 +98,11 @@ export class ActionsSectionComponent {
         const audioResult = await this.sendAudio()
         const imagesResult = await this.sendImages()
         if (!audioResult.success) {
-            this.showToast("Erro ao salvar audio.")
+            this.showToast(audioResult.error ?? "Erro ao salvar audio.")
             return
         }
         if (!imagesResult.success) {
-            this.showToast("Erro ao salvar imagens.")
+            this.showToast(imagesResult.error ?? "Erro ao salvar imagens.")
             return
         }
         const audioData = audioResult.data
@@ -135,7 +135,6 @@ export class ActionsSectionComponent {
                                             this.showToast('Visita concluida com sucesso!');
                                             this.router.navigate([`/dashboard/notificacoes`]);
                                         } else {
-                                            console.log(updateResult.error)
                                             this.showToast(updateResult.error);
                                         }
                                     })
@@ -145,12 +144,10 @@ export class ActionsSectionComponent {
                                     this.router.navigate([`/dashboard/notificacoes`]);
                                 }
                             } else {
-                                console.log(deleteResult.error)
                                 this.showToast(deleteResult.error);
                             }
                         });
                 } else {
-                    console.log(result.error)
                     this.showToast(result.error);
                 }
             })
@@ -161,7 +158,7 @@ export class ActionsSectionComponent {
     updateDiligenceProgress(id: string) {
         this.diligenceService.patchDiligenceProgress({id, inProgress:false, finish:new Date()}).then(result => {
             if (!result.success) {
-                this.showToast("Erro ao atualizar progresso da diligência.");
+                this.showToast(result.error);
             }
         });
     }
@@ -172,14 +169,14 @@ export class ActionsSectionComponent {
         if (this.audioFile) {
             return await this.mediaService.uploadAudio(this.audioFile)
         } else {
-            return { success: true, data: { url: undefined, transcribedAudio: undefined } }
+            return { success: true, data: { url: undefined, transcribedAudio: undefined },error: undefined }
         }
     }
     async sendImages() {
         if (this.photos().length > 0) {
             return await this.mediaService.uploadImages(this.photos().map(photo => photo.file))
         } else {
-            return { success: true, data: [] }
+            return { success: true, data: [], error: undefined }
         }
     }
     showToast(text: string) {

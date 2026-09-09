@@ -144,7 +144,7 @@ export class PlanningComponent implements OnInit {
                 this.isAddressesLoading.set(false);
                 this.isAttemptLoading.set(false)
             } else {
-                this.showToast("Erro ao buscar tentativa.")
+                this.showToast(result.error)
             }
         });
     }
@@ -176,7 +176,7 @@ export class PlanningComponent implements OnInit {
                 if (addressResult.success) {
                     this.router.navigate(['/dashboard/tentativas'])
                 } else {
-                    this.showToast("Erro ao registrar endereço.")
+                    this.showToast(addressResult.error)
                 }
             })
         }
@@ -190,7 +190,7 @@ export class PlanningComponent implements OnInit {
             if (result.success) {
                 
             } else {
-                this.showToast('Erro ao disparar notificação.')
+                this.showToast(result.error)
             }
         })
     }

@@ -45,6 +45,24 @@ export class NotificationsSection {
     @Output() nextPage = new EventEmitter<number>();
     @Output() previousPage = new EventEmitter<number>();
     constructor() {
+        const zone = this.getZoneFromCookie();
+
+        if (zone) {
+            const parsedZone = parseInt(zone, 10);
+
+            if (Number.isInteger(parsedZone)) {
+                this.form.patchValue({ zone: parsedZone });
+            }
+        }
+        const hours = this.getHoursFromCookie();
+
+        if (hours) {
+            const parsedHours = parseInt(hours, 10);
+
+            if (Number.isInteger(parsedHours)) {
+                this.form.patchValue({ hours: parsedHours });
+            }
+        }
         effect(() => {
             this.notificationEntries.set(this.notifications().map(notification => ({
                 id: notification.id,
@@ -60,7 +78,26 @@ export class NotificationsSection {
             })))
         })
     }
+    setHoursToCookie(hours: number) {
+        document.cookie = `hours=${hours}; path=/`;
+    }
 
+    getHoursFromCookie() {
+        const cookies = document.cookie.split('; ');
+
+        const cookie = cookies.find(row => row.startsWith('hours='));
+
+        const hours = cookie?.split('=')[1];
+        return hours
+    }
+    getZoneFromCookie() {
+        const cookies = document.cookie.split('; ');
+
+        const cookie = cookies.find(row => row.startsWith('zone='));
+
+        const zone = cookie?.split('=')[1];
+        return zone
+    }
     fetchNotifications() {
         if (!this.form.value.zone) {
             return;
@@ -72,7 +109,7 @@ export class NotificationsSection {
             this.form.markAllAsTouched();
             return;
         }
-        if (!this.form.value.zone|| !this.form.value.hours) {
+        if (!this.form.value.zone || !this.form.value.hours) {
             return;
         }
         this.planGeneralRouteOutput.emit({ zone: this.form.value.zone!, hours: this.form.value.hours! });
@@ -99,7 +136,7 @@ export class NotificationsSection {
                 }))
             );
         } else {
-            this.showToast('Erro ao buscar notificações.');
+            this.showToast(result.error);
         }
 
         this.isLoading.set(false);
